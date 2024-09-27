@@ -5,11 +5,12 @@ import Register from './Components/Auth/Register';
 
 const App = () => {
   return (
+    
     <main className="bg-slate-300/20  h-full">
       <BrowserRouter>
         {/* <Navbar /> */}
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
            <Route path="/register" element={<Register />} />
           {/*<Route path="/project" element={<Projects />} />
           <Route path="/contact" element={<Contact />} /> */}
