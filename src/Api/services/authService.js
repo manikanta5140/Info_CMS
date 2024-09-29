@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { CHECK_USERNAME_URL, REGISTER_URL } from "../../constants/apiURL.js";
 import { LOGIN_URL } from "../../constants/apiURL.js";
 import axiosInstance from "../axiosInstance";
@@ -12,7 +13,6 @@ import axiosInstance from "../axiosInstance";
 
 export const login = async (userData) => {
   try {
-    console.log(userData, "service");
     const response = await axiosInstance.post(
       LOGIN_URL,
       JSON.stringify(userData)
@@ -40,7 +40,6 @@ export const login = async (userData) => {
  */
 export const register = async (userData) => {
   try {
-    console.log(userData, "service");
     const response = await axiosInstance.post(
       REGISTER_URL,
       JSON.stringify(userData)
@@ -72,13 +71,20 @@ export const register = async (userData) => {
 
 export const checkUsernameAvailability = async (username) => {
   try {
-    console.log(username, "servive user");
     const response = await axiosInstance.get(CHECK_USERNAME_URL, {
       params: { username },
     });
-    console.log(response.data.isAvailable,"hello");
     return response.data.isAvailable;
   } catch (error) {
     throw new Error("Error checking username availability");
+  }
+};
+
+export const logout = () => {
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  if (token) {
+    localStorage.clear();
+    navigate("/");
   }
 };

@@ -131,7 +131,7 @@ const Register = () => {
                       type="text"
                       placeholder="Enter your first name"
                       error={error.firstName}
-                      name="firstname"
+                      name="firstName"
                       value={registerFormData.firstName}
                       onChange={handleChange}
                     />
@@ -140,7 +140,7 @@ const Register = () => {
                       type="text"
                       placeholder="Enter your last name"
                       error={error.lastName}
-                      name="lastname"
+                      name="lastName"
                       value={registerFormData.lastName}
                       onChange={handleChange}
                     />
@@ -150,7 +150,7 @@ const Register = () => {
                     type="text"
                     placeholder="Enter your Username"
                     error={error.userName}
-                    name="username"
+                    name="userName"
                     value={registerFormData.userName}
                     onChange={handleChange}
                   />

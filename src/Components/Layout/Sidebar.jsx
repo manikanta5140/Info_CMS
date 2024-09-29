@@ -13,6 +13,8 @@ import Register from "../auth/Register";
 import ContentHistory from "../../pages/ContentHistory";
 import Profile from "../../pages/Profile";
 import PostedContent from "../../pages/PostedContent";
+import Home from "../../pages/Home";
+import GenerateContent from "../../pages/GenerateContent";
 
 const Sidebar = ({ openSideBar, toggleSideBar }) => {
   return (
@@ -26,7 +28,7 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to="/"
+                to="/home"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 onClick={toggleSideBar}
               >
@@ -96,10 +98,14 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
         </div>
       </aside>
 
-      <div className="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 ">
-          <div class="flex  justify-center min-h-screen rounded bg-gray-50 dark:bg-gray-800">
+      <div className="p-2 sm:ml-64">
+        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg">
+          <div className="flex  justify-center min-h-screen rounded mt-4">
             <Routes>
+              <Route>
+                <Route path="/home" element={<Home />} />
+                <Route path="/content/:slug" element={<GenerateContent />} />
+              </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
