@@ -1,62 +1,114 @@
-import React, { useContext,  useReducer} from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { checkUsernameAvailability, login, register } from "../../Api/services/authService";
 
-/**************************Createating the context*************************************************/
-
+/**
+ * AuthContext is a React context that holds authentication state.
+ * It can be accessed by any component wrapped within the AuthProvider.
+ */
 const AuthContext = React.createContext();
 
-/****************************Hook to access the AuthContext********************************************/
-
+/**
+ * Custom hook to provide access to the AuthContext. This hook simplifies
+ * access to the authentication state and actions like login and register.
+ *
+ * @returns {object} - The current value of AuthContext which includes user data,
+ * login, and registration handlers.
+ */
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-/************************************provider for auth**********************************/
-
+/**
+ * AuthProvider component provides the authentication context to its child components.
+ * It manages the authentication state (logged-in user, login status, loading, error)
+ * and persists the login state across page refreshes.
+ *
+ * @param {ReactNode} children - The child components that will consume the AuthContext.
+ */
 export const AuthProvider = ({ children }) => {
-    /******************* initialising the Initial state************************************/
+  const [authUser, setAuthUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    const initialState = {
-      user: null,
-      isLoggedIn: false,
-    };
-    
-  /*************************** reducer function to handle the action **************************************** */
+  // Effect hook to check and persist user authentication state across page refreshes
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("authUser"));
+    if (storedUser) {
+      setAuthUser(storedUser);
+      setIsLoggedIn(true);
+    }
+    setLoading(false);
+  }, []);
 
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case "LOGIN": {
-        return {
-          ...state,
-          user: action.payload,
-          isLoggedIn: true,
-        };
-      }
-      case "REGISTER": {
-        console.log(action.payload)
-        return {
-          ...state,
-          user: action.payload,
-          isLoggedIn: false,
-        };
-      }
-      case "LOGOUT": {
-        return {
-          ...state,
-          user: null,
-          isLoggedIn: false,
-        };
-      }
-      default:
-        return state;
+  /**
+   * loginUser - Handles user login by calling the login service.
+   * Stores user data in both the state and localStorage on successful login.
+   *
+   * @param {object} userData - The login credentials.
+   */
+  const loginUser = async (userData) => {
+    try {
+      setLoading(true);
+      console.log(userData, "contextAuth");
+      const user = await login(userData);
+      setAuthUser(user);
+      setIsLoggedIn(true);
+      localStorage.setItem("authUser", JSON.stringify(user));
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  
+  /**
+   * registerUser - Handles user registration by calling the registration service.
+   * Stores new user data in both the state and localStorage on successful registration.
+   *
+   * @param {object} userData - The registration credentials.
+   */
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-  return (
-    <AuthContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const registerUser = async (userData) => {
+    try {
+      setLoading(true);
+      console.log(userData, "contextAuth");
+      // Register the user
+      const newUser = await register(userData);
+      setAuthUser(newUser);
+      setIsLoggedIn(true);
+      localStorage.setItem("authUser", JSON.stringify(newUser));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to check if a username is available
+  const checkUsername = async (username) => {
+    try {
+      const isAvailable = await checkUsernameAvailability(username);
+      return isAvailable;
+    } catch (error) {
+      setError("Error checking username availability");
+      return false;
+    }
+  };
+
+  const value = {
+    authUser,
+    setAuthUser,
+    isLoggedIn,
+    setIsLoggedIn,
+    loading,
+    error,
+    loginUser,
+    registerUser,
+    checkUsername,
+  };
+
+  // Return the provider component, wrapping all children components with AuthContext
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

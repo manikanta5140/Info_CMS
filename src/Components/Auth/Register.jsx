@@ -1,96 +1,115 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {Input,Button} from "../index.js";
-import { useAuth } from "../../Context/Auth/AuthContext";
+import Input from "../common/Input";
+import Button from "../common/Button";
+import { useAuth } from "../../Context/Auth/AuthContext.jsx";
 
 const Register = () => {
-
-  const {dispatch}=useAuth();
-  /**********State to store the value of input field and errors****************************** */
-
+  const { registerUser, checkUsername } = useAuth();
   const [registerFormData, setRegisterFormData] = useState({
-    firstname: "",
-    lastname: "",
-    username: "",
+    firstName: "",
+    lastName: "",
+    userName: "",
     email: "",
     password: "",
     conformPassword: "",
   });
+
   const [error, setError] = useState({});
 
-  /**********************check validation for input field before submiting the form **************************/
-  const validate = () => {
-    let isError = {};
+  /**
+   * validate - Validates the input fields for the registration form.
+   * Ensures that all required fields meet the necessary criteria.
+   *
+   * @returns {boolean} - True if the form is valid, false otherwise.
+   */
+  const validate = async () => {
+    const isError = {};
 
-    // Firstname validation
-    if (!registerFormData.firstname) {
-      isError.firstname = "First name is required";
-    } else if (registerFormData.firstname.length < 2) {
-      isError.firstname = "First name must be at least 2 characters long";
+    // Validate firstname: Required and must be at least 2 characters
+    if (!registerFormData.firstName) {
+      isError.firstName = "First name is required";
+    } else if (registerFormData.firstName.length < 2) {
+      isError.firstName = "First name must be at least 2 characters long";
     }
 
-    // Lastname validation
-    if (!registerFormData.lastname) {
-      isError.lastname = "Last name is required";
-    } else if (registerFormData.lastname.length < 2) {
-      isError.lastname = "Last name must be at least 2 characters long";
+    // Validate lastname: Required and must be at least 2 characters
+    if (!registerFormData.lastName) {
+      isError.lastName = "Last name is required";
+    } else if (registerFormData.lastName.length < 2) {
+      isError.lastName = "Last name must be at least 2 characters long";
     }
 
-    // Username validation
-    if (!registerFormData.username) {
-      isError.username = "Username is required";
-    } else if (registerFormData.username.length < 3) {
-      isError.username = "Username must be at least 3 characters long";
+    // Validate username: Required, must be at least 3 characters, and must be unique
+    if (!registerFormData.userName) {
+      isError.userName = "Username is required";
+    } else if (registerFormData.userName.length < 3) {
+      isError.userName = "Username must be at least 3 characters long";
     } else {
-      // Check for unique username
-      // const isAvailable = await checkUsernameAvailability(registerFormData.username);
-      // if (!isAvailable) {
-      //   isError.username = "Username is already taken";
+      try {
+        // Check for unique username
+        const isAvailable = await checkUsername(registerFormData.userName);
+        if (!isAvailable) {
+          isError.userName = "Username is already taken";
+        }
+      } catch (error) {
+        isError.userName = "Error checking username availability";
+      }
     }
 
-    // Email validation
+    // Validate email: Required and must match a basic email pattern
     if (!registerFormData.email) {
       isError.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(registerFormData.email)) {
       isError.email = "Invalid Email";
     }
 
-    // Password validation
+    // Validate password: Required and must be at least 6 characters
     if (!registerFormData.password) {
       isError.password = "Password is required";
     } else if (registerFormData.password.length < 6) {
       isError.password = "Password must be at least 6 characters long";
     }
 
-    // Confirm Password validation
+    // Validate confirm password: Required and must match the password
     if (!registerFormData.conformPassword) {
       isError.conformPassword = "Confirm password is required";
     } else if (registerFormData.conformPassword !== registerFormData.password) {
       isError.conformPassword = "Passwords do not match";
     }
+
     setError(isError);
     return Object.keys(isError).length === 0;
   };
 
-  /******************************* handling the change in input field value********************************* */
-
+  /**
+   * handleChange - Handles the change in input field values.
+   * Updates the state with the current value for the respective field.
+   *
+   * @param {Event} event - The input change event.
+   */
   const handleChange = (event) => {
     const { name, value } = event.target;
     setRegisterFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /*****************************submiting the form by checking form is valid or not ******************* */
+  /**
+   * handleSubmit - Handles the form submission.
+   * Checks if the form is valid using the validate function, and if valid,
+   * calls the registerUser function from the AuthContext to register the user.
+   *
+   * @param {Event} e - The form submit event.
+   */
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      dispatch({type:"REGISTER",payload:registerFormData});
+    if (await validate()) {
+      // Call the registerUser function to process registration if the form is valid
+      registerUser(registerFormData);
     } else {
-      console.log("invalid form");
+      console.log("Invalid form");
     }
   };
-
-  /******************************************************************************************************** */
 
   return (
     <form onSubmit={handleSubmit}>
@@ -111,18 +130,18 @@ const Register = () => {
                       label="First Name"
                       type="text"
                       placeholder="Enter your first name"
-                      error={error.firstname}
+                      error={error.firstName}
                       name="firstname"
-                      value={registerFormData.firstname}
+                      value={registerFormData.firstName}
                       onChange={handleChange}
                     />
                     <Input
                       label="Last Name"
                       type="text"
                       placeholder="Enter your last name"
-                      error={error.lastname}
+                      error={error.lastName}
                       name="lastname"
-                      value={registerFormData.lastname}
+                      value={registerFormData.lastName}
                       onChange={handleChange}
                     />
                   </div>
@@ -130,9 +149,9 @@ const Register = () => {
                     label="Username"
                     type="text"
                     placeholder="Enter your Username"
-                    error={error.username}
+                    error={error.userName}
                     name="username"
-                    value={registerFormData.username}
+                    value={registerFormData.userName}
                     onChange={handleChange}
                   />
 

@@ -1,61 +1,79 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Input, Button } from "../index";
 import { useAuth } from "../../Context/Auth/AuthContext";
+import Input from "../common/Input";
+import Button from "../common/Button";
 
 const Login = () => {
-  const {dispatch } = useAuth();
-
-  /**************************State to store the value of input field and errors********************************************* */
+  // Destructure the loginUser function from the AuthContext to handle user login
+  const { loginUser } = useAuth();
 
   const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
+
   const [error, setError] = useState({});
 
-  /**********************check validation for input field before submiting the form **************************/
-
+  /**
+   * validate - Validates the input fields for the login form.
+   * Ensures that email and password meet the necessary criteria.
+   *
+   * @returns {boolean} - True if the form is valid, false otherwise.
+   */
   const validate = () => {
-    let isError = {};
+    const isError = {};
 
-    // Email validation
+    // Validate email: Required and must match a basic email pattern
     if (!loginFormData.email) {
       isError.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(loginFormData.email)) {
       isError.email = "Invalid Email";
     }
-    // Password  validation
+
+    // Validate password: Required and must be at least 6 characters
     if (!loginFormData.password) {
       isError.password = "Password is required";
     } else if (loginFormData.password.length < 6) {
       isError.password = "Password must be at least 6 characters long";
     }
+
     setError(isError);
     return Object.keys(isError).length === 0;
   };
 
-  /******************************* handling the change in input field value********************************* */
+  /**
+   * handleChange - Handles the change in input field values.
+   * Updates the state with the current value for the respective field.
+   *
+   * @param {Event} e - The input change event.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /*****************************submiting the form by checking form is valid or not ******************* */
-
+  /**
+   * handleSubmit - Handles the form submission.
+   * Checks if the form is valid using the validate function, and if valid,
+   * calls the loginUser function from the AuthContext to log in the user.
+   *
+   * @param {Event} e - The form submit event.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log(loginFormData, "logim")
-     dispatch({type:"LOGIN",payload:loginFormData})
-      console.log("form is valid");
+      loginUser(loginFormData);
+      console.log("Form is valid");
     } else {
-      console.log("invalid form");
+      console.log("Invalid form");
     }
   };
 
-  /******************************************************************************************************** */
-
+  /**
+   * Render the login form with input fields for email and password,
+   * along with a submit button.
+   */
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -103,7 +121,7 @@ const Login = () => {
 
               <div className="w-full flex justify-center">
                 <p className="flex  gap-2 items-center bg-white  px-6 py-2 text-sm font-medium text-gray-800">
-                  Donot have any account?
+                  Donot have an account?
                   <Link
                     to="/register"
                     className="font-bold text-primary transition-all duration-200 underline"
