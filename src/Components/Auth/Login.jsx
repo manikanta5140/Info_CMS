@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useAuth } from "../../Context/Auth/AuthContext";
 import Input from "../common/Input";
 import Button from "../common/Button";
+import { validateEmail, validatePassword } from "../../utils/Validation.js";
 
-const Login = () => {
+const Login = ({ setShowLogin, setShowRegister }) => {
   // Destructure the loginUser function from the AuthContext to handle user login
   const { loginUser } = useAuth();
 
@@ -23,19 +23,12 @@ const Login = () => {
    */
   const validate = () => {
     const isError = {};
-
-    // Validate email: Required and must match a basic email pattern
-    if (!loginFormData.email) {
-      isError.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(loginFormData.email)) {
-      isError.email = "Invalid Email";
-    }
-
-    // Validate password: Required and must be at least 6 characters
-    if (!loginFormData.password) {
-      isError.password = "Password is required";
-    } else if (loginFormData.password.length < 6) {
-      isError.password = "Password must be at least 6 characters long";
+    isError.email = validateEmail(loginFormData.email);
+    isError.password = validatePassword(loginFormData.password);
+    for (const key in isError) {
+      if (isError[key] === null) {
+        delete isError[key];
+      }
     }
 
     setError(isError);
@@ -77,59 +70,67 @@ const Login = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-          <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-            <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-              <div className="max-w-md mx-auto">
-                <div>
-                  <h1 className="text-3xl font-extrabold leading-tight lora text-center ">
-                    Login
-                  </h1>
-                </div>
-                <div className="divide-y divide-gray-200">
-                  <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                    <Input
-                      label="Email"
-                      type="Email"
-                      placeholder="Enter your password"
-                      name="email"
-                      value={loginFormData.email}
-                      onChange={handleChange}
-                      error={error.email}
-                    />
-                    <Input
-                      label="Password"
-                      type="password"
-                      placeholder="Enter your password"
-                      name="password"
-                      value={loginFormData.password}
-                      onChange={handleChange}
-                      error={error.password}
-                    />
-                    <div className="relative">
-                      <Button
-                        type="submit"
-                        className="w-full bg-cyan-500 text-white rounded-md font-bold lore mt-2 "
-                      >
-                        Login
-                      </Button>
-                    </div>
+        <div className="relative py-3 sm:max-w-xl sm:mx-auto bg-transparent">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+          <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+            <div className="max-w-md mx-auto">
+              <div className="bg-tranparent p-6 w-11/12 md:w-1/2 lg:w-1/3 max-w-lg mx-auto">
+                <Button
+                  className="absolute top-6 right-8 bg-gray-200 text-black"
+                  type="button"
+                  onClick={() => setShowLogin(false)}
+                >
+                  X
+                </Button>
+              </div>
+              <div>
+                <h1 className="text-3xl font-extrabold leading-tight lora text-center ">
+                  Login
+                </h1>
+              </div>
+              <div className="divide-y divide-gray-200">
+                <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                  <Input
+                    label="Email"
+                    type="Email"
+                    name="email"
+                    value={loginFormData.email}
+                    onChange={handleChange}
+                    error={error.email}
+                  />
+                  <Input
+                    label="Password"
+                    type="password"
+                    name="password"
+                    value={loginFormData.password}
+                    onChange={handleChange}
+                    error={error.password}
+                  />
+                  <div className="relative">
+                    <Button
+                      type="submit"
+                      className="w-full bg-cyan-500 text-white rounded-md font-bold lore mt-2 "
+                    >
+                      Login
+                    </Button>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="w-full flex justify-center">
-                <p className="flex  gap-2 items-center bg-white  px-6 py-2 text-sm font-medium text-gray-800">
-                  Donot have an account?
-                  <Link
-                    to="/register"
-                    className="font-bold text-primary transition-all duration-200 underline"
-                  >
-                    Register
-                  </Link>
-                </p>
-              </div>
+            <div className="w-full flex justify-center">
+              <p className="flex  gap-2 items-center bg-white  px-6 py-2 text-sm font-medium text-gray-800">
+                Donot have an account?
+                <span
+                  className="font-bold text-primary transition-all duration-200 underline cursor-pointer"
+                  onClick={() => {
+                    setShowLogin(false);
+                    setShowRegister(true);
+                  }}
+                >
+                  Register
+                </span>
+              </p>
             </div>
           </div>
         </div>

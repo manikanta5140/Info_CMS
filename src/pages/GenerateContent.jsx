@@ -1,31 +1,51 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import Template from "../Template";
 import Button from "../Components/common/Button";
 import Input from "../Components/common/Input";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCopy,
+  faSpinner,
+  faCloudArrowUp,
+  faBackward,
+} from "@fortawesome/free-solid-svg-icons";
 import { chatSession } from "../utils/AiModel";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const GenerateContent = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [aiResult, setAiResult] = useState("");
+  const [isCopied, setIsCopied] = useState();
   const editorRef = useRef();
   const params = useParams();
+  const navigate = useNavigate();
+
   const { slug } = params;
   const selectedTemplte = Template?.find((item) => item.slug == slug);
+
+  const onCopyHandler = (text, result) => {
+    if (result) {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 1500);
+    } else {
+      alert("Failed to copy text. Please try again.");
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
     generateAiContent(formData);
   };
+
   const generateAiContent = async (formData) => {
     setLoading(true);
     const selectedPrompt = selectedTemplte?.aiPrompt;
@@ -43,6 +63,13 @@ const GenerateContent = () => {
     <>
       <div className="sm:p-6 md:py-8  md:px-2 my-auto">
         <section className="max-w-screen-lg md:rounded-md ">
+          <Button
+            type="button"
+            className="flex gap-2 justify-center items-center mb-3 md:ml-8  lg:ml-0 mt-10 md:mt-0"
+            onClick={() => navigate("/home")}
+          >
+            <FontAwesomeIcon icon={faBackward} /> Back
+          </Button>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-gray-800">
             {/* <!-- Form section --> */}
             <div className="lg:col-span-1 flex justify-center">
@@ -118,9 +145,21 @@ const GenerateContent = () => {
                   <h2 className="font-semibold text-base md:text-lg">
                     Your Result
                   </h2>
-                  <Button className="flex items-center gap-2 text-sm md:text-base">
-                    <FontAwesomeIcon icon={faCopy} /> Copy
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button className="flex items-center gap-2 text-sm md:text-base">
+                      <FontAwesomeIcon icon={faCloudArrowUp} />
+                      Post
+                    </Button>
+                    <CopyToClipboard text={aiResult} onCopy={onCopyHandler}>
+                      <Button
+                        className={`flex items-center gap-2 text-sm md:text-base ${
+                          isCopied ? "bg-green-600 text-white" : ""
+                        }`}
+                      >
+                        <FontAwesomeIcon icon={faCopy} /> Copy
+                      </Button>
+                    </CopyToClipboard>
+                  </div>
                 </div>
                 <Editor
                   ref={editorRef}

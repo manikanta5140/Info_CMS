@@ -39,11 +39,14 @@ export const login = async (userData) => {
  * @throws {Error} - Throws an error with a meaningful message if the registration request fails.
  */
 export const register = async (userData) => {
+ 
   try {
+    console.log(userData,"service")
     const response = await axiosInstance.post(
       REGISTER_URL,
       JSON.stringify(userData)
     );
+    console.log(response.data,"response")
     return response.data;
   } catch (error) {
     if (error.response) {
