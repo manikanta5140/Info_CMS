@@ -13,12 +13,12 @@ import axiosInstance from "../axiosInstance";
 
 export const login = async (userData) => {
   try {
-    const response = await axiosInstance.post(
-      LOGIN_URL,
-      JSON.stringify(userData)
-    );
+    console.log(userData);
+    const response = await axiosInstance.post(LOGIN_URL, userData);
+    console.log(response.data);
     return response.data;
   } catch (error) {
+    console.log(error);
     if (error.response) {
       throw new Error(
         `Login failed: ${error.response.data?.message || "Unexpected error"}`
@@ -39,14 +39,8 @@ export const login = async (userData) => {
  * @throws {Error} - Throws an error with a meaningful message if the registration request fails.
  */
 export const register = async (userData) => {
- 
   try {
-    console.log(userData,"service")
-    const response = await axiosInstance.post(
-      REGISTER_URL,
-      JSON.stringify(userData)
-    );
-    console.log(response.data,"response")
+    const response = await axiosInstance.post(REGISTER_URL, userData);
     return response.data;
   } catch (error) {
     if (error.response) {

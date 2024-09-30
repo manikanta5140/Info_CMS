@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { checkUsernameAvailability, login, register } from "../../Api/services/authService";
+import {
+  checkUsernameAvailability,
+  login,
+  register,
+} from "../../Api/services/authService";
 
 /**
  * AuthContext is a React context that holds authentication state.
@@ -32,14 +36,14 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   // Effect hook to check and persist user authentication state across page refreshes
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("authUser"));
-    if (storedUser) {
-      setAuthUser(storedUser);
-      setIsLoggedIn(true);
-    }
-    setLoading(false);
-  }, []);
+  // useEffect(() => {
+  //   const storedUser = JSON.parse(localStorage.getItem("authUser"));
+  //   if (storedUser) {
+  //     setAuthUser(storedUser);
+  //     setIsLoggedIn(true);
+  //   }
+  //   setLoading(false);
+  // }, []);
 
   /**
    * loginUser - Handles user login by calling the login service.
@@ -54,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       const user = await login(userData);
       setAuthUser(user);
       setIsLoggedIn(true);
-      localStorage.setItem("authUser", JSON.stringify(user));
+      localStorage.setItem("authUser", JSON.stringify(user.accessToken));
     } catch (error) {
       setError(error.message);
     } finally {

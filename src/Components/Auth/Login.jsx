@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../Context/Auth/AuthContext";
 import Input from "../common/Input";
 import Button from "../common/Button";
-import { validateEmail, validatePassword } from "../../utils/Validation.js";
+import {
+  checkUserVerified,
+  validateEmail,
+  validatePassword,
+} from "../../utils/Validation.js";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ setShowLogin, setShowRegister }) => {
   // Destructure the loginUser function from the AuthContext to handle user login
@@ -14,6 +19,8 @@ const Login = ({ setShowLogin, setShowRegister }) => {
   });
 
   const [error, setError] = useState({});
+  const navigate = useNavigate();
+
 
   /**
    * validate - Validates the input fields for the login form.
@@ -56,8 +63,15 @@ const Login = ({ setShowLogin, setShowRegister }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      loginUser(loginFormData);
-      console.log("Form is valid");
+      const user = loginUser(loginFormData);
+      if (user) {
+        const res = checkUserVerified(user?.userDetails?.profilePhoto);
+        if (res) {
+          navigate("/dashboard");
+        } else {
+          alert("you are not veryfied");
+        }
+      }
     } else {
       console.log("Invalid form");
     }
@@ -94,7 +108,7 @@ const Login = ({ setShowLogin, setShowRegister }) => {
                     label="Email"
                     type="Email"
                     name="email"
-                    value={loginFormData.email}
+                    value={loginFormData.email || ""}
                     onChange={handleChange}
                     error={error.email}
                   />
@@ -102,7 +116,7 @@ const Login = ({ setShowLogin, setShowRegister }) => {
                     label="Password"
                     type="password"
                     name="password"
-                    value={loginFormData.password}
+                    value={loginFormData.password || ""}
                     onChange={handleChange}
                     error={error.password}
                   />

@@ -1,9 +1,7 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import API_CONFIG from "./ApiConfig";
 
 // Creating an Axios instance with base settings for all API requests
-
 const axiosInstance = axios.create({
   baseURL: API_CONFIG.baseURL,
   headers: API_CONFIG.headers,
@@ -39,7 +37,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    const navigate = useNavigate();
     if (error.response && error.response.status === 401) {
       // If we receive a 401 Unauthorized response, the token might have expired
       localStorage.removeItem("accessToken");
