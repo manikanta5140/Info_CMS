@@ -54,11 +54,9 @@ export const AuthProvider = ({ children }) => {
   const loginUser = async (userData) => {
     try {
       setLoading(true);
-      console.log(userData, "contextAuth");
       const user = await login(userData);
       setAuthUser(user);
       setIsLoggedIn(true);
-      localStorage.setItem("authUser", JSON.stringify(user.accessToken));
     } catch (error) {
       setError(error.message);
     } finally {

@@ -19,6 +19,8 @@ const Login = ({ setShowLogin, setShowRegister }) => {
   });
 
   const [error, setError] = useState({});
+  const[checkVerified,setCheckVerified]=useState();
+
   const navigate = useNavigate();
 
 
@@ -67,6 +69,7 @@ const Login = ({ setShowLogin, setShowRegister }) => {
       if (user) {
         const res = checkUserVerified(user?.userDetails?.profilePhoto);
         if (res) {
+          localStorage.setItem("authUser", JSON.stringify(user.accessToken));
           navigate("/dashboard");
         } else {
           alert("you are not veryfied");
