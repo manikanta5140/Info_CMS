@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       const user = await login(userData);
       setAuthUser(user);
-      setIsLoggedIn(true);
     } catch (error) {
       setError(error.message);
     } finally {

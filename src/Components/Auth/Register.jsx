@@ -79,7 +79,17 @@ const Register = ({ setShowRegister, setShowLogin }) => {
     if (await validate()) {
       // Call the registerUser function to process registration if the form is valid
       delete registerFormData.confirmPassword;
-      registerUser(registerFormData);
+      const user = registerUser(registerFormData);
+      if (user) {
+        const res = checkUserVerified(user?.userDetails?.isVerified);
+        if (res) {
+          localStorage.setItem("authUser", JSON.stringify(user.accessToken));
+          navigate("/dashboard");
+        } else {
+          setShowLogin(false);
+          openModal();
+        }
+      }
     } else {
       console.log("Invalid form");
     }

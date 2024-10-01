@@ -1,20 +1,49 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
-import Login from "../auth/Login";
 import Register from "../auth/Register";
+import Login from "../Auth/Login";
+import Modal from "./Model";
+import { useAuth } from "../../Context/Auth/AuthContext";
 
 function Landing() {
-  const[showLogin,setShowLogin]=useState(false);
-  const[showRegister,setShowRegister]=useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+    /************************************Modal********************** */
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    // const handleVerify = () => {
+    //   setIsLoading(true);
+    //   setTimeout(() => {
+    //     alert('You have been!');
+    //     setIsLoading(false);
+    //     closeModal();
+    //   }, 2000); // Simulate a 2-second loading period
+    // }
+
+    const handleResend = () => {
+      alert("Verification code resent!");
+    };
+
   return (
     <>
       {/* Navbar Section */}
       <div className="bg-white py-2 border-b-2 border-gray-50 shadow-md">
         <div className="container mx-auto flex items-center justify-between px-4">
-          <div className="text-blue-gray-900 text-2xl font-bold py-3 px-6 rounded-lg">InfoCms</div>
+          <div className="text-blue-gray-900 text-2xl font-bold py-3 px-6 rounded-lg">
+            InfoCms
+          </div>
           <div className="lg:flex items-center space-x-6">
-            <Button className="bg-black text-white md:py-3 py-2 px-6 rounded-lg text-sm md:text-lg"
-            onClick={()=>setShowLogin(true)}>Login</Button>
+            <Button
+              className="bg-black text-white md:py-3 py-2 px-6 rounded-lg text-sm md:text-lg"
+              onClick={() => setShowLogin(true)}
+            >
+              Login
+            </Button>
           </div>
         </div>
       </div>
@@ -32,11 +61,15 @@ function Landing() {
             <span className="text-green-500">marketers</span>.
           </h1>
           <p className="text-gray-600 text-lg lg:text-xl max-w-2xl mx-auto">
-            Organize, manage, and deliver your content efficiently with a system that evolves with your needs.
+            Organize, manage, and deliver your content efficiently with a system
+            that evolves with your needs.
           </p>
 
           <div className="mt-4 ">
-            <Button className="bg-black text-white py-3 px-6 rounded-lg text-lg" onClick={()=>setShowLogin(true)}>
+            <Button
+              className="bg-black text-white py-3 px-6 rounded-lg text-lg"
+              onClick={() => setShowLogin(true)}
+            >
               Get Started
             </Button>
           </div>
@@ -50,43 +83,56 @@ function Landing() {
             <div className="p-6 bg-white shadow-lg rounded-lg">
               <h3 className="text-xl font-semibold mb-4">High Performance</h3>
               <p className="text-gray-600">
-                Experience fast, reliable content management built for today’s demands.
+                Experience fast, reliable content management built for today’s
+                demands.
               </p>
             </div>
             <div className="p-6 bg-white shadow-lg rounded-lg">
               <h3 className="text-xl font-semibold mb-4">Top Security</h3>
               <p className="text-gray-600">
-                Safeguard your data with the latest security protocols and encryption.
+                Safeguard your data with the latest security protocols and
+                encryption.
               </p>
             </div>
             <div className="p-6 bg-white shadow-lg rounded-lg">
               <h3 className="text-xl font-semibold mb-4">Easy Integration</h3>
               <p className="text-gray-600">
-                Seamlessly integrate with your existing tools and platforms for a smooth workflow.
+                Seamlessly integrate with your existing tools and platforms for
+                a smooth workflow.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-        {/* Login Modal Popup */}
-        {showLogin && (
+      {/* Login Modal Popup */}
+      {showLogin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-5 md:px-0">
-          
-            <Login  setShowLogin={ setShowLogin} setShowRegister={setShowRegister}/>
-         
+          <Login
+            setShowLogin={setShowLogin}
+            setShowRegister={setShowRegister}
+            openModal={openModal}
+          />
         </div>
       )}
       {/* Register Modal Popup */}
       {showRegister && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-5 md:px-0 ">
-            <Register  setShowLogin={ setShowLogin} setShowRegister={setShowRegister}/>
-         
+          <Register
+            setShowLogin={setShowLogin}
+            setShowRegister={setShowRegister}
+            openModal={openModal}
+          />
         </div>
       )}
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onResend={handleResend}
+      />
     </>
   );
 }
-
 
 export default Landing;

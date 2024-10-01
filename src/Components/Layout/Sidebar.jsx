@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouseUser,
@@ -101,17 +101,7 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
       <div className="p-2 sm:ml-64">
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg">
           <div className="flex  justify-center min-h-screen rounded mt-4">
-            <Routes>
-              <Route>
-                <Route path="/home" element={<Home />} />
-                <Route path="/content/:slug" element={<GenerateContent />} />
-              </Route>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/history" element={<ContentHistory />} />
-              <Route path="/posted-content" element={<PostedContent />} />
-            </Routes>
+            <Outlet/>
           </div>
         </div>
       </div>

@@ -8,10 +8,11 @@ import {
   validatePassword,
 } from "../../utils/Validation.js";
 import { useNavigate } from "react-router-dom";
+import Modal from "../Layout/Model.jsx";
 
-const Login = ({ setShowLogin, setShowRegister }) => {
+const Login = ({ setShowLogin, setShowRegister,openModal }) => {
   // Destructure the loginUser function from the AuthContext to handle user login
-  const { loginUser } = useAuth();
+  const { loginUser,setIsLoggedIn } = useAuth();
 
   const [loginFormData, setLoginFormData] = useState({
     email: "",
@@ -19,10 +20,7 @@ const Login = ({ setShowLogin, setShowRegister }) => {
   });
 
   const [error, setError] = useState({});
-  const[checkVerified,setCheckVerified]=useState();
-
   const navigate = useNavigate();
-
 
   /**
    * validate - Validates the input fields for the login form.
@@ -64,21 +62,31 @@ const Login = ({ setShowLogin, setShowRegister }) => {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
+    localStorage.setItem("accessToken","1234567890" );
+    sessionStorage.setItem("accessToken", "1234567890");
+    // setIsLoggedIn(true);
     if (validate()) {
       const user = loginUser(loginFormData);
+      console.log(user)
       if (user) {
-        const res = checkUserVerified(user?.userDetails?.profilePhoto);
+        const res = checkUserVerified(user?.userDetails?.isVerified);
         if (res) {
-          localStorage.setItem("authUser", JSON.stringify(user.accessToken));
+          // JSON.stringify(user.accessToken)
+          localStorage.setItem("accessToken","1234567890" );
+          localSession.setItem("accessToken", "1234567890");
+            setIsLoggedIn(true);
           navigate("/dashboard");
         } else {
-          alert("you are not veryfied");
+          setShowLogin(false);
+          openModal();
         }
       }
     } else {
       console.log("Invalid form");
     }
   };
+
+
 
   /**
    * Render the login form with input fields for email and password,
@@ -152,6 +160,8 @@ const Login = ({ setShowLogin, setShowRegister }) => {
           </div>
         </div>
       </form>
+
+      
     </>
   );
 };
