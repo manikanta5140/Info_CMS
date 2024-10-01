@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
   withCredentials: API_CONFIG.withCredentials,
   timeout: API_CONFIG.timeout,
 });
+console.log(axiosInstance)
 
 /************************************************ 
   Interceptors for adding auth tokens and handling 
@@ -16,18 +17,19 @@ const axiosInstance = axios.create({
 
 // Intercept outgoing requests to include authorization token
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// axiosInstance.interceptors.request.use(
+//   (config) => {
+//     console.log(config)
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 /********************************************* 
   Response Interceptors: Handling token expiry 
