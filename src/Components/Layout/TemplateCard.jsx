@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
-import Template from "../../Template";
 import { Link, NavLink } from "react-router-dom";
+import { getAllContent } from "../../Api/services/contentService";
 
 const TemplateCard = ({ searchTemplate }) => {
   const [templateList, setTemplateList] = useState(searchTemplate);
+  const [content, setContent] = useState();
+  useEffect(() => {
+    getAllContent()
+      .then((res) => {
+        setContent(res);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   useEffect(() => {
     if (searchTemplate) {
-      const filterTemplate = Template.filter((item) =>
+      const filterTemplate = content?.filter((item) =>
         item.name.toLowerCase().includes(searchTemplate.toLowerCase())
       );
       setTemplateList(filterTemplate);
     } else {
-      setTemplateList(Template);
+      setTemplateList(content);
     }
   }, [searchTemplate]);
   return (
@@ -20,26 +28,26 @@ const TemplateCard = ({ searchTemplate }) => {
         templateList.map((item, index) => (
           <Link
             key={index}
-            to={`/content/${item.slug}`}
+            to={`/content/${item?.slug}`}
             className="flex w-full"
           >
             <div className="relative flex flex-col break-words rounded-lg border border-gray-200 bg-white shadow-lg transition-transform transform hover:scale-105">
               <div className="absolute -mt-10 left-1/2 transform -translate-x-1/2 h-16 w-16 rounded-xl flex items-center justify-center">
-                <img src={item.icon} alt="icon" className="w-12 h-12" />
+                <img src={item?.iconUrl} alt="icon" className="w-12 h-12" />
               </div>
               <div className="p-4 pt-12 text-center">
                 <p className="text-sm font-light capitalize text-gray-600">
                   Title
                 </p>
                 <h4 className="text-lg font-semibold tracking-tight text-gray-800">
-                  {item.name}
+                  {item?.categoryName}
                 </h4>
               </div>
 
               <hr className="my-4 border-gray-300" />
 
               <div className="p-4">
-                <p className="font-light text-gray-600">{item.desc}</p>
+                <p className="font-light text-gray-600">{item?.description}</p>
               </div>
             </div>
           </Link>

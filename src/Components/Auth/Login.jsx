@@ -62,9 +62,6 @@ const Login = ({ setShowLogin, setShowRegister,openModal }) => {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("accessToken","1234567890" );
-    sessionStorage.setItem("accessToken", "1234567890");
-    // setIsLoggedIn(true);
     if (validate()) {
       const user = loginUser(loginFormData);
       console.log(user)

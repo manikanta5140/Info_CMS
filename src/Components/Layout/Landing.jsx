@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Register from "../auth/Register";
-import Login from "../Auth/Login";
+import Login from "../auth/Login";
 import Modal from "./Model";
 import { useAuth } from "../../Context/Auth/AuthContext";
 
@@ -10,24 +10,22 @@ function Landing() {
   const [showRegister, setShowRegister] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  /************************************Modal********************** */
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
+  // const handleVerify = () => {
+  //   setIsLoading(true);
+  //   setTimeout(() => {
+  //     alert('You have been!');
+  //     setIsLoading(false);
+  //     closeModal();
+  //   }, 2000); // Simulate a 2-second loading period
+  // }
 
-    /************************************Modal********************** */
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-
-    // const handleVerify = () => {
-    //   setIsLoading(true);
-    //   setTimeout(() => {
-    //     alert('You have been!');
-    //     setIsLoading(false);
-    //     closeModal();
-    //   }, 2000); // Simulate a 2-second loading period
-    // }
-
-    const handleResend = () => {
-      alert("Verification code resent!");
-    };
+  const handleResend = () => {
+    alert("Verification code resent!");
+  };
 
   return (
     <>

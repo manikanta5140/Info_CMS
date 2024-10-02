@@ -7,6 +7,8 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 const Home = () => {
   const [searchTemplate, setSearchTemplate] = useState("");
 
+
+
   return (
     <>
       <div className="flex flex-col py-8 w-full">

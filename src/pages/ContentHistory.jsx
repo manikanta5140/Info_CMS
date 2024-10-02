@@ -84,13 +84,7 @@ const ContentHistory = () => {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                         Minima similique aliquid optio neque, quisquam eum?
                       </div>
-                      <div className="flex gap-1 justify-start items-center">
-                        <FontAwesomeIcon
-                          className="h-4 w-4   align-middle"
-                          icon={faCloudArrowUp}
-                        />
-                        instagram facebook
-                      </div>
+
                       <div className="flex items-center gap-1">
                         <FontAwesomeIcon
                           className="h-3 w-3 align-middle"
@@ -114,15 +108,26 @@ const ContentHistory = () => {
                       <FontAwesomeIcon icon={faCopy} />
                       Copy
                     </div>
-                    <span className="mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-center text-xs text-purple-800 lg:hidden">
-                      Edit
-                    </span>
+                    <div className="flex gap-1 justify-center items-center">
+                      <span className="ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800">
+                        <FontAwesomeIcon
+                          className="h-4 w-4   align-middle"
+                          icon={faCloudArrowUp}
+                        />
+                        post
+                      </span>
+                      <span className="mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-center text-xs text-purple-800 lg:hidden">
+                        Edit
+                      </span>
+                    </div>
                   </td>
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                     15/4/2024
                   </td>
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
-                    facebook , linkedin
+                    <span className="ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800">
+                      post
+                    </span>
                   </td>
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                     Copy

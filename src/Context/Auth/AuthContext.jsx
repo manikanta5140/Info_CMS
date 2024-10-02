@@ -73,12 +73,9 @@ export const AuthProvider = ({ children }) => {
   const registerUser = async (userData) => {
     try {
       setLoading(true);
-      console.log(userData, "contextAuth");
-      // Register the user
       const newUser = await register(userData);
       setAuthUser(newUser);
-      setIsLoggedIn(true);
-      localStorage.setItem("authUser", JSON.stringify(newUser));
+      // localStorage.setItem("accessToken", JSON.stringify(newUser));
     } catch (err) {
       setError(err.message);
     } finally {

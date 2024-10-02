@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {  useNavigate, useParams } from "react-router-dom";
-import Template from "../Template";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../Components/common/Button";
 import Input from "../Components/common/Input";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -14,18 +13,29 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { chatSession } from "../utils/AiModel";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { getContentBySlug } from "../Api/services/contentService";
 
 const GenerateContent = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [aiResult, setAiResult] = useState("");
   const [isCopied, setIsCopied] = useState();
+  const [content, setContent] = useState();
   const editorRef = useRef();
   const params = useParams();
   const navigate = useNavigate();
-
   const { slug } = params;
-  const selectedTemplte = Template?.find((item) => item.slug == slug);
+  useEffect(() => {
+    getContentBySlug(slug)
+      .then((res) => {
+        setContent(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const selectedTemplte = content?.find((item) => item.slug == slug);
 
   const onCopyHandler = (text, result) => {
     if (result) {
@@ -75,20 +85,20 @@ const GenerateContent = () => {
             <div className="lg:col-span-1 flex justify-center">
               <div className="max-w-sm bg-white xl:max-w-md p-4 md:p-6 shadow-md sm:px-8 sm:py-10 rounded-lg">
                 <img
-                  src={selectedTemplte?.icon}
+                  src={selectedTemplte?.iconUrl}
                   alt="icon"
                   className="w-12 h-12 mb-3 text-blue-600"
                 />
                 <h2 className="font-semibold text-xl md:text-2xl mb-2 text-purple-700">
-                  {selectedTemplte?.name}
+                  {selectedTemplte?.categoryName}
                 </h2>
                 <blockquote className="mt-4">
                   <p className="leading-relaxed text-sm md:text-base">
-                    {selectedTemplte?.desc}
+                    {selectedTemplte?.description}
                   </p>
                 </blockquote>
                 <form className="mt-4" onSubmit={onSubmit}>
-                  {selectedTemplte?.form.map((item, idx) => (
+                  {selectedTemplte?.map((item, idx) => (
                     <div
                       key={idx}
                       className="my-2 flex flex-col gap-2 mb-5 md:mb-6"
@@ -97,15 +107,15 @@ const GenerateContent = () => {
                         htmlFor={`field-${idx}`}
                         className="block mb-1 font-medium md:font-bold"
                       >
-                        {item.label}
+                        {item?.formLabel1}
                       </label>
-                      {item.field === "input" ? (
+                      {item?.formField1&& (
                         <Input
-                          name={item?.name}
-                          required={item?.required}
+                          name={item?.formName1}
+                          required={item?.formRequired}
                           onChange={handleChange}
                           placeholder={
-                            item?.placeholder || `Enter ${item?.label}`
+                            item?.placeholder || `Enter ${item?.formLabel1}`
                           }
                           className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
                         />

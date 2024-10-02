@@ -9,10 +9,11 @@ import {
   validateEmail,
   validatePassword,
   validateConfirmPassword,
+  checkUserVerified,
 } from "../../utils/Validation.js";
 
-const Register = ({ setShowRegister, setShowLogin }) => {
-  const { registerUser, checkUsername } = useAuth();
+const Register = ({ setShowRegister, setShowLogin, openModal }) => {
+  const { registerUser, checkUsername, authUser } = useAuth();
   const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
     lastName: "",
@@ -76,22 +77,26 @@ const Register = ({ setShowRegister, setShowLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (await validate()) {
       // Call the registerUser function to process registration if the form is valid
       delete registerFormData.confirmPassword;
-      const user = registerUser(registerFormData);
-      if (user) {
-        const res = checkUserVerified(user?.userDetails?.isVerified);
+      await registerUser(registerFormData);
+      console.log(authUser, "reg");
+      if (authUser) {
+        const res = checkUserVerified(authUser?.userDetails?.isVerified);
         if (res) {
-          localStorage.setItem("authUser", JSON.stringify(user.accessToken));
+          localStorage.setItem(
+            "authUser",
+            JSON.stringify(authUser.accessToken)
+          );
           navigate("/dashboard");
         } else {
           setShowLogin(false);
+          setShowRegister(false);
           openModal();
         }
       }
-    } else {
-      console.log("Invalid form");
     }
   };
 
