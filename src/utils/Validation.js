@@ -18,6 +18,9 @@ export const validateLastName = (lastName) => {
   return null;
 };
 
+
+
+
 // Validate Username
 export const validateUserName = async (userName, checkUsername) => {
   if (!userName) {
@@ -38,6 +41,7 @@ export const validateUserName = async (userName, checkUsername) => {
   return null;
 };
 
+
 // Validate Email
 export const validateEmail = (email) => {
   if (!email) {
@@ -48,6 +52,42 @@ export const validateEmail = (email) => {
   return null;
 };
 
+//validate Phone Number
+export const validatePhoneNumber = (phoneNumber) => {
+  if (!phoneNumber) {
+    return "Phone number is required";
+  }
+  const isValid = /^\d{10}$/.test(phoneNumber);
+  if (!isValid) {
+    return "Phone number must be exactly 10 digits";
+  }
+  return null; 
+};
+
+//validate Dob
+export const validateDOB = (dob) => {
+  if (!dob) {
+    return "Date of birth is required";
+  }
+
+  // Convert the input date to a JavaScript Date object
+  const inputDate = new Date(dob);
+
+  // Get the current date without time (only year, month, and day)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ignore time part
+
+
+  if (inputDate > today) {
+    return "Date of birth cannot be in the future";
+  }
+
+  return null; 
+};
+
+
+
+
 // Validate Password
 export const validatePassword = (password) => {
   if (!password) {
@@ -57,6 +97,8 @@ export const validatePassword = (password) => {
   }
   return null;
 };
+
+
 
 // Validate Confirm Password
 export const validateConfirmPassword = (confirmPassword, password) => {
@@ -75,3 +117,5 @@ export const checkUserVerified = (verified) => {
   }
   return false;
 };
+
+
