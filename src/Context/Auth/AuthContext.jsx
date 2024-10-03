@@ -70,18 +70,17 @@ export const AuthProvider = ({ children }) => {
    * @param {object} userData - The registration credentials.
    */
 
-  const registerUser = async (userData) => {
-    try {
-      setLoading(true);
-      const newUser = await register(userData);
-      setAuthUser(newUser);
-      // localStorage.setItem("accessToken", JSON.stringify(newUser));
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const registerUser = async (userData) => {
+  //   try {
+  //     setLoading(true);
+  //     const newUser = await register(userData);
+  //     return newUser.data;
+  //   } catch (err) {
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // Function to check if a username is available
   const checkUsername = async (username) => {
@@ -102,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     loginUser,
-    registerUser,
+    // registerUser,
     checkUsername,
   };
 

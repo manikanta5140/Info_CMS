@@ -9,7 +9,6 @@ import ContentHistory from "./pages/ContentHistory";
 import PostedContent from "./pages/PostedContent";
 import { useAuth } from "./Context/Auth/AuthContext";
 
-
 const App = () => {
   const { isLoggedIn } = useAuth();
   const [showLanding, setShowLanding] = useState(true);
@@ -22,19 +21,19 @@ const App = () => {
   return (
     <main className="h-full">
       <Routes>
-        {/* {showLanding ? (
+        {showLanding ? (
           <Route path="/" element={<Landing />} />
-        ) : ( */}
-        <Route path="/" element={<Dashboard />}>
-          <Route>
-            <Route path="/home" element={<Home />} />
-            <Route path="/content/:slug" element={<GenerateContent />} />
+        ) : (
+          <Route path="/" element={<Dashboard />}>
+            <Route>
+              <Route path="/home" element={<Home />} />
+              <Route path="/content/:slug" element={<GenerateContent />} />
+            </Route>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/history" element={<ContentHistory />} />
+            <Route path="/posted-content" element={<PostedContent />} />
           </Route>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/history" element={<ContentHistory />} />
-          <Route path="/posted-content" element={<PostedContent />} />
-        </Route>
-        {/* )} */}
+        )}
       </Routes>
     </main>
   );

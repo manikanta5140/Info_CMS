@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import { useAuth } from "../../Context/Auth/AuthContext.jsx";
@@ -11,9 +11,14 @@ import {
   validateConfirmPassword,
   checkUserVerified,
 } from "../../utils/Validation.js";
+import { register } from "../../Api/services/authService.js";
+import axiosInstance from "../../Api/axiosInstance.js";
+import { GET_USER_URL } from "../../constants/apiURL.js";
+import { setAuthHeader } from "../../Api/ApiConfig.js";
 
 const Register = ({ setShowRegister, setShowLogin, openModal }) => {
-  const { registerUser, checkUsername, authUser } = useAuth();
+  // const { registerUser, checkUsername } = useAuth();
+  const [registeredUser, setRegisteredUser] = useState();
   const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,6 +29,24 @@ const Register = ({ setShowRegister, setShowLogin, openModal }) => {
   });
 
   const [error, setError] = useState({});
+  useEffect(() => {
+    if (registeredUser) {
+      const interval = setInterval(() => {
+        if (!registeredUser.userDetails.isVerified) {
+          try {
+            axiosInstance.get(GET_USER_URL).then((res) => {
+              console.log(res.data);
+            });
+          } catch (error) {
+            console.error("Error fetching user details:", error);
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [registeredUser]);
 
   /**
    * validate - Validates the input fields for the registration form.
@@ -81,21 +104,30 @@ const Register = ({ setShowRegister, setShowLogin, openModal }) => {
     if (await validate()) {
       // Call the registerUser function to process registration if the form is valid
       delete registerFormData.confirmPassword;
-      await registerUser(registerFormData);
-      console.log(authUser, "reg");
-      if (authUser) {
-        const res = checkUserVerified(authUser?.userDetails?.isVerified);
-        if (res) {
-          localStorage.setItem(
-            "authUser",
-            JSON.stringify(authUser.accessToken)
+      try {
+        const newUser = await register(registerFormData);
+        setRegisteredUser(newUser);
+        sessionStorage.clear();
+        sessionStorage.setItem(
+          "token",
+          JSON.stringify(registeredUser.accessToken)
+        );
+        setAuthHeader(registeredUser.accessToken);
+        if (registeredUser) {
+          console.log(registeredUser, "auth");
+          const res = checkUserVerified(
+            registeredUser?.userDetails?.isVerified
           );
-          navigate("/dashboard");
-        } else {
-          setShowLogin(false);
-          setShowRegister(false);
-          openModal();
+          if (res) {
+            navigate("/dashboard");
+          } else {
+            setShowLogin(false);
+            setShowRegister(false);
+            openModal();
+          }
         }
+      } catch (err) {
+        setError(err.message);
       }
     }
   };

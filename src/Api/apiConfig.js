@@ -13,4 +13,13 @@ const API_CONFIG = {
   withCredentials: true, // Include credentials (cookies, tokens) with every request
 };
 
+// Function to add Authorization header dynamically
+export const setAuthHeader = (token) => {
+  console.log(token,":authheader")
+  if (token) {
+    API_CONFIG.headers["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete API_CONFIG.headers["Authorization"];
+  }
+};
 export default API_CONFIG;
