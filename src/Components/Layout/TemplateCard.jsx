@@ -5,6 +5,7 @@ import { getAllContent } from "../../Api/services/contentService";
 const TemplateCard = ({ searchTemplate }) => {
   const [templateList, setTemplateList] = useState(searchTemplate);
   const [content, setContent] = useState();
+
   useEffect(() => {
     getAllContent()
       .then((res) => {
@@ -13,15 +14,17 @@ const TemplateCard = ({ searchTemplate }) => {
       .catch((error) => console.log(error));
   }, []);
   useEffect(() => {
-    if (searchTemplate) {
-      const filterTemplate = content?.filter((item) =>
-        item.name.toLowerCase().includes(searchTemplate.toLowerCase())
-      );
-      setTemplateList(filterTemplate);
-    } else {
-      setTemplateList(content);
+    if (content) {
+      if (searchTemplate) {
+        const filterTemplate = content.filter((item) =>
+          item.name.toLowerCase().includes(searchTemplate.toLowerCase())
+        );
+        setTemplateList(filterTemplate);
+      } else {
+        setTemplateList(content);
+      }
     }
-  }, [searchTemplate]);
+  }, [searchTemplate, content]);
   return (
     <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-2 lg:gap-4 px-2 sm:px-4 md:px-6 lg:px-10 py-8 lg:py-12">
       {templateList &&

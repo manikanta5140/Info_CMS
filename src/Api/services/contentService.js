@@ -7,7 +7,7 @@ import axiosInstance from "../axiosInstance";
 export const getAllContent = async () => {
   try {
     const response = await axiosInstance.get(GET_CATEGORY_LIST);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -15,7 +15,7 @@ export const getAllContent = async () => {
 };
 export const getContentBySlug = async (slug) => {
   try {
-    const response = await axiosInstance.get(GET_CATEGORY_BY_SLUG);
+    const response = await axiosInstance.get(GET_CATEGORY_BY_SLUG(slug));
     console.log(response.data);
     return response.data;
   } catch (error) {

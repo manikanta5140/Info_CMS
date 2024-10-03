@@ -21,6 +21,7 @@ const GenerateContent = () => {
   const [aiResult, setAiResult] = useState("");
   const [isCopied, setIsCopied] = useState();
   const [content, setContent] = useState();
+  const [selectedTemplte, setSelectedTemplate] = useState();
   const editorRef = useRef();
   const params = useParams();
   const navigate = useNavigate();
@@ -35,7 +36,13 @@ const GenerateContent = () => {
       });
   }, []);
 
-  const selectedTemplte = content?.find((item) => item.slug == slug);
+  useEffect(() => {
+    if (content) {
+      const res = content.find((item) => item.slug == slug);
+      setSelectedTemplate(res);
+      console.log(res);
+    }
+  }, [content]);
 
   const onCopyHandler = (text, result) => {
     if (result) {
@@ -63,6 +70,7 @@ const GenerateContent = () => {
     const result = await chatSession.sendMessage(finalAiPrompt);
     setAiResult(result?.response.text());
     setLoading(false);
+
   };
 
   useEffect(() => {
@@ -98,40 +106,53 @@ const GenerateContent = () => {
                   </p>
                 </blockquote>
                 <form className="mt-4" onSubmit={onSubmit}>
-                  {selectedTemplte?.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="my-2 flex flex-col gap-2 mb-5 md:mb-6"
-                    >
-                      <label
-                        htmlFor={`field-${idx}`}
-                        className="block mb-1 font-medium md:font-bold"
-                      >
-                        {item?.formLabel1}
-                      </label>
-                      {item?.formField1&& (
-                        <Input
-                          name={item?.formName1}
-                          required={item?.formRequired}
-                          onChange={handleChange}
-                          placeholder={
-                            item?.placeholder || `Enter ${item?.formLabel1}`
-                          }
-                          className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
-                        />
-                      ) : item.field === "textarea" ? (
-                        <textarea
-                          name={item?.name}
-                          required={item?.required}
-                          onChange={handleChange}
-                          placeholder={
-                            item?.placeholder || `Enter ${item?.label}`
-                          }
-                          className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
-                        />
-                      ) : null}
+                  {selectedTemplte && (
+                    <div className="my-2 flex flex-col gap-2 mb-5 md:mb-6">
+                      {selectedTemplte?.formField1 && (
+                        <div>
+                          <label
+                            htmlFor={selectedTemplte?.id}
+                            className="block mb-1 font-medium md:font-bold"
+                          >
+                            {selectedTemplte?.formLabel1}
+                          </label>
+
+                          <Input
+                            name={selectedTemplte?.formName1}
+                            required={selectedTemplte?.formRequired1}
+                            onChange={handleChange}
+                            placeholder={
+                              selectedTemplte?.placeholder ||
+                              `Enter ${selectedTemplte?.formLabel1}`
+                            }
+                            className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
+                          />
+                        </div>
+                      )}
+
+                      {selectedTemplte?.formField2 && (
+                        <div>
+                          <label
+                            htmlFor={selectedTemplte?.id}
+                            className="block mb-1 font-medium md:font-bold"
+                          >
+                            {selectedTemplte?.formLabel2}
+                          </label>
+
+                          <textarea
+                            name={selectedTemplte?.formName2}
+                            required={selectedTemplte?.formRequired2}
+                            onChange={handleChange}
+                            placeholder={
+                              selectedTemplte?.placeholder ||
+                              `Enter ${selectedTemplte?.formLabel1}`
+                            }
+                            className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
+                          />
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  )}
                   <Button
                     type="submit"
                     className="text-sm md:text-base flex gap-2 items-center justify-center"
