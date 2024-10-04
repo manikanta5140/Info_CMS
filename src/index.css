@@ -23,10 +23,10 @@ body{
         --color-text-primary: rgb(255 255 255);   /* text-white */
         --color-text-secondary: rgb(229 231 235); /* text-slate-500 */
         --color-text-important: rgb(56 189 248); /* text-violet-800 */
-      --color-primary: rgb(17 24 39);
+      --color-primary: rgb(3 7 18);
       --color-secondary: rgb(55 65 81);
       --color-important: rgb(46 16 101);
-      --color-fill: #302f2f;
+      --color-fill: rgb(31 41 55);
       --color-button: #047857;
       --color-button-hover: #064e3b;
       --color-button-cancel: #4b5563;

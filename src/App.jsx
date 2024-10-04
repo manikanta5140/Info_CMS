@@ -8,7 +8,6 @@ import Profile from "./pages/Profile";
 import ContentHistory from "./pages/ContentHistory";
 import PostedContent from "./pages/PostedContent";
 import { useAuth } from "./Context/Auth/AuthContext";
-import Demo from "./Components/Layout/demo";
 
 const App = () => {
   // Theme Setting variables
@@ -32,7 +31,7 @@ const App = () => {
         {/* {showLanding ? (
           <Route path="/" element={<Landing themes={themes} useTheme={setTheme} />} />
         ) : ( */}
-          <Route path="/" element={<Dashboard />}>
+          <Route path="/" element={<Dashboard themes={themes} useTheme={setTheme}/>}>
             <Route>
               <Route path="/home" element={<Home />} />
               <Route path="/content/:slug" element={<GenerateContent />} />

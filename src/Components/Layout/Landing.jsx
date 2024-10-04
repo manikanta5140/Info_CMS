@@ -6,7 +6,7 @@ import Modal from "./Model";
 import { useAuth } from "../../Context/Auth/AuthContext";
 
 
-function Landing({ themes, useTheme }) {
+function Landing({ themes, setTheme }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +31,7 @@ function Landing({ themes, useTheme }) {
 
   const handleThemeChange = (e) => {
     setDemo(e.target.value);
-    useTheme(e.target.value);
+    setTheme(e.target.value);
   };
 
   return (

@@ -9,7 +9,7 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Navbar = () => {
+const Navbar = ({ themes, setTheme }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const dropdownRef = useRef(null);
@@ -29,6 +29,10 @@ const Navbar = () => {
     }
   };
 
+  const handleThemeChange = (e) => {
+    setTheme(e.target.value);
+  };
+
   // Add event listener for clicks outside the dropdown and sidebar
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -39,7 +43,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full bg-primary border-b border-[var(--color-important)]">
+      <nav className="fixed top-0 z-50 w-full bg-primary">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -63,6 +67,18 @@ const Navbar = () => {
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
+              <div>
+                  <select
+                    onChange={handleThemeChange}
+                    className="border border-gray-300 rounded p-2"
+                  >
+                    {themes.map((theme, index) => (
+                      <option key={index} value={theme}>
+                        {theme}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div
                   className="flex gap-3 items-center justify-center focus:ring-4 focus:ring-gray-300 cursor-pointer"
                   onClick={toggleDropdown}

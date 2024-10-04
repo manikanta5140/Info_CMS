@@ -148,8 +148,8 @@ const Profile = () => {
 
   return (
     <>
-      <div className="w-full px-2 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
-        <h1 className="pl-6 text-3xl font-extrabold leading-tight lora mt-8">
+      <div className="w-full bg-primary px-4 lg:px-12 mt-16 sm:max-w-xl rounded-lg py-6 border border-[var(--color-secondary)]">
+        <h1 className="pl-6 text-3xl font-extrabold leading-tight text-primary">
           Profile
         </h1>
 
@@ -157,7 +157,7 @@ const Profile = () => {
           <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
             {/* Profile Image */}
             <img
-              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
+              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-var[(--color-important)]"
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
@@ -172,7 +172,7 @@ const Profile = () => {
                 <span className="sr-only">Choose profile photo</span>
                 <Input
                   type="file"
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
+                  className="block w-full text-sm text-primary file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
                   accept="image/*"
                   onChange={handleImageChange}
                 />
@@ -180,9 +180,10 @@ const Profile = () => {
             )}
           </div>
 
-          <div className="items-center mt-8 sm:mt-14 text-[#202142]">
+          <div className="items-center mt-8 sm:mt-14">
             <div className="mb-2 sm:mb-6">
               <Input
+                className="bg-primary text-primary"
                 label="Username"
                 type="text"
                 name="userName"
@@ -196,6 +197,7 @@ const Profile = () => {
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
               <Input
+              className="bg-primary text-primary"
                 label="First Name"
                 type="text"
                 name="firstName"
@@ -207,6 +209,7 @@ const Profile = () => {
               />
 
               <Input
+              className="bg-primary text-primary"
                 label="Last Name"
                 type="text"
                 name="lastName"
@@ -220,6 +223,7 @@ const Profile = () => {
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
               <Input
+              className="bg-primary text-primary"
                 label="Email"
                 type="email"
                 name="email"
@@ -230,6 +234,7 @@ const Profile = () => {
                 required
               />
               <Input
+              className="bg-primary text-primary"
                 label="Phone Number"
                 type="text"
                 name="phoneNumber"
@@ -275,6 +280,7 @@ const Profile = () => {
               {/* Date of Birth */}
               <div className="w-full sm:w-1/2">
                 <Input
+                className="bg-fill text-primary"
                   type="date"
                   name="dob"
                   value={userData?.dob || ""}
@@ -286,7 +292,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="flex justify-end mt-16">
+            <div className="flex justify-end">
               {isEditing ? (
                 <>
                   <Button type="submit">Save</Button>
