@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Button from "../Components/common/Button";
 import Input from "../Components/common/Input";
 import {
@@ -8,6 +8,8 @@ import {
   validatePhoneNumber,
   validateDOB,
 } from "../utils/Validation";
+import { getUser } from "../Api/services/userService";
+
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +27,19 @@ const Profile = () => {
     "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
   ); // Default profile image
   const [selectedImage, setSelectedImage] = useState(null); // Image preview
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+
+    getUser()
+    .then(res => {
+      setUserData(res);
+      console.log(res);
+    } )
+    .catch(err => {
+      console.log(err);
+    })
+  },[])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -172,7 +187,7 @@ const Profile = () => {
                 type="text"
                 name="userName"
                 error={error.userName}
-                value={formData.userName}
+                value={userData?.userName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -185,7 +200,7 @@ const Profile = () => {
                 type="text"
                 name="firstName"
                 error={error.firstName}
-                value={formData.firstName}
+                value={userData?.firstName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -196,7 +211,7 @@ const Profile = () => {
                 type="text"
                 name="lastName"
                 error={error.lastName}
-                value={formData.lastName}
+                value={userData?.lastName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -208,7 +223,7 @@ const Profile = () => {
                 label="Email"
                 type="email"
                 name="email"
-                value={formData.email}
+                value={userData?.email || ""}
                 error={error.email}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
@@ -219,7 +234,7 @@ const Profile = () => {
                 type="text"
                 name="phoneNumber"
                 error={error.phoneNumber}
-                value={formData.phoneNumber}
+                value={userData?.phoneNumber || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -262,7 +277,7 @@ const Profile = () => {
                 <Input
                   type="date"
                   name="dob"
-                  value={formData.dob}
+                  value={userData?.dob || ""}
                   error={error.dob}
                   onChange={handleChange}
                   disabled={!isEditing} // Disable if not editing
