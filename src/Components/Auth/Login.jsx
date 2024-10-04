@@ -81,6 +81,29 @@ const Login = ({ setShowLogin, setShowRegister,openModal }) => {
     } else {
       console.log("Invalid form");
     }
+    navigate("/");
+  //   localStorage.setItem("accessToken","1234567890" );
+  //   sessionStorage.setItem("accessToken", "1234567890");
+  //   // setIsLoggedIn(true);
+  //   if (validate()) {
+  //     const user = loginUser(loginFormData);
+  //     console.log(user)
+  //     if (user) {
+  //       const res = checkUserVerified(user?.userDetails?.isVerified);
+  //       if (res) {
+  //         // JSON.stringify(user.accessToken)
+  //         localStorage.setItem("accessToken","1234567890" );
+  //         localSession.setItem("accessToken", "1234567890");
+  //           setIsLoggedIn(true);
+  //         navigate("/dashboard");
+  //       } else {
+  //         setShowLogin(false);
+  //         openModal();
+  //       }
+  //     }
+  //   } else {
+  //     console.log("Invalid form");
+  //   }
   };
 
 

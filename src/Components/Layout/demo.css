@@ -1,4 +1,4 @@
-html, body {
+/* html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -19,7 +19,7 @@ html, body {
     width: 115%;
     position: absolute;
 
-    background: #def1dc;
+    background: #115609;
  }
 
  #hex-grid .grid{
@@ -31,7 +31,7 @@ html, body {
     width: 100%;
     height: 100%; 
     z-index: 0;
-    background-size: 400px;
+    background-size: 300px;
  }
 
  #hex-grid .light{
@@ -46,7 +46,7 @@ html, body {
         90deg, #335bf4 0%, #2ae9c9 100%
     );
     z-index: 0;
- }
+ } */
   
 /* 
  

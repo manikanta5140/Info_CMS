@@ -8,8 +8,13 @@ import Profile from "./pages/Profile";
 import ContentHistory from "./pages/ContentHistory";
 import PostedContent from "./pages/PostedContent";
 import { useAuth } from "./Context/Auth/AuthContext";
+import Demo from "./Components/Layout/demo";
 
 const App = () => {
+  // Theme Setting variables
+  const[theme, setTheme] = useState("theme-dark");
+  const themes = ["theme-dark", "theme-light"];
+
   const { isLoggedIn } = useAuth();
   const [showLanding, setShowLanding] = useState(true);
   useEffect(() => {
@@ -19,10 +24,11 @@ const App = () => {
     else setShowLanding(false);
   }, [isLoggedIn]);
   return (
-    <main className="h-full">
+    <main className={`${theme}`}>
+      {/* <Demo/> */}
       <Routes>
         {showLanding ? (
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Landing themes={themes} useTheme={setTheme} />} />
         ) : (
           <Route path="/" element={<Dashboard />}>
             <Route>

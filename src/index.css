@@ -11,3 +11,38 @@ body{
 .lora{
     font-family: "Lora", serif;
 }
+
+#blur{
+  text-shadow: 0px 0px 40px rgb(156 163 175);
+}
+
+
+
+@layer base{
+    .theme-dark{
+        --color-text-primary: rgb(255 255 255);   /* text-white */
+        --color-text-secondary: rgb(229 231 235); /* text-slate-500 */
+        --color-text-important: rgb(56 189 248); /* text-violet-800 */
+      --color-primary: rgb(17 24 39);
+      --color-secondary: rgb(55 65 81);
+      --color-important: rgb(46 16 101);
+      --color-fill: #302f2f;
+      --color-button: #047857;
+      --color-button-hover: #064e3b;
+      --color-button-cancel: #4b5563;
+      --color-button-cancel-hover: #111827;
+    }
+    .theme-light{
+        --color-text-primary: rgb(17 24 39);   /* text-gray-900 */
+        --color-text-secondary: rgb(75 85 99); /* text-gray-500 */
+        --color-text-important: #0CA7FF;
+      --color-primary: #D7F0FF;
+      --color-secondary: #EBF7FF;
+      --color-important: #0CA7FF;
+      --color-fill: #FFFFFF;
+      --color-button: #2dd4bf;
+      --color-button-hover: #0d9488;
+      --color-button-cancel: #fb7185;
+      --color-button-cancel-hover: #e11d48;
+    }
+  }
