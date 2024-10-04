@@ -33,6 +33,7 @@ const Profile = () => {
 
     getUser()
     .then(res => {
+      setUserData(res);
       console.log(res);
     } )
     .catch(err => {
@@ -186,7 +187,7 @@ const Profile = () => {
                 type="text"
                 name="userName"
                 error={error.userName}
-                value={formData.userName}
+                value={userData?.userName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -199,7 +200,7 @@ const Profile = () => {
                 type="text"
                 name="firstName"
                 error={error.firstName}
-                value={formData.firstName}
+                value={userData?.firstName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -210,7 +211,7 @@ const Profile = () => {
                 type="text"
                 name="lastName"
                 error={error.lastName}
-                value={formData.lastName}
+                value={userData?.lastName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -222,7 +223,7 @@ const Profile = () => {
                 label="Email"
                 type="email"
                 name="email"
-                value={formData.email}
+                value={userData?.email || ""}
                 error={error.email}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
@@ -233,7 +234,7 @@ const Profile = () => {
                 type="text"
                 name="phoneNumber"
                 error={error.phoneNumber}
-                value={formData.phoneNumber}
+                value={userData?.phoneNumber || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -276,7 +277,7 @@ const Profile = () => {
                 <Input
                   type="date"
                   name="dob"
-                  value={formData.dob}
+                  value={userData?.dob || ""}
                   error={error.dob}
                   onChange={handleChange}
                   disabled={!isEditing} // Disable if not editing
