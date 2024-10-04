@@ -44,25 +44,24 @@ const PostedContent = () => {
                     Template
                   </td>
                   <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
-                    Content Name
+                    Content
                   </td>
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
-                    Date
+                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3 flex gap-2 items-center justify-center">
+                    
                     <FontAwesomeIcon
-                      className="h-3 w-3 ml-3 mb-1 align-middle"
+                      className="h-3 w-3  mb-1 align-middle"
                       icon={faCalendarDays}
                     />
+                    PostedOn
                   </td>
 
                   <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
-                    Post
-                    <FontAwesomeIcon
-                      className="h-4 w-4 ml-4 mb-1 align-middle"
+                  <FontAwesomeIcon
+                      className="h-4 w-4 mr-2 mb-1 align-middle"
                       icon={faCloudArrowUp}
                     />
-                  </td>
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
-                    Action
+                    Post
+                    
                   </td>
                 </tr>
               </thead>
@@ -106,11 +105,7 @@ const PostedContent = () => {
                     Magni ullam earum excepturi qui! Necessitatibus, porro.
                   </td>
 
-                  <div className="flex gap-1 justify-center items-center">
-                    <span className="mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-center text-xs text-purple-800 lg:hidden">
-                      preview
-                    </span>
-                  </div>
+                
 
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                     15/4/2024
@@ -118,11 +113,7 @@ const PostedContent = () => {
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                     facebook , linkedin
                   </td>
-                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-500 sm:px-3 lg:table-cell">
-                    <span className="ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800">
-                      Preview
-                    </span>
-                  </td>
+                
                 </tr>
               </tbody>
             </table>

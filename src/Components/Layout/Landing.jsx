@@ -49,7 +49,7 @@ function Landing({ themes, setTheme }) {
           <div className=" py-2">
             <div className="container mx-auto flex items-center justify-between px-4">
               <div className="text-blue-gray-900 text-2xl font-bold py-3 px-6 rounded-lg">
-                InfoCms
+              {/* <img src="cms_logo.png" alt=" Logo" /> */}
               </div>
               <div className="lg:flex items-center space-x-6">
                 <div>

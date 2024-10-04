@@ -13,39 +13,88 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { chatSession } from "../utils/AiModel";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { getContentBySlug } from "../Api/services/contentService";
+import {
+  getContentById,
+  getContentBySlug,
+  storeContentHistory,
+  updateContentHistory,
+} from "../Api/services/contentService";
+import { useAuth } from "../Context/Auth/AuthContext";
+import { UPDATE_CONTENT_HISTORY } from "../constants/apiURL";
 
-const GenerateContent = () => {
+const GenerateContent = ({ mode }) => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [aiResult, setAiResult] = useState("");
   const [isCopied, setIsCopied] = useState();
   const [content, setContent] = useState();
   const [selectedTemplte, setSelectedTemplate] = useState();
+  const [editData, setEditData] = useState();
+  const { authUser } = useAuth();
   const editorRef = useRef();
 
   
   const params = useParams();
   const navigate = useNavigate();
-  const { slug } = params;
+  const { slug, id } = params;
+
   useEffect(() => {
     getContentBySlug(slug)
       .then((res) => {
         setContent(res);
+        console.log(res, "byslug");
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [slug]);
 
 
   useEffect(() => {
-    if (content) {
-      const res = content.find((item) => item.slug == slug);
-      setSelectedTemplate(res);
-      console.log(res);
+    const updateData = async () => {
+      try {
+        if (content && mode) {
+          if (mode === "edit" && id) {
+            const res = await getContentById(id);
+            const { slug, content: editorContent, ...rest } = res;
+            const formDetails = await getContentBySlug(slug);
+            setEditData(res)
+            setSelectedTemplate(formDetails[0]);
+
+            const editorInstance = editorRef.current.getInstance();
+            editorInstance.setMarkdown(editorContent || "");
+          } else if (mode === "generate" && slug) {
+            const selectedTemplate = content.find((item) => item.slug === slug);
+            setSelectedTemplate(selectedTemplate);
+          }
+        }
+      } catch (err) {
+        console.error("Error updating data:", err);
+      }
+    };
+
+    updateData();
+  }, [content, mode, slug, id]);
+
+  useEffect(() => {
+    const editorInstance = editorRef.current.getInstance();
+    editorInstance.setMarkdown(aiResult);
+  }, [aiResult]);
+
+  useEffect(() => {
+    if (aiResult) {
+      const contentData = {
+        userId: 1, // i have to add it
+        categoryId: selectedTemplte?.id,
+        prompt: selectedTemplte?.aiPrompt,
+        content: aiResult,
+        slug: slug,
+        inputLable1Text: formData[selectedTemplte?.formName1],
+        inputLabel2Text: formData[selectedTemplte?.formName2],
+      };
+      storeContentHistory(contentData);
     }
-  }, [content]);
+  }, [aiResult]);
 
   const onCopyHandler = (text, result) => {
     if (result) {
@@ -73,13 +122,26 @@ const GenerateContent = () => {
     const result = await chatSession.sendMessage(finalAiPrompt);
     setAiResult(result?.response.text());
     setLoading(false);
-
   };
 
-  useEffect(() => {
+
+  const handleSave = async () => {
     const editorInstance = editorRef.current.getInstance();
-    editorInstance.setMarkdown(aiResult);
-  }, [aiResult]);
+    const updatedContent = editorInstance.getMarkdown(); 
+    const updatedData = {
+      content: updatedContent,
+      
+    };
+
+    try {
+      await updateContentHistory(id, updatedData); 
+      navigate(-1);
+   
+    } catch (error) {
+      console.error("Error updating content:", error);
+    }
+  };
+
   return (
     <>
       <div className="sm:p-6 md:py-8  md:px-2 my-auto">
@@ -87,7 +149,7 @@ const GenerateContent = () => {
           <Button
             type="button"
             className="flex gap-2 justify-center items-center mb-3 md:ml-8  lg:ml-0 mt-10 md:mt-0"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate(-1)}
           >
             <FontAwesomeIcon icon={faBackward} /> Back
           </Button>
@@ -117,13 +179,13 @@ const GenerateContent = () => {
                             htmlFor={selectedTemplte?.id}
                             className="block mb-1 font-medium md:font-bold"
                           >
-                            {selectedTemplte?.formLabel1}
                           </label>
 
                           <Input
                             name={selectedTemplte?.formName1}
                             required={selectedTemplte?.formRequired1}
                             onChange={handleChange}
+                            value={mode === "edit" ? editData?.inputLable1Text || "" : ""}
                             placeholder={
                               selectedTemplte?.placeholder ||
                               `Enter ${selectedTemplte?.formLabel1}`
@@ -145,6 +207,7 @@ const GenerateContent = () => {
                           <textarea
                             name={selectedTemplte?.formName2}
                             required={selectedTemplte?.formRequired2}
+                            value={mode === "edit" ? editData?.inputLable2Text || "" : ""}
                             onChange={handleChange}
                             placeholder={
                               selectedTemplte?.placeholder ||
@@ -202,6 +265,11 @@ const GenerateContent = () => {
                   height="450px"
                   useCommandShortcut={true}
                 />
+                {mode === "edit" && (
+                  <div className="flex flex-row-reverse mt-3">
+                    <Button className=" text-sm md:text-base" onClick={handleSave} >Save</Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -43,13 +43,12 @@ export default function ModalButton() {
   }
   return (
     <>
-      <Button
-        bgColor="bg-important"
-        className="text-primary py-3 px-6 rounded-lg text-lg font-medium transition-all shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)] hover:scale-105"
+      <span
+        className=" cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800"
         onClick={() => openModal()}
       >
-        Modal
-      </Button>
+        Post
+      </span>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

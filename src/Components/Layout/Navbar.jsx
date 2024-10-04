@@ -55,11 +55,7 @@ const Navbar = ({ themes, setTheme }) => {
                 <FontAwesomeIcon className="w-6 h-6" icon={faBars} />
               </button>
               <Link to="/" className="flex ms-2 md:me-24">
-                <img
-                  src="https://flowbite.com/docs/images/logo.svg"
-                  className="h-8 me-3"
-                  alt="FlowBite Logo"
-                />
+                {/* <img src="cms_logo.png" alt=" Logo" /> */}
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-primary">
                   InfoCms
                 </span>
@@ -93,7 +89,7 @@ const Navbar = ({ themes, setTheme }) => {
                       alt="user photo"
                     />
                   </button>
-                  <FontAwesomeIcon  icon={faChevronDown} />
+                  <FontAwesomeIcon icon={faChevronDown} />
                 </div>
                 {dropdownOpen && (
                   <div
@@ -101,9 +97,7 @@ const Navbar = ({ themes, setTheme }) => {
                     className="z-50 fixed right-0 top-12 md:top-10 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"
                   >
                     <div className="px-4 py-3">
-                      <p className="text-sm text-primary">
-                        Anup kumar
-                      </p>
+                      <p className="text-sm text-primary">Anup kumar</p>
                       <p className="text-sm font-medium text-primary truncate">
                         anup@gmail.com
                       </p>
