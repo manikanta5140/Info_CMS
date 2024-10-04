@@ -25,11 +25,13 @@ const App = () => {
   }, [isLoggedIn]);
   return (
     <main className={`${theme}`}>
+
+
       {/* <Demo/> */}
       <Routes>
-        {showLanding ? (
+        {/* {showLanding ? (
           <Route path="/" element={<Landing themes={themes} useTheme={setTheme} />} />
-        ) : (
+        ) : ( */}
           <Route path="/" element={<Dashboard />}>
             <Route>
               <Route path="/home" element={<Home />} />
@@ -39,7 +41,7 @@ const App = () => {
             <Route path="/history" element={<ContentHistory />} />
             <Route path="/posted-content" element={<PostedContent />} />
           </Route>
-        )}
+        {/* )} */}
       </Routes>
     </main>
   );

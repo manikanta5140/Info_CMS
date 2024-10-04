@@ -23,6 +23,8 @@ const GenerateContent = () => {
   const [content, setContent] = useState();
   const [selectedTemplte, setSelectedTemplate] = useState();
   const editorRef = useRef();
+
+  
   const params = useParams();
   const navigate = useNavigate();
   const { slug } = params;
@@ -35,6 +37,7 @@ const GenerateContent = () => {
         console.log(err);
       });
   }, []);
+
 
   useEffect(() => {
     if (content) {
