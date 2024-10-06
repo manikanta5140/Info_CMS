@@ -9,6 +9,7 @@ import ContentHistory from "./pages/ContentHistory";
 import PostedContent from "./pages/PostedContent";
 import { useAuth } from "./Context/AuthContext";
 import { checkValidToken } from "./Api/services/authService";
+import Notification from "./Components/notification/Notification";
 
 const App = () => {
   // Theme Setting variables
@@ -23,6 +24,7 @@ const App = () => {
 
   return (
     <main className={`${theme}`}>
+      <Notification />
       <Routes>
         {/* Landing page at root */}
         <Route

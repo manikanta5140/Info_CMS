@@ -5,6 +5,7 @@ import {
 } from "../../constants/apiURL.js";
 import { LOGIN_URL } from "../../constants/apiURL.js";
 import axiosInstance from "../axiosInstance";
+import { showNotification } from "../../Components/notification/Notification.jsx";
 
 /**
  * Login Service
@@ -18,10 +19,12 @@ export const login = async (userData) => {
   try {
     console.log(userData);
     const response = await axiosInstance.post(LOGIN_URL, userData);
+    showNotification("logged in successfully", "success");
     console.log(response.data);
     return response.data;
   } catch (error) {
     if (error.response) {
+      showNotification("logged in failed", "error");
       throw new Error(
         `Login failed: ${error.response.data?.message || "Unexpected error"}`
       );
@@ -50,8 +53,7 @@ export const register = async (userData) => {
     if (error.response) {
       console.log(error.response.data?.message);
       throw new Error(
-        `Registration failed: ${
-          error.response.data?.message || "Unexpected error"
+        `Registration failed: ${error.response.data?.message || "Unexpected error"
         }`
       );
     } else if (error.request) {
