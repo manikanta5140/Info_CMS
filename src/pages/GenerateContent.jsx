@@ -139,7 +139,7 @@ const GenerateContent = ({ mode }) => {
 
   return (
     <>
-      <div className="sm:p-6 md:py-8  md:px-2 my-auto">
+      <div className="sm:p-6 md:py-12  md:px-2 my-auto">
         <section className="max-w-screen-lg md:rounded-md ">
           <Button
             type="button"
@@ -148,14 +148,14 @@ const GenerateContent = ({ mode }) => {
           >
             <FontAwesomeIcon icon={faBackward} /> Back
           </Button>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-gray-800">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-secondary">
             {/* <!-- Form section --> */}
             <div className="lg:col-span-1 flex justify-center">
-              <div className="max-w-sm bg-white xl:max-w-md p-4 md:p-6 shadow-md sm:px-8 sm:py-10 rounded-lg">
+              <div className="max-w-sm bg-primary xl:max-w-md p-4 md:p-6 shadow-md sm:px-8 sm:py-10 rounded-lg">
                 <img
                   src={selectedTemplte?.iconUrl}
                   alt="icon"
-                  className="w-12 h-12 mb-3 text-blue-600"
+                  className="w-12 h-12 mb-3 p-1 rounded bg-white"
                 />
                 <h2 className="font-semibold text-xl md:text-2xl mb-2 text-purple-700">
                   {selectedTemplte?.categoryName}

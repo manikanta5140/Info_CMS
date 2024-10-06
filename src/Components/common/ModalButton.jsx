@@ -64,7 +64,7 @@ export default function ModalButton() {
   return (
     <>
       <span
-        className="cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800"
+        className="cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-button px-2 text-primary"
         onClick={openModal}
       >
         Post

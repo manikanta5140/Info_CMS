@@ -20,7 +20,7 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
   return (
     <>
       <aside
-        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-fill border-r border-[var(--color-important)] ${
+        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-secondary ${
           openSideBar ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >

@@ -10,11 +10,11 @@ import PostedContent from "./pages/PostedContent";
 import { useAuth } from "./Context/AuthContext";
 import { checkValidToken } from "./Api/services/authService";
 import Notification from "./Components/notification/Notification";
+import { useTheme } from "./Context/ThemeContext";
 
 const App = () => {
   // Theme Setting variables
-  const [theme, setTheme] = useState("theme-dark");
-  const themes = ["theme-dark", "theme-light"];
+  const { theme } = useTheme();
 
   const { validateToken } = useAuth();
 
@@ -26,18 +26,12 @@ const App = () => {
     <main className={`${theme}`}>
       <Notification />
       <Routes>
-        {/* Landing page at root */}
-        <Route
-          path="/"
-          element={<Landing themes={themes} useTheme={setTheme} />}
-        />
+        
+        <Route path="/" element={<Landing />} />
 
-        {/* Nested Dashboard routes */}
-        <Route
-          path="/"
-          element={<Dashboard themes={themes} setTheme={setTheme} />}
-        >
-          {/* All these routes will use the Dashboard layout */}
+        
+        <Route path="/" element={<Dashboard />}>
+          
           <Route path="/home" element={<Home />} />
           <Route
             path="/content/:slug"

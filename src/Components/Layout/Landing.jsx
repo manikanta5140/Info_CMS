@@ -6,15 +6,16 @@ import Modal from "./Model";
 import { useAuth } from "../../Context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getUser } from "../../Api/services/userService";
+import { useTheme } from "../../Context/ThemeContext";
 
-function Landing({ themes, setTheme }) {
+function Landing() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [demo, setDemo] = useState("theme-light");
   const [authUser, setAuthUser] = useState(null);
   const navigate = useNavigate();
   const { setIsLoggedIn, checkToken, userDetails, isLoggedIn } = useAuth();
+  const { theme, setTheme, themes } = useTheme();
 
   /************************************Modal********************** */
   const openModal = () => setIsModalOpen(true);
@@ -44,7 +45,6 @@ function Landing({ themes, setTheme }) {
   };
 
   const handleThemeChange = (e) => {
-    setDemo(e.target.value);
     setTheme(e.target.value);
   };
   const handleStarted = () => {
@@ -61,13 +61,13 @@ function Landing({ themes, setTheme }) {
       <div className="bg-gradient-to-b from-[var(--color-important)] to-white">
         <div
           className={`${
-            demo === "theme-dark"
+            theme === "theme-dark"
               ? "bg-[url(grid-dark.svg)]"
               : "bg-[url(grid-light.svg)]"
           } bg-[length:300px] bg-repeat`}
         >
           <div className=" py-2">
-            <div className="container mx-auto flex items-center justify-between px-4">
+            <div className="container mx-auto flex items-center justify-between px-4 lg:px-8">
               <div className="text-blue-gray-900 text-2xl font-bold py-3 px-6 rounded-lg flex items-center">
                 <NavLink
                   to="/"
@@ -79,13 +79,14 @@ function Landing({ themes, setTheme }) {
 
               <div className="lg:flex items-center space-x-6">
                 <div>
-                  <select
+                <select
                     onChange={handleThemeChange}
+                    value={theme} // Set the current theme as selected
                     className="border border-gray-300 rounded p-2"
                   >
-                    {themes.map((theme, index) => (
-                      <option key={index} value={theme}>
-                        {theme}
+                    {themes.map((themeOption, index) => (
+                      <option key={index} value={themeOption}>
+                        {themeOption}
                       </option>
                     ))}
                   </select>
@@ -101,7 +102,11 @@ function Landing({ themes, setTheme }) {
                 ) : (
                   <Button
                     bgColor="bg-important"
-                    className="text-primary md:py-3 py-2 px-6 rounded-lg text-sm font-medium md:text-lg transition-all hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"
+                    className={`${
+                      theme === "theme-dark"
+                        ? "hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"
+                        : ""
+                    } text-primary py-2 px-6 rounded-lg text-sm font-medium md:text-lg transition-all`}
                     onClick={() => {
                       if (!isLoggedIn) setShowLogin(true);
                     }}
@@ -139,7 +144,11 @@ function Landing({ themes, setTheme }) {
               <div className="my-6 ">
                 <Button
                   bgColor="bg-important"
-                  className="text-primary py-3 px-6 rounded-lg text-lg font-medium transition-all shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)] hover:scale-105"
+                  className={`${
+                    theme === "theme-dark"
+                      ? "shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"
+                      : ""
+                  } text-primary py-3 px-6 rounded-lg text-lg font-medium transition-all hover:scale-105`}
                   onClick={handleStarted}
                 >
                   Get Started

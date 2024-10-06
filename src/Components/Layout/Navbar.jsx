@@ -9,13 +9,15 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
+import { useTheme } from "../../Context/ThemeContext";
 
-const Navbar = ({ themes, setTheme }) => {
+const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const dropdownRef = useRef(null);
   const { logout, userDetails } = useAuth();
   console.log(userDetails, "user");
+  const { theme, setTheme, themes } = useTheme();
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -67,13 +69,14 @@ const Navbar = ({ themes, setTheme }) => {
             <div className="flex items-center">
               <div className="flex items-center ms-3">
                 <div>
-                  <select
+                <select
                     onChange={handleThemeChange}
+                    value={theme} // Set the current theme as selected
                     className="border border-gray-300 rounded p-2"
                   >
-                    {themes.map((theme, index) => (
-                      <option key={index} value={theme}>
-                        {theme}
+                    {themes.map((themeOption, index) => (
+                      <option key={index} value={themeOption}>
+                        {themeOption}
                       </option>
                     ))}
                   </select>

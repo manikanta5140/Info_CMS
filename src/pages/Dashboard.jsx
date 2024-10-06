@@ -2,10 +2,10 @@ import React from "react";
 
 import Navbar from "../Components/layout/Navbar";
 
-const Dashboard = ({ themes, setTheme }) => {
+const Dashboard = () => {
   return (
     <>
-      <Navbar themes={themes} setTheme={setTheme} />
+      <Navbar />
     </>
   );
 };

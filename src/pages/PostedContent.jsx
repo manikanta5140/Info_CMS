@@ -11,20 +11,20 @@ import {
 const PostedContent = () => {
   return (
     <>
-      <div className="w-screen bg-gray-50">
+      <div className="w-screen bg-fill">
         <div className="mx-auto max-w-screen-xl px-2 py-10">
           <div className="mt-4 w-full">
             <div className="flex w-full flex-col items-center justify-between space-y-2 sm:flex-row sm:space-y-0">
               <form className="relative flex w-full max-w-2xl items-center">
                 <FontAwesomeIcon
-                  className=" absolute left-2 block h-5 w-5 text-gray-400"
+                  className=" absolute left-2 block h-5 w-5 text-primary"
                   icon={faMagnifyingGlass}
                 />
 
                 <input
                   type="text"
                   name="search"
-                  className="h-12 w-full border-b-gray-400 bg-transparent py-4 pl-12 text-sm outline-none focus:border-b-2"
+                  className="h-12 w-full text-primary border-b-gray-400 bg-transparent py-4 pl-12 text-sm outline-none focus:border-b-2"
                   placeholder=" Search by content name"
                 />
               </form>
@@ -33,20 +33,20 @@ const PostedContent = () => {
             </div>
           </div>
 
-          <div className="mt-6 overflow-hidden rounded-xl bg-white px-6 shadow lg:px-4">
+          <div className="mt-6 overflow-hidden rounded-xl bg-primary px-6 shadow lg:px-4">
             <table className="min-w-full border-collapse border-spacing-y-2 border-spacing-x-2">
               <thead className="hidden border-b lg:table-header-group">
                 <tr className="">
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
+                  <td className="whitespace-normal py-4 text-sm font-semibold text-primary sm:px-3">
                     Id
                   </td>
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
+                  <td className="whitespace-normal py-4 text-sm font-semibold text-primary sm:px-3">
                     Template
                   </td>
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
+                  <td className="whitespace-normal py-4 text-sm font-semibold text-primary sm:px-3">
                     Content
                   </td>
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3 flex gap-2 items-center justify-center">
+                  <td className="whitespace-normal py-4 text-sm font-semibold text-primary sm:px-3 flex gap-2 items-center justify-center">
                     
                     <FontAwesomeIcon
                       className="h-3 w-3  mb-1 align-middle"
@@ -55,7 +55,7 @@ const PostedContent = () => {
                     PostedOn
                   </td>
 
-                  <td className="whitespace-normal py-4 text-sm font-semibold text-gray-800 sm:px-3">
+                  <td className="whitespace-normal py-4 text-sm font-semibold text-primary sm:px-3">
                   <FontAwesomeIcon
                       className="h-4 w-4 mr-2 mb-1 align-middle"
                       icon={faCloudArrowUp}
