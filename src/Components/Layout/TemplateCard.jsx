@@ -10,6 +10,7 @@ const TemplateCard = ({ searchTemplate }) => {
     getAllContent()
       .then((res) => {
         setContent(res);
+        console.log(res);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -17,7 +18,7 @@ const TemplateCard = ({ searchTemplate }) => {
     if (content) {
       if (searchTemplate) {
         const filterTemplate = content.filter((item) =>
-          item.name.toLowerCase().includes(searchTemplate.toLowerCase())
+          item.categoryName.toLowerCase().includes(searchTemplate.toLowerCase())
         );
         setTemplateList(filterTemplate);
       } else {
@@ -39,7 +40,6 @@ const TemplateCard = ({ searchTemplate }) => {
                 <img src={item?.iconUrl} alt="icon" className="w-12 h-12" />
               </div>
               <div className="p-4 pt-12 text-center">
-                
                 <h4 className="text-lg font-semibold tracking-tight text-primary">
                   {item?.categoryName}
                 </h4>
@@ -48,7 +48,9 @@ const TemplateCard = ({ searchTemplate }) => {
               <hr className="my-4 border-[var(--color-important)]" />
 
               <div className="p-4">
-                <p className="text-secondary font-medium">{item?.description}</p>
+                <p className="text-secondary font-medium">
+                  {item?.description}
+                </p>
               </div>
             </div>
           </Link>

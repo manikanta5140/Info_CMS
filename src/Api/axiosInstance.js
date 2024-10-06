@@ -20,8 +20,8 @@ console.log(axiosInstance);
 axiosInstance.interceptors.request.use(
   (config) => {
     console.log(config);
-    const token = sessionStorage.getItem("token");
-    console.log(token)
+    const token = localStorage.getItem("token");
+    console.log(token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

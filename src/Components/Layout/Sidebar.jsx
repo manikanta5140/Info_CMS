@@ -8,8 +8,10 @@ import {
   faUser,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../Context/AuthContext";
 
 const Sidebar = ({ openSideBar, toggleSideBar }) => {
+  const { logout } = useAuth();
   const getActiveClassName = ({ isActive }) =>
     isActive
       ? "bg-primary text-primary"
@@ -24,12 +26,13 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
       >
         <div className="h-full px-3 pb-4 overflow-y-auto">
           <ul className="space-y-2 font-medium">
-            
             <li>
               <NavLink
                 to="/home"
                 className={({ isActive }) =>
-                  `flex items-center p-2 rounded ${getActiveClassName({ isActive })}`
+                  `flex items-center p-2 rounded ${getActiveClassName({
+                    isActive,
+                  })}`
                 }
                 onClick={toggleSideBar}
               >
@@ -41,12 +44,13 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
               </NavLink>
             </li>
 
-      
             <li>
               <NavLink
                 to="/history"
                 className={({ isActive }) =>
-                  `flex items-center p-2 rounded ${getActiveClassName({ isActive })}`
+                  `flex items-center p-2 rounded ${getActiveClassName({
+                    isActive,
+                  })}`
                 }
                 onClick={toggleSideBar}
               >
@@ -58,12 +62,13 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
               </NavLink>
             </li>
 
-           
             <li>
               <NavLink
                 to="/posted-content"
                 className={({ isActive }) =>
-                  `flex items-center p-2 rounded ${getActiveClassName({ isActive })}`
+                  `flex items-center p-2 rounded ${getActiveClassName({
+                    isActive,
+                  })}`
                 }
                 onClick={toggleSideBar}
               >
@@ -77,12 +82,13 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
               </NavLink>
             </li>
 
-           
             <li>
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>
-                  `flex items-center p-2 rounded ${getActiveClassName({ isActive })}`
+                  `flex items-center p-2 rounded ${getActiveClassName({
+                    isActive,
+                  })}`
                 }
                 onClick={toggleSideBar}
               >
@@ -90,15 +96,19 @@ const Sidebar = ({ openSideBar, toggleSideBar }) => {
                   className="flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-primary"
                   icon={faUser}
                 />
-                <span className="flex-1 ms-3 whitespace-nowrap">My Account</span>
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  My Account
+                </span>
               </NavLink>
             </li>
 
-           
             <li>
               <div
                 className="fixed bottom-5 w-60 flex items-center p-2 text-primary rounded hover:bg-primary group"
-                onClick={toggleSideBar}
+                onClick={() => {
+                  logout();
+                  toggleSideBar();
+                }}
               >
                 <FontAwesomeIcon
                   className="mr-2 flex-shrink-0 w-5 h-5 text-secondary transition duration-75 group-hover:text-primary"

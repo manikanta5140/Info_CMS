@@ -14,7 +14,7 @@ const ContentHistory = () => {
   const [historyContent, setHistoryContent] = useState([]);
   const [searchContent, setSearchContent] = useState("");
   const [contentValue, setContentValue] = useState(searchContent);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     getContentHistory()
@@ -37,8 +37,7 @@ const ContentHistory = () => {
         setContentValue(historyContent);
       }
     }
-  }, [searchContent,historyContent]);
-
+  }, [searchContent, historyContent]);
 
   return (
     <div className="w-screen bg-gray-50">
@@ -125,13 +124,10 @@ const ContentHistory = () => {
                     </td>
                     <td className="whitespace-no-wrap py-4 text-right text-sm text-gray-600 sm:px-3 lg:text-left block lg:hidden">
                       <div className="flex gap-1 justify-center items-center">
-                        <span className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-center text-xs text-purple-800 lg:hidden">
-                          <FontAwesomeIcon
-                            className="h-3 w-3 align-middle mr-1"
-                            icon={faCloudArrowUp}
-                          />
-                          post
+                        <span className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-purple-100 py-0.5 text-center text-xs text-purple-800 lg:hidden">
+                          <ModalButton />
                         </span>
+
                         <span
                           onClick={() => navigate(`/content/${item.id}/edit`)}
                           className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-center text-xs text-purple-800 lg:hidden"
@@ -144,14 +140,15 @@ const ContentHistory = () => {
                       {new Date(item.modifiedOn).toLocaleDateString("en-US")}
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
-                      <ModalButton/>
-                      {/* <span className="  cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800">
-                        post
-                      </span> */}
+                      <span className="  cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100  py-0.5 text-purple-800">
+                        <ModalButton />
+                      </span>
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-500 sm:px-3 lg:table-cell">
-                      <span className="  cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800"
-                      onClick={() => navigate(`/content/${item.id}/edit`)}>
+                      <span
+                        className="  cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-purple-100 px-2 py-0.5 text-purple-800"
+                        onClick={() => navigate(`/content/${item.id}/edit`)}
+                      >
                         Edit
                       </span>
                     </td>

@@ -19,7 +19,7 @@ import {
   storeContentHistory,
   updateContentHistory,
 } from "../Api/services/contentService";
-import { useAuth } from "../Context/Auth/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 import { UPDATE_CONTENT_HISTORY } from "../constants/apiURL";
 
 const GenerateContent = ({ mode }) => {
@@ -33,7 +33,6 @@ const GenerateContent = ({ mode }) => {
   const { authUser } = useAuth();
   const editorRef = useRef();
 
-  
   const params = useParams();
   const navigate = useNavigate();
   const { slug, id } = params;
@@ -49,7 +48,6 @@ const GenerateContent = ({ mode }) => {
       });
   }, [slug]);
 
-
   useEffect(() => {
     const updateData = async () => {
       try {
@@ -58,7 +56,7 @@ const GenerateContent = ({ mode }) => {
             const res = await getContentById(id);
             const { slug, content: editorContent, ...rest } = res;
             const formDetails = await getContentBySlug(slug);
-            setEditData(res)
+            setEditData(res);
             setSelectedTemplate(formDetails[0]);
 
             const editorInstance = editorRef.current.getInstance();
@@ -124,19 +122,16 @@ const GenerateContent = ({ mode }) => {
     setLoading(false);
   };
 
-
   const handleSave = async () => {
     const editorInstance = editorRef.current.getInstance();
-    const updatedContent = editorInstance.getMarkdown(); 
+    const updatedContent = editorInstance.getMarkdown();
     const updatedData = {
       content: updatedContent,
-      
     };
 
     try {
-      await updateContentHistory(id, updatedData); 
+      await updateContentHistory(id, updatedData);
       navigate(-1);
-   
     } catch (error) {
       console.error("Error updating content:", error);
     }
@@ -178,14 +173,17 @@ const GenerateContent = ({ mode }) => {
                           <label
                             htmlFor={selectedTemplte?.id}
                             className="block mb-1 font-medium md:font-bold"
-                          >
-                          </label>
+                          ></label>
 
                           <Input
                             name={selectedTemplte?.formName1}
                             required={selectedTemplte?.formRequired1}
                             onChange={handleChange}
-                            value={mode === "edit" ? editData?.inputLable1Text || "" : ""}
+                            value={
+                              mode === "edit"
+                                ? editData?.inputLable1Text || ""
+                                : formData[selectedTemplte?.formName1] || ""
+                            }
                             placeholder={
                               selectedTemplte?.placeholder ||
                               `Enter ${selectedTemplte?.formLabel1}`
@@ -207,7 +205,11 @@ const GenerateContent = ({ mode }) => {
                           <textarea
                             name={selectedTemplte?.formName2}
                             required={selectedTemplte?.formRequired2}
-                            value={mode === "edit" ? editData?.inputLable2Text || "" : ""}
+                            value={
+                              mode === "edit"
+                                ? editData?.inputLable2Text || ""
+                                : formData[selectedTemplte?.formName2] || ""
+                            }
                             onChange={handleChange}
                             placeholder={
                               selectedTemplte?.placeholder ||
@@ -267,7 +269,12 @@ const GenerateContent = ({ mode }) => {
                 />
                 {mode === "edit" && (
                   <div className="flex flex-row-reverse mt-3">
-                    <Button className=" text-sm md:text-base" onClick={handleSave} >Save</Button>
+                    <Button
+                      className=" text-sm md:text-base"
+                      onClick={handleSave}
+                    >
+                      Save
+                    </Button>
                   </div>
                 )}
               </div>

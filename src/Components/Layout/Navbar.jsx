@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,11 +8,14 @@ import {
   faBars,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../Context/AuthContext";
 
 const Navbar = ({ themes, setTheme }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const dropdownRef = useRef(null);
+  const { logout, userDetails } = useAuth();
+  console.log(userDetails, "user");
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -54,16 +57,16 @@ const Navbar = ({ themes, setTheme }) => {
               >
                 <FontAwesomeIcon className="w-6 h-6" icon={faBars} />
               </button>
-              <Link to="/" className="flex ms-2 md:me-24">
-                {/* <img src="cms_logo.png" alt=" Logo" /> */}
-                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-primary">
-                  InfoCms
-                </span>
-              </Link>
+              <NavLink
+                to="/"
+                className="w-20 h-10 bg-white flex items-center justify-center  shadow-md rounded-lg   font-bold "
+              >
+                <p className="blue-gradient_text">CMS</p>
+              </NavLink>
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
-              <div>
+                <div>
                   <select
                     onChange={handleThemeChange}
                     className="border border-gray-300 rounded p-2"
@@ -97,28 +100,17 @@ const Navbar = ({ themes, setTheme }) => {
                     className="z-50 fixed right-0 top-12 md:top-10 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"
                   >
                     <div className="px-4 py-3">
-                      <p className="text-sm text-primary">Anup kumar</p>
+                      <p className="text-sm text-primary">
+                        {userDetails?.userName || "user"}
+                      </p>
                       <p className="text-sm font-medium text-primary truncate">
-                        anup@gmail.com
+                        {userDetails?.email || "user@gmail.com"}
                       </p>
                     </div>
                     <ul className="py-1">
-                      <li>
-                        <Link
-                          to="/"
-                          className="block px-4 py-2 text-sm text-primary hover:bg-primary"
-                          onClick={toggleDropdown}
-                        >
-                          <FontAwesomeIcon
-                            className="mr-2 flex-shrink-0 w-4 h-4 text-primary transition duration-75 group-hover:text-secondary"
-                            icon={faRightFromBracket}
-                          />
-                          <span>Logout</span>
-                        </Link>
-                      </li>
                       <li onClick={toggleDropdown}>
                         <Link
-                          to="/"
+                          to="/profile"
                           className="block px-4 py-2 text-sm text-primary hover:bg-primary"
                         >
                           <FontAwesomeIcon
@@ -126,6 +118,22 @@ const Navbar = ({ themes, setTheme }) => {
                             icon={faUser}
                           />
                           My Account
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/"
+                          className="block px-4 py-2 text-sm text-primary hover:bg-primary"
+                          onClick={() => {
+                            logout();
+                            toggleDropdown();
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            className="mr-2 flex-shrink-0 w-4 h-4 text-primary transition duration-75 group-hover:text-secondary"
+                            icon={faRightFromBracket}
+                          />
+                          <span>Logout</span>
                         </Link>
                       </li>
                     </ul>

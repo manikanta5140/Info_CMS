@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
-import { useAuth } from "../../Context/Auth/AuthContext.jsx";
+import { useAuth } from "../../Context/AuthContext.jsx";
 import {
   validateFirstName,
   validateLastName,
@@ -15,10 +15,16 @@ import { register } from "../../Api/services/authService.js";
 import axiosInstance from "../../Api/axiosInstance.js";
 import { GET_USER_URL } from "../../constants/apiURL.js";
 import { setAuthHeader } from "../../Api/ApiConfig.js";
+import { useNavigate } from "react-router-dom"; // Add navigate for routing
 
-const Register = ({ setShowRegister, setShowLogin, openModal }) => {
-  // const { registerUser, checkUsername } = useAuth();
-  const [registeredUser, setRegisteredUser] = useState();
+const Register = ({
+  setShowRegister,
+  setShowLogin,
+  openModal,
+  setRegisteredUser,
+}) => {
+  const navigate = useNavigate(); // Initialize navigate
+
   const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
     lastName: "",
@@ -27,40 +33,16 @@ const Register = ({ setShowRegister, setShowLogin, openModal }) => {
     password: "",
     confirmPassword: "",
   });
-
+  const { setUserDetails } = useAuth();
   const [error, setError] = useState({});
-  useEffect(() => {
-    if (registeredUser) {
-      const interval = setInterval(() => {
-        if (!registeredUser.userDetails.isVerified) {
-          try {
-            axiosInstance.get(GET_USER_URL).then((res) => {
-              console.log(res.data);
-            });
-          } catch (error) {
-            console.error("Error fetching user details:", error);
-          }
-        } else {
-          clearInterval(interval);
-        }
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [registeredUser]);
 
-  /**
-   * validate - Validates the input fields for the registration form.
-   * Ensures that all required fields meet the necessary criteria.
-   *
-   * @returns {boolean} - True if the form is valid, false otherwise.
-   */
   const validate = async () => {
     const isError = {};
 
     // Validate
     isError.firstName = validateFirstName(registerFormData.firstName);
     isError.lastName = validateLastName(registerFormData.lastName);
-    // isError.userName = await validateUserName(registerFormData.userName, checkUsername);
+    // isError.userName = await validateUserName(registerFormData.userName); // Uncommented for username validation
     isError.email = validateEmail(registerFormData.email);
     isError.password = validatePassword(registerFormData.password);
     isError.confirmPassword = validateConfirmPassword(
@@ -79,49 +61,30 @@ const Register = ({ setShowRegister, setShowLogin, openModal }) => {
     return Object.keys(isError).length === 0;
   };
 
-  /**
-   * handleChange - Handles the change in input field values.
-   * Updates the state with the current value for the respective field.
-   *
-   * @param {Event} event - The input change event.
-   */
   const handleChange = (event) => {
     const { name, value } = event.target;
     setRegisterFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * handleSubmit - Handles the form submission.
-   * Checks if the form is valid using the validate function, and if valid,
-   * calls the registerUser function from the AuthContext to register the user.
-   *
-   * @param {Event} e - The form submit event.
-   */
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (await validate()) {
-      // Call the registerUser function to process registration if the form is valid
-      delete registerFormData.confirmPassword;
+      // Remove confirmPassword before sending data
+      const { confirmPassword, ...submitData } = registerFormData;
       try {
-        const newUser = await register(registerFormData);
-        setRegisteredUser(newUser);
-        sessionStorage.clear();
-        sessionStorage.setItem(
-          "token",
-          JSON.stringify(registeredUser.accessToken)
-        );
-        setAuthHeader(registeredUser.accessToken);
-        if (registeredUser) {
-          console.log(registeredUser, "auth");
-          const res = checkUserVerified(
-            registeredUser?.userDetails?.isVerified
-          );
+        const newUser = await register(submitData);
+        setRegisteredUser(newUser?.userDetails);
+        localStorage.clear();
+        localStorage.setItem("token", newUser?.accessToken);
+        setAuthHeader(newUser?.accessToken);
+        if (newUser) {
+          const res = checkUserVerified(newUser?.userDetails?.isVerified);
+          setUserDetails(user?.userDetails);
           if (res) {
-            navigate("/dashboard");
+            setIsLoggedIn(true);
+            navigate("/home");
           } else {
-            setShowLogin(false);
             setShowRegister(false);
             openModal();
           }
@@ -138,7 +101,7 @@ const Register = ({ setShowRegister, setShowLogin, openModal }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
-            <div className="bg-tranparent w-11/12 md:w-1/2 lg:w-1/3 max-w-lg mx-auto">
+            <div className="bg-transparent w-11/12 md:w-1/2 lg:w-1/3 max-w-lg mx-auto">
               <Button
                 className="absolute top-6 right-8 bg-gray-200 text-black"
                 type="button"
@@ -221,7 +184,7 @@ const Register = ({ setShowRegister, setShowLogin, openModal }) => {
 
           <div className="w-full flex justify-center">
             <p className="flex  gap-2 items-center bg-white  px-6 py-2 text-sm font-medium text-gray-800">
-              Alredy have an account?
+              Already have an account?
               <span
                 className="font-bold text-primary transition-all duration-200 underline cursor-pointer"
                 onClick={() => {

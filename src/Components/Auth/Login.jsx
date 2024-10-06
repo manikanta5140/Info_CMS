@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../Context/Auth/AuthContext";
+import { useAuth } from "../../Context/AuthContext.jsx";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import {
@@ -8,11 +8,16 @@ import {
   validatePassword,
 } from "../../utils/Validation.js";
 import { useNavigate } from "react-router-dom";
-import Modal from "../Layout/Model.jsx";
+import { login } from "../../Api/services/authService.js";
 
-const Login = ({ setShowLogin, setShowRegister,openModal }) => {
+const Login = ({
+  setShowLogin,
+  setShowRegister,
+  openModal,
+  setLoggedInUser,
+}) => {
   // Destructure the loginUser function from the AuthContext to handle user login
-  const { loginUser,setIsLoggedIn } = useAuth();
+  const { setIsLoggedIn, setUserDetails } = useAuth();
 
   const [loginFormData, setLoginFormData] = useState({
     email: "",
@@ -60,53 +65,29 @@ const Login = ({ setShowLogin, setShowRegister,openModal }) => {
    *
    * @param {Event} e - The form submit event.
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      const user = loginUser(loginFormData);
-      console.log(user)
+      const user = await login(loginFormData);
+      console.log(user);
+      localStorage.clear();
+      localStorage.setItem("token", user?.accessToken);
       if (user) {
+        setLoggedInUser(user?.userDetails);
+        setUserDetails(user?.userDetails);
         const res = checkUserVerified(user?.userDetails?.isVerified);
         if (res) {
-          // JSON.stringify(user.accessToken)
-          localStorage.setItem("accessToken","1234567890" );
-          localSession.setItem("accessToken", "1234567890");
-            setIsLoggedIn(true);
-          navigate("/dashboard");
+          setIsLoggedIn(true);
+          navigate("/home");
         } else {
           setShowLogin(false);
           openModal();
         }
       }
     } else {
-      console.log("Invalid form");
+      console.log("error", "Please verify your details and try again.");
     }
-    navigate("/");
-  //   localStorage.setItem("accessToken","1234567890" );
-  //   sessionStorage.setItem("accessToken", "1234567890");
-  //   // setIsLoggedIn(true);
-  //   if (validate()) {
-  //     const user = loginUser(loginFormData);
-  //     console.log(user)
-  //     if (user) {
-  //       const res = checkUserVerified(user?.userDetails?.isVerified);
-  //       if (res) {
-  //         // JSON.stringify(user.accessToken)
-  //         localStorage.setItem("accessToken","1234567890" );
-  //         localSession.setItem("accessToken", "1234567890");
-  //           setIsLoggedIn(true);
-  //         navigate("/dashboard");
-  //       } else {
-  //         setShowLogin(false);
-  //         openModal();
-  //       }
-  //     }
-  //   } else {
-  //     console.log("Invalid form");
-  //   }
   };
-
-
 
   /**
    * Render the login form with input fields for email and password,
@@ -180,8 +161,6 @@ const Login = ({ setShowLogin, setShowRegister,openModal }) => {
           </div>
         </div>
       </form>
-
-      
     </>
   );
 };

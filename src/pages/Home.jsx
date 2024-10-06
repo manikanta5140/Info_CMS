@@ -7,8 +7,6 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 const Home = () => {
   const [searchTemplate, setSearchTemplate] = useState("");
 
-
-
   return (
     <>
       <div className="flex flex-col pt-12 w-full">
@@ -37,7 +35,7 @@ const Home = () => {
               icon={faMagnifyingGlass}
             />
             <Input
-              placeholder="Search..."
+              placeholder="Search here by template..."
               className="h-12 w-full text-primary placeholder-[var(--color-text-secondary)]   border-[var(--color-secondary)] bg-transparent py-4 pl-12 text-sm outline-none focus:border-b-2"
               name="searchTemplate"
               value={searchTemplate}

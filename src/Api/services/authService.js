@@ -1,5 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { CHECK_USERNAME_URL, REGISTER_URL } from "../../constants/apiURL.js";
+import {
+  CHECK_USERNAME_URL,
+  CHECK_VALID_TOKEN,
+  REGISTER_URL,
+} from "../../constants/apiURL.js";
 import { LOGIN_URL } from "../../constants/apiURL.js";
 import axiosInstance from "../axiosInstance";
 
@@ -18,7 +21,6 @@ export const login = async (userData) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log(error);
     if (error.response) {
       throw new Error(
         `Login failed: ${error.response.data?.message || "Unexpected error"}`
@@ -80,11 +82,12 @@ export const checkUsernameAvailability = async (username) => {
   }
 };
 
-export const logout = () => {
-  const token = localStorage.getItem("token");
-  const navigate = useNavigate();
-  if (token) {
-    localStorage.clear();
-    navigate("/");
+export const checkValidToken = async (token) => {
+  try {
+    const response = await axiosInstance.get(CHECK_VALID_TOKEN(token));
+    console.log(response.data, "authserrrr");
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };
