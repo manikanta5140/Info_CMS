@@ -12,10 +12,10 @@ import {
   checkUserVerified,
 } from "../../utils/Validation.js";
 import { register } from "../../Api/services/authService.js";
-import axiosInstance from "../../Api/axiosInstance.js";
-import { GET_USER_URL } from "../../constants/apiURL.js";
 import { setAuthHeader } from "../../Api/ApiConfig.js";
-import { useNavigate } from "react-router-dom"; // Add navigate for routing
+import { useNavigate } from "react-router-dom"; 
+import { showNotification } from "../notification/Notification.jsx";
+import Landing from "../Layout/Landing.jsx";
 
 const Register = ({
   setShowRegister,
@@ -23,7 +23,7 @@ const Register = ({
   openModal,
   setRegisteredUser,
 }) => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
   const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
@@ -42,7 +42,7 @@ const Register = ({
     // Validate
     isError.firstName = validateFirstName(registerFormData.firstName);
     isError.lastName = validateLastName(registerFormData.lastName);
-    // isError.userName = await validateUserName(registerFormData.userName); // Uncommented for username validation
+    // isError.userName = await validateUserName(registerFormData.userName);
     isError.email = validateEmail(registerFormData.email);
     isError.password = validatePassword(registerFormData.password);
     isError.confirmPassword = validateConfirmPassword(
@@ -80,10 +80,12 @@ const Register = ({
         setAuthHeader(newUser?.accessToken);
         if (newUser) {
           const res = checkUserVerified(newUser?.userDetails?.isVerified);
-          setUserDetails(user?.userDetails);
+          setUserDetails(newUser?.userDetails);
           if (res) {
             setIsLoggedIn(true);
+            showNotification('Verified successfully', 'success');
             navigate("/home");
+          
           } else {
             setShowRegister(false);
             openModal();
@@ -116,7 +118,7 @@ const Register = ({
               </h1>
             </div>
             <div className="divide-y divide-gray-200">
-              <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+              <div className="py-8 text-base leading-6 space-y-6 text-gray-700 sm:text-lg sm:leading-7">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Input
                     label="First Name"
@@ -175,7 +177,7 @@ const Register = ({
                     type="submit"
                     className="w-full bg-cyan-500 text-white rounded-md font-bold lore mt-2"
                   >
-                    Sign in
+                    Register
                   </Button>
                 </div>
               </div>

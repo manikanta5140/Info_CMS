@@ -9,6 +9,7 @@ import {
 } from "../../utils/Validation.js";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../Api/services/authService.js";
+import { showNotification } from "../notification/Notification.jsx";
 
 const Login = ({
   setShowLogin,
@@ -69,7 +70,6 @@ const Login = ({
     e.preventDefault();
     if (validate()) {
       const user = await login(loginFormData);
-      console.log(user);
       localStorage.clear();
       localStorage.setItem("token", user?.accessToken);
       if (user) {
@@ -77,6 +77,7 @@ const Login = ({
         setUserDetails(user?.userDetails);
         const res = checkUserVerified(user?.userDetails?.isVerified);
         if (res) {
+          showNotification("logged in successfully", "success");
           setIsLoggedIn(true);
           navigate("/home");
         } else {
@@ -85,7 +86,7 @@ const Login = ({
         }
       }
     } else {
-      console.log("error", "Please verify your details and try again.");
+     showNotification("Please verify your details and try again.","error",);
     }
   };
 
@@ -115,9 +116,9 @@ const Login = ({
                 </h1>
               </div>
               <div className="">
-                <div className="py-8 text-base leading-6 space-y-4 sm:text-lg sm:leading-7">
+                <div className="py-8 text-base leading-6 space-y-6 sm:text-lg sm:leading-7">
                   <Input
-                    className="text-primary bg-primary rounded ps-2"
+                    className="rounded ps-2"
               
                     label="Email"
                     type="Email"

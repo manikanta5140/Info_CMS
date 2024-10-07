@@ -13,13 +13,14 @@ import {
 import { useAuth } from "../../Context/AuthContext";
 import { useTheme } from "../../Context/ThemeContext";
 
+
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const dropdownRef = useRef(null);
   const { logout, userDetails } = useAuth();
-  console.log(userDetails, "user");
   const { theme, setTheme, themes } = useTheme();
+  
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -105,11 +106,11 @@ const Navbar = () => {
                     />
                   </button>
                   <FontAwesomeIcon icon={faChevronDown} />
-                </div>
-                {dropdownOpen && (
+                </div> 
+                 {dropdownOpen && (
                   <div
                     ref={dropdownRef}
-                    className="z-50 fixed right-0 top-12 md:top-10 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"
+                    className="z-50 fixed right-2 top-14 md:top-12 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"
                   >
                     <div className="px-4 py-3">
                       <p className="text-sm text-primary">
@@ -151,12 +152,13 @@ const Navbar = () => {
                     </ul>
                   </div>
                 )}
+               
               </div>
             </div>
           </div>
         </div>
       </nav>
-      <Sidebar openSideBar={openSideBar} toggleSideBar={toggleSideBar} />
+      <Sidebar openSideBar={openSideBar} toggleSideBar={toggleSideBar} dropdownRef={dropdownRef}/>
     </>
   );
 };

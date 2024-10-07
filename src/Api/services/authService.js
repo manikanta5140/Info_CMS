@@ -19,7 +19,6 @@ export const login = async (userData) => {
   try {
     console.log(userData);
     const response = await axiosInstance.post(LOGIN_URL, userData);
-    showNotification("logged in successfully", "success");
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -93,3 +92,9 @@ export const checkValidToken = async (token) => {
     console.log(error);
   }
 };
+
+// export const resendMail=()=>{
+//   try{
+//     const response=await axiosInstance.get()
+//   }
+// }

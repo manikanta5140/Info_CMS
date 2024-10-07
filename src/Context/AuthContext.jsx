@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  checkUsernameAvailability,
   checkValidToken,
-  login,
-  register,
+
 } from "../Api/services/authService";
 import { getUser } from "../Api/services/userService";
 import { useNavigate } from "react-router-dom";
+import { showNotification } from "../Components/notification/Notification";
 
 /**
  * AuthContext is a React context that holds authentication state.
@@ -52,7 +51,6 @@ export const AuthProvider = ({ children }) => {
           setIsLoggedIn(false);
         }
       } catch (error) {
-        console.error("Error checking token:", error);
         setCheckToken(false);
         setIsLoggedIn(false);
       }

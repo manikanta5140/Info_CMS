@@ -10,7 +10,9 @@ export const STORE_CONTENT_HISTORY = "/content-history";
 export const UPDATE_CONTENT_HISTORY = (id) => `/content-history/${id}`;
 export const GET_CONTENT_HISTORY = "/content-history";
 export const GET_CONTENT_BY_ID = (id) => `/content-history/${id}`;
-export const CHECK_VALID_TOKEN = (token) => `/auth/verify/${token}`;
+export const CHECK_VALID_TOKEN = (token) => `/auth/isVerified-user/${token}`;
+
+
 
 // export const UPDATE_CONTENT_URL=(slug)=>navigate(`/content/${slug}?mode=edit`)
 // export const LOGOUT_URL = "/auth/logout";

@@ -7,8 +7,6 @@ import GenerateContent from "./pages/GenerateContent";
 import Profile from "./pages/Profile";
 import ContentHistory from "./pages/ContentHistory";
 import PostedContent from "./pages/PostedContent";
-import { useAuth } from "./Context/AuthContext";
-import { checkValidToken } from "./Api/services/authService";
 import Notification from "./Components/notification/Notification";
 import { useTheme } from "./Context/ThemeContext";
 
@@ -16,11 +14,7 @@ const App = () => {
   // Theme Setting variables
   const { theme } = useTheme();
 
-  const { validateToken } = useAuth();
 
-  useEffect(() => {
-    validateToken();
-  }, []);
 
   return (
     <main className={`${theme}`}>

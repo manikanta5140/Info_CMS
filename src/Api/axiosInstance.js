@@ -42,11 +42,12 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // If we receive a 401 Unauthorized response, the token might have expired
-      // localStorage.removeItem("accessToken");
-      // navigate("/login");
+      localStorage.removeItem("token");
+      window.location.href = '/'; 
     }
     return Promise.reject(error);
   }
 );
+
 
 export default axiosInstance;

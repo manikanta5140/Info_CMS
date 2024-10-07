@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../common/Button";
 import Register from "../auth/Register";
 import Login from "../auth/Login";
 import Modal from "./Model";
 import { useAuth } from "../../Context/AuthContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { getUser } from "../../Api/services/userService";
 import { useTheme } from "../../Context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { showNotification } from "../notification/Notification";
 import {
+  faUser,
+  faRightFromBracket,
+  faBars,
+  faChevronDown,
   faSun,
   faMoon
 } from "@fortawesome/free-solid-svg-icons";
@@ -20,13 +25,25 @@ function Landing() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [authUser, setAuthUser] = useState(null);
   const navigate = useNavigate();
-  const { setIsLoggedIn, checkToken, userDetails, isLoggedIn } = useAuth();
-  const { theme, setTheme, themes} = useTheme();
+  const {
+    setIsLoggedIn,
+    checkToken,
+    validateToken,
+    isLoggedIn,
+    logout,
+    userDetails,
+  } = useAuth();
+  const { theme, setTheme, themes } = useTheme();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   /************************************Modal********************** */
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  /*********************************************** */
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
   /************************************logic for verifying the user either it is verified or not******************* */
   useEffect(() => {
     if (authUser) {
@@ -37,14 +54,19 @@ function Landing() {
           if (localStorage.getItem("token")) {
             setIsLoggedIn(true);
             closeModal();
+            showNotification("Verified successfully", "success");
             navigate("/home");
           }
         }
-      }, 3000);
+      }, 5000);
 
       return () => clearInterval(interval);
     }
   }, [authUser]);
+
+  useEffect(() => {
+    validateToken();
+  }, []);
 
   const handleResend = () => {
     alert("Verification code resent!");
@@ -96,13 +118,69 @@ function Landing() {
             
                 </div>
                 {isLoggedIn ? (
-                  <span className="flex text-sm bg-white-800 rounded-full ">
-                    <img
-                      className="w-10 h-10 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                      alt="user photo"
-                    />
-                  </span>
+                  <div className="">
+                    <div
+                      className="flex gap-3 items-center justify-center focus:ring-4 focus:ring-gray-300 cursor-pointer"
+                      onClick={toggleDropdown}
+                    >
+                      <button
+                        type="button"
+                        className="flex text-sm bg-white-800 rounded-full "
+                      >
+                        <img
+                          className="w-8 h-8 rounded-full"
+                          src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                          alt="user photo"
+                        />
+                      </button>
+                      <FontAwesomeIcon icon={faChevronDown} />
+                    </div>
+                    {dropdownOpen && (
+                      <div
+                        ref={dropdownRef}
+                        className="z-50 fixed right-2 top-12 md:top-12 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"
+                      >
+                        <div className="px-4 py-3">
+                          <p className="text-sm text-primary">
+                            {userDetails?.userName || "user"}
+                          </p>
+                          <p className="text-sm font-medium text-primary truncate">
+                            {userDetails?.email || "user@gmail.com"}
+                          </p>
+                        </div>
+                        <ul className="py-1">
+                          <li onClick={toggleDropdown}>
+                            <Link
+                              to="/profile"
+                              className="block px-4 py-2 text-sm text-primary hover:bg-primary"
+                            >
+                              <FontAwesomeIcon
+                                className="mr-2 flex-shrink-0 w-4 h-4 text-primary transition duration-75 group-hover:text-secondary"
+                                icon={faUser}
+                              />
+                              My Account
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/"
+                              className="block px-4 py-2 text-sm text-primary hover:bg-primary"
+                              onClick={() => {
+                                logout();
+                                toggleDropdown();
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                className="mr-2 flex-shrink-0 w-4 h-4 text-primary transition duration-75 group-hover:text-secondary"
+                                icon={faRightFromBracket}
+                              />
+                              <span>Logout</span>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <Button
                     bgColor="bg-important"
@@ -162,34 +240,34 @@ function Landing() {
           </header>
 
           {/* Features Section */}
-          <section className=" py-4 px-5 md:px-0">
+          <section className="py-4 px-5 md:px-0">
             <div className="container mx-auto text-center px-1 md:px-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="p-6 bg-fill shadow-lg rounded-lg border border-[var(--color-important)]">
                   <h3 className="text-xl font-semibold mb-4 text-primary">
-                    High Performance
+                    Free to Use
                   </h3>
                   <p className="text-secondary">
-                    Experience fast, reliable content management built for
-                    today’s demands.
+                    Enjoy a powerful CMS platform with zero cost, designed to
+                    help you manage content efficiently.
                   </p>
                 </div>
                 <div className="p-6 bg-fill shadow-lg rounded-lg border border-[var(--color-important)]">
                   <h3 className="text-xl font-semibold mb-4 text-primary">
-                    Top Security
+                    Multi-Platform Posting
                   </h3>
                   <p className="text-secondary">
-                    Safeguard your data with the latest security protocols and
-                    encryption.
+                    Publish your content simultaneously across multiple
+                    platforms like LinkedIn, Twitter, and more.
                   </p>
                 </div>
                 <div className="p-6 bg-fill shadow-lg rounded-lg border border-[var(--color-important)]">
                   <h3 className="text-xl font-semibold mb-4 text-primary">
-                    Easy Integration
+                    Job Scheduling
                   </h3>
                   <p className="text-secondary">
-                    Seamlessly integrate with your existing tools and platforms
-                    for a smooth workflow.
+                    Schedule your posts and tasks ahead of time, ensuring
+                    content is delivered when your audience is most active.
                   </p>
                 </div>
               </div>
@@ -220,12 +298,8 @@ function Landing() {
           />
         </div>
       )}
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onResend={handleResend}
-      />
+      {/**********************varification modal popop************** */}
+      <Modal isOpen={isModalOpen} onResend={handleResend} />
     </>
   );
 }

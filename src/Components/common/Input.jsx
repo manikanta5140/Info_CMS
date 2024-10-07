@@ -27,7 +27,7 @@ const Input = React.forwardRef(function Input(
         ref={ref}
         required={required}
         disabled={disabled}
-        className={`peer bg-primary placeholder-gray-100 h-10 w-full border-b-2 
+        className={`peer text-primary bg-primary  placeholder-gray-100 h-10 w-full  
           ${
             error
               ? "border-red-500 focus:border-red-500"
@@ -40,13 +40,13 @@ const Input = React.forwardRef(function Input(
       {label && (
         <label
           htmlFor={id}
-          className={`absolute left-0 -top-3.5 text-primary text-sm 
-            peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
-            peer-placeholder-shown:top-2 transition-all 
+          className={`absolute left-0 -top-6 text-primary text-sm 
+            peer-placeholder-shown:text-base peer-placeholder-shown:text-primary
+            peer-placeholder-shown:top-2 transition-all  peer-placeholder-shown:pl-2
             ${
               error
                 ? "text-red-500"
-                : "peer-focus:text-gray-600 peer-focus:text-sm"
+                : "peer-focus:text-primary peer-focus:text-sm"
             }`}
         >
           {label}
