@@ -52,7 +52,8 @@ export const register = async (userData) => {
     if (error.response) {
       console.log(error.response.data?.message);
       throw new Error(
-        `Registration failed: ${error.response.data?.message || "Unexpected error"
+        `Registration failed: ${
+          error.response.data?.message || "Unexpected error"
         }`
       );
     } else if (error.request) {
@@ -74,10 +75,10 @@ export const register = async (userData) => {
 
 export const checkUsernameAvailability = async (username) => {
   try {
-    const response = await axiosInstance.get(CHECK_USERNAME_URL, {
-      params: { username },
+    const response = await axiosInstance.post(CHECK_USERNAME_URL, {
+      userName: username,
     });
-    return response.data.isAvailable;
+    return response.data.isUnique;
   } catch (error) {
     throw new Error("Error checking username availability");
   }

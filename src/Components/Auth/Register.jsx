@@ -13,7 +13,7 @@ import {
 } from "../../utils/Validation.js";
 import { register } from "../../Api/services/authService.js";
 import { setAuthHeader } from "../../Api/ApiConfig.js";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { showNotification } from "../notification/Notification.jsx";
 import Landing from "../Layout/Landing.jsx";
 
@@ -23,7 +23,7 @@ const Register = ({
   openModal,
   setRegisteredUser,
 }) => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
@@ -42,7 +42,7 @@ const Register = ({
     // Validate
     isError.firstName = validateFirstName(registerFormData.firstName);
     isError.lastName = validateLastName(registerFormData.lastName);
-    // isError.userName = await validateUserName(registerFormData.userName);
+    isError.userName = await validateUserName(registerFormData.userName);
     isError.email = validateEmail(registerFormData.email);
     isError.password = validatePassword(registerFormData.password);
     isError.confirmPassword = validateConfirmPassword(
@@ -61,9 +61,17 @@ const Register = ({
     return Object.keys(isError).length === 0;
   };
 
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     const { name, value } = event.target;
+
+    // Update form data
     setRegisterFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validate username dynamically
+    if (name === "userName") {
+      const userNameError = await validateUserName(value);
+      setError((prev) => ({ ...prev, userName: userNameError }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -83,12 +91,11 @@ const Register = ({
           setUserDetails(newUser?.userDetails);
           if (res) {
             setIsLoggedIn(true);
-            showNotification('Verified successfully', 'success');
+            showNotification("Verified successfully", "success");
             navigate("/home");
-          
           } else {
-            setShowRegister(false);
             openModal();
+            setShowRegister(false);
           }
         }
       } catch (err) {

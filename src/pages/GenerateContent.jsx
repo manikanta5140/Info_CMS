@@ -21,6 +21,7 @@ import {
 } from "../Api/services/contentService";
 import { useAuth } from "../Context/AuthContext";
 import { UPDATE_CONTENT_HISTORY } from "../constants/apiURL";
+import { showNotification } from "../Components/notification/Notification";
 
 const GenerateContent = ({ mode }) => {
   const [formData, setFormData] = useState({});
@@ -82,7 +83,6 @@ const GenerateContent = ({ mode }) => {
   useEffect(() => {
     if (aiResult) {
       const contentData = {
-        userId: 1, // i have to add it
         categoryId: selectedTemplte?.id,
         prompt: selectedTemplte?.aiPrompt,
         content: aiResult,
@@ -99,7 +99,7 @@ const GenerateContent = ({ mode }) => {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 1500);
     } else {
-      alert("Failed to copy text. Please try again.");
+      showNotification("Failed to copy text. Please try again.", "error");
     }
   };
 

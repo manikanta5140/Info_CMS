@@ -18,7 +18,10 @@ const ContentHistory = () => {
 
   useEffect(() => {
     getContentHistory()
-      .then((res) => setHistoryContent(res))
+      .then((res) => {
+        console.log(res, "sdfghj");
+        setHistoryContent(res);
+      })
       .catch((err) => console.log(err));
   }, []);
   const getContent = (content) => {
@@ -96,9 +99,9 @@ const ContentHistory = () => {
             <tbody className=" lg:border-gray-300">
               {contentValue.length > 0 ? (
                 contentValue.map((item, index) => (
-                  <tr key={item.id} className="border-t border-gray-300">
-                    <td className="whitespace-no-wrap py-4 text-left text-sm text-secondary sm:px-3 lg:text-left">
-                      <span className="hidden lg:block">{item.id}</span>
+                  <tr key={item.id} className="border-b border-gray-300">
+                    <td className="whitespace-no-wrap py-4 text-left text-sm text-gray-600 sm:px-3 lg:text-left">
+                      <span className="hidden lg:block">{index + 1}</span>
                       <div className="mt-1 flex flex-col text-xs font-medium lg:hidden">
                         <div className="flex items-center gap-2 text-lg font-bold">
                           <FontAwesomeIcon icon={faReceipt} />
@@ -125,7 +128,7 @@ const ContentHistory = () => {
                     <td className="whitespace-no-wrap py-4 text-right text-sm text-secondary sm:px-3 lg:text-left block lg:hidden">
                       <div className="flex gap-1 justify-center items-center">
                         <span className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-primary py-0.5 text-center text-xs text-primary  lg:hidden">
-                          <ModalButton />
+                          <ModalButton message={getContent(item.content)} contentHistoryId={item.id}/>
                         </span>
 
                         <span
@@ -141,7 +144,7 @@ const ContentHistory = () => {
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                       <span className="  cursor-pointer mr-3 whitespace-nowrap rounded-full bg-button  py-0.5 text-primary font-semibold">
-                        <ModalButton />
+                      <ModalButton message={getContent(item.content)} contentHistoryId={item.id}/>
                       </span>
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-500 sm:px-3 lg:table-cell">

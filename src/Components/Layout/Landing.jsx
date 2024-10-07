@@ -15,9 +15,8 @@ import {
   faBars,
   faChevronDown,
   faSun,
-  faMoon
+  faMoon,
 } from "@fortawesome/free-solid-svg-icons";
-
 
 function Landing() {
   const [showLogin, setShowLogin] = useState(false);
@@ -109,13 +108,15 @@ function Landing() {
               <div className="lg:flex items-center space-x-6">
                 <div className="flex  items-center justify-center bg  text-3xl font-extrabold rounded">
                   <button onClick={handleThemeChange}>
-                    {
-                      theme === "theme-dark" ? 
-                      <FontAwesomeIcon icon={faSun} className="text-white hover:text-yellow-400"/>
-                      : <FontAwesomeIcon icon={faMoon} />
-                    }
+                    {theme === "theme-dark" ? (
+                      <FontAwesomeIcon
+                        icon={faSun}
+                        className="text-white hover:text-yellow-400"
+                      />
+                    ) : (
+                      <FontAwesomeIcon icon={faMoon} />
+                    )}
                   </button>
-            
                 </div>
                 {isLoggedIn ? (
                   <div className="">

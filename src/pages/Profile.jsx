@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Components/common/Button";
 import Input from "../Components/common/Input";
 import {
@@ -9,7 +9,6 @@ import {
   validateDOB,
 } from "../utils/Validation";
 import { getUser } from "../Api/services/userService";
-
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -27,19 +26,18 @@ const Profile = () => {
     "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
   ); // Default profile image
   const [selectedImage, setSelectedImage] = useState(null); // Image preview
- const [updatedFormData, setUpdatedFormData] = useState(null);
+  const [updatedFormData, setUpdatedFormData] = useState(null);
 
   useEffect(() => {
-
     getUser()
-    .then(res => {
-      setFormData(res);
-      console.log(res);
-    } )
-    .catch(err => {
-      console.log(err);
-    })
-  },[])
+      .then((res) => {
+        setFormData(res);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -203,7 +201,7 @@ const Profile = () => {
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
               <Input
-              className="bg-primary text-primary"
+                className="bg-primary text-primary"
                 label="First Name"
                 type="text"
                 name="firstName"
@@ -215,7 +213,7 @@ const Profile = () => {
               />
 
               <Input
-              className="bg-primary text-primary"
+                className="bg-primary text-primary"
                 label="Last Name"
                 type="text"
                 name="lastName"
@@ -229,7 +227,7 @@ const Profile = () => {
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
               <Input
-              className="bg-primary text-primary"
+                className="bg-primary text-primary"
                 label="Email"
                 type="email"
                 name="email"
@@ -240,7 +238,7 @@ const Profile = () => {
                 required
               />
               <Input
-              className="bg-primary text-primary"
+                className="bg-primary text-primary"
                 label="Phone Number"
                 type="text"
                 name="phoneNumber"
@@ -286,14 +284,15 @@ const Profile = () => {
               {/* Date of Birth */}
               <div className="w-full sm:w-1/2">
                 <Input
-                className="bg-fill text-primary"
+                  label="dob"
+                  className="bg-fill text-primary"
                   type="date"
                   name="dob"
                   value={formData?.dob || ""}
                   error={error.dob}
                   onChange={handleChange}
-                  disabled={!isEditing} // Disable if not editing
-                  required
+                  disabled={!isEditing}
+                  required={true}
                 />
               </div>
             </div>
@@ -305,7 +304,6 @@ const Profile = () => {
                   <Button type="button" onClick={handleCancel} className="ml-4">
                     Cancel
                   </Button>
-                  
                 </>
               ) : (
                 <Button type="button" onClick={() => setIsEditing(true)}>

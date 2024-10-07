@@ -1,18 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body{
-    font-family: "Work Sans", sans-serif;
+body {
+  font-family: "Work Sans", sans-serif;
 }
-.lora{
-    font-family: "Lora", serif;
+.lora {
+  font-family: "Lora", serif;
 }
 
-#blur{
+#blur {
   text-shadow: 0px 0px 40px rgb(156 163 175);
 }
 
@@ -49,3 +49,32 @@ body{
       --color-button-cancel-hover: #e11d48;
     }
   }
+  .theme-light {
+    --color-text-primary: rgb(17 24 39); /* text-gray-900 */
+    --color-text-secondary: rgb(75 85 99); /* text-gray-500 */
+    --color-text-important: #0ca7ff;
+    --color-primary: #d7f0ff;
+    /* --color-secondary: #EBF7FF; */
+    --color-secondary: #f3f6f9;
+    --color-important: #0ca7ff;
+    --color-fill: #ffffff;
+    --color-button: rgb(74 222 128);
+    --color-button-secondary: rgb(245 158 11);
+    --color-button-hover: #0d9488;
+    --color-button-cancel: #fb7185;
+    --color-button-cancel-hover: #e11d48;
+  }
+
+.theme-light {
+  --color-text-primary: rgb(17 24 39); /* text-gray-900 */
+  --color-text-secondary: rgb(75 85 99); /* text-gray-500 */
+  --color-text-important: #0ca7ff;
+  --color-primary: #d7f0ff;
+  --color-secondary: #ebf7ff;
+  --color-important: #0ca7ff;
+  --color-fill: #ffffff;
+  --color-button: #2dd4bf;
+  --color-button-hover: #0d9488;
+  --color-button-cancel: #fb7185;
+  --color-button-cancel-hover: #e11d48;
+}

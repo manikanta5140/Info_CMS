@@ -1,7 +1,13 @@
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import React, { useState } from "react";
+import {
+  authorizeTwitter,
+  twitterPost,
+  verifyPlatform,
+} from "../../Api/services/socialMediaService";
+import { showNotification } from "../notification/Notification";
 
-export default function ModalButton() {
+export default function ModalButton({ message, contentHistoryId }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [authorizedPlatforms, setAuthorizedPlatforms] = useState({
     Twitter: false,
@@ -10,6 +16,7 @@ export default function ModalButton() {
     Instagram: false,
   });
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+  const [postedPlatforms, setPostedPlatforms] = useState([]); // New state for successful posts
 
   const socialMediaList = [
     {
@@ -37,6 +44,23 @@ export default function ModalButton() {
     setIsOpen(false);
   }
 
+  useEffect(() => {
+    verifyPlatform()
+      .then((response) => {
+        console.log(response, "mod");
+        let result = response?.filter(
+          (res) => res?.platforms.platformName === "Twitter"
+        );
+        if (
+          result[0]?.platforms.platformName === "Twitter" &&
+          result[0]?.isVerified
+        ) {
+          setAuthorizedPlatforms((prev) => ({ ...prev, Twitter: true }));
+        }
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   function handlePlatformSelection(platform) {
     setSelectedPlatforms((prevSelection) =>
       prevSelection.includes(platform)
@@ -45,19 +69,29 @@ export default function ModalButton() {
     );
   }
 
-  function handleAuthorize(platform) {
-    setAuthorizedPlatforms((prevAuth) => ({
-      ...prevAuth,
-      [platform]: true,
-    }));
+  async function handleAuthorize(platform) {
+    if (platform === "Twitter") {
+      await authorizeTwitter();
+    }
   }
 
-  function handlePost() {
+  async function handlePost() {
     if (selectedPlatforms.length === 0) {
       alert("Please select at least one platform.");
     } else {
-      console.log("Posting to:", selectedPlatforms);
-      closeModal();
+      const isTwitterSelected = selectedPlatforms.includes("Twitter");
+      if (isTwitterSelected) {
+        console.log(message);
+        const res = await twitterPost(message, contentHistoryId);
+        if (res) {
+          showNotification("Post sent successfully", "success");
+          // Add to the posted platforms
+          setPostedPlatforms((prev) => [...prev, "Twitter"]);
+        } else {
+          showNotification("Error sending post", "error");
+        }
+      }
+      // Add similar logic for other platforms if needed
     }
   }
 
@@ -110,7 +144,9 @@ export default function ModalButton() {
                   </span>
                 </div>
 
-                {authorizedPlatforms[item.platform] ? (
+                {postedPlatforms.includes(item.platform) ? (
+                  <span className="text-green-500 text-lg font-bold">✔</span>
+                ) : authorizedPlatforms[item.platform] ? (
                   <input
                     type="checkbox"
                     className="form-checkbox h-5 w-5 text-purple-600"

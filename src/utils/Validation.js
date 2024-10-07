@@ -1,3 +1,5 @@
+import { checkUsernameAvailability } from "../Api/services/authService";
+
 // Validate First Name
 export const validateFirstName = (firstName) => {
   if (!firstName) {
@@ -18,11 +20,8 @@ export const validateLastName = (lastName) => {
   return null;
 };
 
-
-
-
 // Validate Username
-export const validateUserName = async (userName, checkUsername) => {
+export const validateUserName = async (userName) => {
   if (!userName) {
     return "Username is required";
   } else if (userName.length < 3) {
@@ -30,17 +29,17 @@ export const validateUserName = async (userName, checkUsername) => {
   } else {
     try {
       // Check for unique username
-      const isAvailable = await checkUsername(userName);
+      const isAvailable = await checkUsernameAvailability(userName);
       if (!isAvailable) {
         return "Username is already taken";
       }
     } catch (error) {
+      console.error("Error in username validation:", error); // Log the error
       return "Error checking username availability";
     }
   }
   return null;
 };
-
 
 // Validate Email
 export const validateEmail = (email) => {
@@ -61,7 +60,7 @@ export const validatePhoneNumber = (phoneNumber) => {
   if (!isValid) {
     return "Phone number must be exactly 10 digits";
   }
-  return null; 
+  return null;
 };
 
 //validate Dob
@@ -77,16 +76,12 @@ export const validateDOB = (dob) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ignore time part
 
-
   if (inputDate > today) {
     return "Date of birth cannot be in the future";
   }
 
-  return null; 
+  return null;
 };
-
-
-
 
 // Validate Password
 export const validatePassword = (password) => {
@@ -97,8 +92,6 @@ export const validatePassword = (password) => {
   }
   return null;
 };
-
-
 
 // Validate Confirm Password
 export const validateConfirmPassword = (confirmPassword, password) => {
@@ -117,5 +110,3 @@ export const checkUserVerified = (verified) => {
   }
   return false;
 };
-
-

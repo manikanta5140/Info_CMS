@@ -38,7 +38,10 @@ axiosInstance.interceptors.request.use(
 **********************************************/
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(response, "inter");
+    return response;
+  },
   (error) => {
     if (error.response && error.response.status === 401) {
       // If we receive a 401 Unauthorized response, the token might have expired

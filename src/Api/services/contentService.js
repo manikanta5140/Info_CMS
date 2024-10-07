@@ -27,6 +27,7 @@ export const getContentBySlug = async (slug) => {
 };
 export const storeContentHistory = async (contentData) => {
   try {
+    console.log(contentData);
     const response = await axiosInstance.post(
       STORE_CONTENT_HISTORY,
       contentData
@@ -38,33 +39,29 @@ export const storeContentHistory = async (contentData) => {
 };
 export const getContentHistory = async () => {
   try {
-    const response = await axiosInstance.get(
-      GET_CONTENT_HISTORY
-    );
+    const response = await axiosInstance.get(GET_CONTENT_HISTORY);
     return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getContentById=async(id)=>{
+export const getContentById = async (id) => {
   try {
-    const response = await axiosInstance.get(
-      GET_CONTENT_BY_ID(id)
-    );
+    const response = await axiosInstance.get(GET_CONTENT_BY_ID(id));
     return response.data;
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const updateContentHistory = async (id,updatedcontentData) => {
+export const updateContentHistory = async (id, updatedcontentData) => {
   try {
     const response = await axiosInstance.patch(
       UPDATE_CONTENT_HISTORY(id),
       updatedcontentData
     );
-    console.log(response.data,"UPDATE");
+    console.log(response.data, "UPDATE");
     return response.data;
   } catch (error) {
     console.log(error);
