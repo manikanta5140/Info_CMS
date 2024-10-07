@@ -11,28 +11,20 @@ import {
 import { getUser } from "../Api/services/userService";
 
 const Profile = () => {
-  const [formData, setFormData] = useState({
-    userName: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    gender: "",
-    dob: "",
-  });
+  const [formData, setFormData] = useState(null);
+  const [initialFormData, setIntitialFormData] = useState(null);
 
   const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
-  const [profileImage, setProfileImage] = useState(
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-  ); // Default profile image
   const [selectedImage, setSelectedImage] = useState(null); // Image preview
   const [updatedFormData, setUpdatedFormData] = useState(null);
+  const [gender, setGender] = useState(null);
 
   useEffect(() => {
     getUser()
       .then((res) => {
         setFormData(res);
-        console.log(res);
+        setIntitialFormData(res);
+        setGender(res?.gender);
       })
       .catch((err) => {
         console.log(err);
@@ -45,13 +37,8 @@ const Profile = () => {
       ...formData,
       [name]: value,
     });
-    setUpdatedFormData({
-      ...updatedFormData,
-      [name]: value,
-    });
   };
 
-  const [gender, setGender] = useState("Male");
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   if (await validate()) {
@@ -68,57 +55,35 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (await validate()) {
-      const formDataToSend = new FormData();
 
-      // Add form data fields
-      formDataToSend.append("userName", formData.userName);
-      formDataToSend.append("firstName", formData.firstName);
-      formDataToSend.append("lastName", formData.lastName);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("phoneNumber", formData.phoneNumber);
-      formDataToSend.append("gender", formData.gender);
-      formDataToSend.append("dob", formData.dob);
+    const formDataToSend = new FormData();
 
-      // Add the selected image file (if any)
-      if (selectedImage) {
-        formDataToSend.append("profileImage", selectedImage);
-      }
+    // Add form data fields
+    formDataToSend.append("firstName", formData.firstName);
+    formDataToSend.append("lastName", formData.lastName);
+    formDataToSend.append("mobileNumber", formData.mobileNumber);
+    formDataToSend.append("gender", gender);
+    formDataToSend.append("dateOfBirth", formData.dateOfBirth);
 
-      // Print form data in console
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(`${key}:`, value);
-      }
-
-      console.log(updatedFormData);
-
-      // Example: sending the form data to the backend using fetch or axios
-      // try {
-      //   const response = await fetch("/api/profile", {
-      //     method: "POST",
-      //     body: formDataToSend, // Send the FormData object
-      //   });
-
-      //   if (response.ok) {
-      //     console.log("Profile updated successfully");
-      //     // Handle success response
-      //   } else {
-      //     console.log("Error updating profile");
-      //     // Handle error response
-      //   }
-      // } catch (error) {
-      //   console.error("Error:", error);
-      // }
-
-      setIsEditing(false); // Disable editing after saving
-    } else {
-      console.log("Invalid form");
+    // Add the selected image file (if any)
+    if (selectedImage) {
+      formDataToSend.append("profileImage", selectedImage);
     }
+
+    // Print form data in console
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    console.log(formDataToSend);
+
+    setIsEditing(false); // Disable editing after saving
   };
 
   const handleCancel = () => {
-    setIsEditing(false); // Disable editing and revert changes
-    setSelectedImage(null); // Reset selected image on cancel
+    setIsEditing(false);
+    setSelectedImage(null);
+    setFormData(initialFormData);
   };
 
   const handleImageChange = (e) => {
@@ -136,8 +101,8 @@ const Profile = () => {
     isError.firstName = validateFirstName(formData.firstName);
     isError.lastName = validateLastName(formData.lastName);
     isError.email = validateEmail(formData.email);
-    isError.phoneNumber = validatePhoneNumber(formData.phoneNumber);
-    isError.dob = validateDOB(formData.dob);
+    // isError.mobileNumber = validatePhoneNumber(formData.mobileNumber);
+    // isError.dob = validateDOB(formData.dateOfBirth);
 
     // Remove fields without errors
     for (const key in isError) {
@@ -165,7 +130,7 @@ const Profile = () => {
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
-                  : profileImage
+                  : formData?.profilePhoto
               }
               alt="Profile avatar"
             />
@@ -194,7 +159,7 @@ const Profile = () => {
                 error={error.userName}
                 value={formData?.userName}
                 onChange={handleChange}
-                disabled={!isEditing} // Disable if not editing
+                disabled // Disable if not editing
                 required
               />
             </div>
@@ -206,7 +171,7 @@ const Profile = () => {
                 type="text"
                 name="firstName"
                 error={error.firstName}
-                value={formData?.firstName || ""}
+                value={formData?.firstName}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -218,7 +183,7 @@ const Profile = () => {
                 type="text"
                 name="lastName"
                 error={error.lastName}
-                value={formData?.lastName || ""}
+                value={formData?.lastName}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -241,12 +206,11 @@ const Profile = () => {
                 className="bg-primary text-primary"
                 label="Phone Number"
                 type="text"
-                name="phoneNumber"
-                error={error.phoneNumber}
-                value={formData?.phoneNumber || ""}
+                name="mobileNumber"
+                error={error.mobileNumber}
+                value={formData?.mobileNumber}
                 onChange={handleChange}
-                disabled={!isEditing} // Disable if not editing
-                required
+                disabled={!isEditing}
               />
             </div>
 
@@ -283,16 +247,13 @@ const Profile = () => {
 
               {/* Date of Birth */}
               <div className="w-full sm:w-1/2">
-                <Input
-                  label="dob"
+                <input
                   className="bg-fill text-primary"
                   type="date"
-                  name="dob"
-                  value={formData?.dob || ""}
-                  error={error.dob}
+                  name="dateOfBirth"
+                  value={formData?.dateOfBirth}
                   onChange={handleChange}
                   disabled={!isEditing}
-                  required={true}
                 />
               </div>
             </div>
@@ -306,9 +267,13 @@ const Profile = () => {
                   </Button>
                 </>
               ) : (
-                <Button type="button" onClick={() => setIsEditing(true)}>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-lg bg-blue-600"
+                  onClick={() => setIsEditing(true)}
+                >
                   Edit
-                </Button>
+                </button>
               )}
             </div>
           </div>
