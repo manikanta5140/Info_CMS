@@ -7,6 +7,12 @@ import { useAuth } from "../../Context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getUser } from "../../Api/services/userService";
 import { useTheme } from "../../Context/ThemeContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSun,
+  faMoon
+} from "@fortawesome/free-solid-svg-icons";
+
 
 function Landing() {
   const [showLogin, setShowLogin] = useState(false);
@@ -15,7 +21,7 @@ function Landing() {
   const [authUser, setAuthUser] = useState(null);
   const navigate = useNavigate();
   const { setIsLoggedIn, checkToken, userDetails, isLoggedIn } = useAuth();
-  const { theme, setTheme, themes } = useTheme();
+  const { theme, setTheme, themes} = useTheme();
 
   /************************************Modal********************** */
   const openModal = () => setIsModalOpen(true);
@@ -44,9 +50,10 @@ function Landing() {
     alert("Verification code resent!");
   };
 
-  const handleThemeChange = (e) => {
-    setTheme(e.target.value);
+  const handleThemeChange = () => {
+    setTheme(`${theme === "theme-dark" ? "theme-light" : "theme-dark"}`);
   };
+
   const handleStarted = () => {
     if (checkToken) {
       navigate("/home");
@@ -78,18 +85,15 @@ function Landing() {
               </div>
 
               <div className="lg:flex items-center space-x-6">
-                <div>
-                <select
-                    onChange={handleThemeChange}
-                    value={theme} // Set the current theme as selected
-                    className="border border-gray-300 rounded p-2"
-                  >
-                    {themes.map((themeOption, index) => (
-                      <option key={index} value={themeOption}>
-                        {themeOption}
-                      </option>
-                    ))}
-                  </select>
+                <div className="flex  items-center justify-center bg  text-3xl font-extrabold rounded">
+                  <button onClick={handleThemeChange}>
+                    {
+                      theme === "theme-dark" ? 
+                      <FontAwesomeIcon icon={faSun} className="text-white hover:text-yellow-400"/>
+                      : <FontAwesomeIcon icon={faMoon} />
+                    }
+                  </button>
+            
                 </div>
                 {isLoggedIn ? (
                   <span className="flex text-sm bg-white-800 rounded-full ">

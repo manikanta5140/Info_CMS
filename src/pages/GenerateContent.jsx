@@ -143,7 +143,7 @@ const GenerateContent = ({ mode }) => {
         <section className="max-w-screen-lg md:rounded-md ">
           <Button
             type="button"
-            className="flex gap-2 justify-center items-center mb-3 md:ml-8  lg:ml-0 mt-10 md:mt-0"
+            className="bg-secondary text-primary font-medium flex gap-2 justify-center items-center mb-3 md:ml-8  lg:ml-0 mt-10 md:mt-0"
             onClick={() => navigate(-1)}
           >
             <FontAwesomeIcon icon={faBackward} /> Back
@@ -188,16 +188,16 @@ const GenerateContent = ({ mode }) => {
                               selectedTemplte?.placeholder ||
                               `Enter ${selectedTemplte?.formLabel1}`
                             }
-                            className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
+                            className="text-primary placeholder:text-primary w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-[var(--color-important)]"
                           />
                         </div>
                       )}
 
                       {selectedTemplte?.formField2 && (
-                        <div>
+                        <div className="mt-4">
                           <label
                             htmlFor={selectedTemplte?.id}
-                            className="block mb-1 font-medium md:font-bold"
+                            className="text-secondary block mb-1 font-medium md:font-bold"
                           >
                             {selectedTemplte?.formLabel2}
                           </label>
@@ -215,7 +215,7 @@ const GenerateContent = ({ mode }) => {
                               selectedTemplte?.placeholder ||
                               `Enter ${selectedTemplte?.formLabel1}`
                             }
-                            className="w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-blue-300"
+                            className="bg-primary text-primary w-full px-3 py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring focus:border-[var(--color-important)]"
                           />
                         </div>
                       )}
@@ -223,7 +223,7 @@ const GenerateContent = ({ mode }) => {
                   )}
                   <Button
                     type="submit"
-                    className="text-sm md:text-base flex gap-2 items-center justify-center"
+                    className="text-primary font-semibold bg-button text-sm md:text-base flex gap-2 items-center justify-center"
                     disabled={loading}
                   >
                     {loading && (
@@ -239,19 +239,19 @@ const GenerateContent = ({ mode }) => {
             </div>
             {/* <!-- Editor section --> */}
             <div className="lg:col-span-2 flex flex-col justify-between">
-              <div className="bg-white shadow-lg border rounded-lg p-4 md:p-6">
+              <div className="bg-primary shadow-lg  rounded-lg p-4 md:p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="font-semibold text-base md:text-lg">
+                  <h2 className="text-primary font-semibold text-base md:text-lg">
                     Your Result
                   </h2>
                   <div className="flex gap-2">
-                    <Button className="flex items-center gap-2 text-sm md:text-base">
+                    <Button className="bg-button text-primary font-medium flex items-center gap-2 text-sm md:text-base">
                       <FontAwesomeIcon icon={faCloudArrowUp} />
                       Post
                     </Button>
                     <CopyToClipboard text={aiResult} onCopy={onCopyHandler}>
                       <Button
-                        className={`flex items-center gap-2 text-sm md:text-base ${
+                        className={` text-primary font-medium flex items-center gap-2 text-sm md:text-base ${
                           isCopied ? "bg-green-600 text-white" : ""
                         }`}
                       >

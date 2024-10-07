@@ -66,9 +66,9 @@ const PostedContent = () => {
                 </tr>
               </thead>
 
-              <tbody className="bg-white lg::border-gray-300">
+              <tbody className="lg::border-gray-300">
                 <tr className="">
-                  <td className="whitespace-no-wrap py-4 text-left text-sm text-gray-600 sm:px-3 lg::text-left">
+                  <td className="whitespace-no-wrap py-4 text-left text-sm text-secondary sm:px-3 lg::text-left">
                     <span className="hidden lg:block"> 1</span>
                     <div className="mt-1 flex flex-col text-xs font-medium lg:hidden">
                       <div className="flex items-center  gap-2 text-lg font-bold">
@@ -96,21 +96,21 @@ const PostedContent = () => {
                     </div>
                   </td>
 
-                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
+                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
                     Youtube
                   </td>
 
-                  <td className="whitespace-no-wrap py-4 text-right text-sm text-gray-600 sm:px-3 lg:text-left hidden lg:block">
+                  <td className="whitespace-no-wrap py-4 text-right text-sm text-secondary sm:px-3 lg:text-left hidden lg:block">
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                     Magni ullam earum excepturi qui! Necessitatibus, porro.
                   </td>
 
                 
 
-                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
+                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
                     15/4/2024
                   </td>
-                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
+                  <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
                     facebook , linkedin
                   </td>
                 

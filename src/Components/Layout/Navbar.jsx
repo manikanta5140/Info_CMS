@@ -7,6 +7,8 @@ import {
   faRightFromBracket,
   faBars,
   faChevronDown,
+  faSun,
+  faMoon
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
 import { useTheme } from "../../Context/ThemeContext";
@@ -34,8 +36,8 @@ const Navbar = () => {
     }
   };
 
-  const handleThemeChange = (e) => {
-    setTheme(e.target.value);
+  const handleThemeChange = () => {
+    setTheme(`${theme === "theme-dark" ? "theme-light" : "theme-dark"}`);
   };
 
   // Add event listener for clicks outside the dropdown and sidebar
@@ -67,9 +69,16 @@ const Navbar = () => {
               </NavLink>
             </div>
             <div className="flex items-center">
-              <div className="flex items-center ms-3">
-                <div>
-                <select
+              <div className="flex items-center space-x-8 ms-3">
+                <div className="flex  items-center justify-center bg  text-2xl font-extrabold rounded">
+                 <button onClick={handleThemeChange}>
+                    {
+                      theme === "theme-dark" ? 
+                      <FontAwesomeIcon icon={faSun} className="text-white rounded-full hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"/>
+                      : <FontAwesomeIcon icon={faMoon} />
+                    }
+                  </button>
+                {/* <select
                     onChange={handleThemeChange}
                     value={theme} // Set the current theme as selected
                     className="border border-gray-300 rounded p-2"
@@ -79,7 +88,7 @@ const Navbar = () => {
                         {themeOption}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
                 </div>
                 <div
                   className="flex gap-3 items-center justify-center focus:ring-4 focus:ring-gray-300 cursor-pointer"
