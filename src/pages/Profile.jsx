@@ -27,13 +27,13 @@ const Profile = () => {
     "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
   ); // Default profile image
   const [selectedImage, setSelectedImage] = useState(null); // Image preview
-  const [userData, setUserData] = useState([]);
+ const [updatedFormData, setUpdatedFormData] = useState(null);
 
   useEffect(() => {
 
     getUser()
     .then(res => {
-      setUserData(res);
+      setFormData(res);
       console.log(res);
     } )
     .catch(err => {
@@ -45,6 +45,10 @@ const Profile = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
+      [name]: value,
+    });
+    setUpdatedFormData({
+      ...updatedFormData,
       [name]: value,
     });
   };
@@ -87,6 +91,8 @@ const Profile = () => {
       for (let [key, value] of formDataToSend.entries()) {
         console.log(`${key}:`, value);
       }
+
+      console.log(updatedFormData);
 
       // Example: sending the form data to the backend using fetch or axios
       // try {
@@ -188,7 +194,7 @@ const Profile = () => {
                 type="text"
                 name="userName"
                 error={error.userName}
-                value={userData?.userName || ""}
+                value={formData?.userName}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -202,7 +208,7 @@ const Profile = () => {
                 type="text"
                 name="firstName"
                 error={error.firstName}
-                value={userData?.firstName || ""}
+                value={formData?.firstName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -214,7 +220,7 @@ const Profile = () => {
                 type="text"
                 name="lastName"
                 error={error.lastName}
-                value={userData?.lastName || ""}
+                value={formData?.lastName || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -227,10 +233,10 @@ const Profile = () => {
                 label="Email"
                 type="email"
                 name="email"
-                value={userData?.email || ""}
+                value={formData?.email || ""}
                 error={error.email}
                 onChange={handleChange}
-                disabled={!isEditing} // Disable if not editing
+                disabled // Disable if not editing
                 required
               />
               <Input
@@ -239,7 +245,7 @@ const Profile = () => {
                 type="text"
                 name="phoneNumber"
                 error={error.phoneNumber}
-                value={userData?.phoneNumber || ""}
+                value={formData?.phoneNumber || ""}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
                 required
@@ -283,7 +289,7 @@ const Profile = () => {
                 className="bg-fill text-primary"
                   type="date"
                   name="dob"
-                  value={userData?.dob || ""}
+                  value={formData?.dob || ""}
                   error={error.dob}
                   onChange={handleChange}
                   disabled={!isEditing} // Disable if not editing
@@ -299,6 +305,7 @@ const Profile = () => {
                   <Button type="button" onClick={handleCancel} className="ml-4">
                     Cancel
                   </Button>
+                  
                 </>
               ) : (
                 <Button type="button" onClick={() => setIsEditing(true)}>
