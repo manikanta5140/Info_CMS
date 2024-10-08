@@ -53,10 +53,8 @@ export const validateEmail = (email) => {
 
 //validate Phone Number
 export const validatePhoneNumber = (phoneNumber) => {
-  if (!phoneNumber) {
-    return "Phone number is required";
-  }
   const isValid = /^\d{10}$/.test(phoneNumber);
+
   if (!isValid) {
     return "Phone number must be exactly 10 digits";
   }
@@ -65,17 +63,11 @@ export const validatePhoneNumber = (phoneNumber) => {
 
 //validate Dob
 export const validateDOB = (dob) => {
-  if (!dob) {
-    return "Date of birth is required";
-  }
 
-  // Convert the input date to a JavaScript Date object
   const inputDate = new Date(dob);
 
-  // Get the current date without time (only year, month, and day)
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ignore time part
-
+  today.setHours(0, 0, 0, 0);
   if (inputDate > today) {
     return "Date of birth cannot be in the future";
   }

@@ -8,11 +8,10 @@ import {
   faBars,
   faChevronDown,
   faSun,
-  faMoon
+  faMoon,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
 import { useTheme } from "../../Context/ThemeContext";
-
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -20,7 +19,6 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const { logout, userDetails } = useAuth();
   const { theme, setTheme, themes } = useTheme();
-  
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -72,14 +70,17 @@ const Navbar = () => {
             <div className="flex items-center">
               <div className="flex items-center space-x-8 ms-3">
                 <div className="flex  items-center justify-center bg  text-2xl font-extrabold rounded">
-                 <button onClick={handleThemeChange}>
-                    {
-                      theme === "theme-dark" ? 
-                      <FontAwesomeIcon icon={faSun} className="text-white rounded-full hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"/>
-                      : <FontAwesomeIcon icon={faMoon} />
-                    }
+                  <button onClick={handleThemeChange}>
+                    {theme === "theme-dark" ? (
+                      <FontAwesomeIcon
+                        icon={faSun}
+                        className="text-white rounded-full hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"
+                      />
+                    ) : (
+                      <FontAwesomeIcon icon={faMoon} />
+                    )}
                   </button>
-                {/* <select
+                  {/* <select
                     onChange={handleThemeChange}
                     value={theme} // Set the current theme as selected
                     className="border border-gray-300 rounded p-2"
@@ -101,13 +102,13 @@ const Navbar = () => {
                   >
                     <img
                       className="w-8 h-8 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      src={userDetails?.profilePhoto}
                       alt="user photo"
                     />
                   </button>
                   <FontAwesomeIcon icon={faChevronDown} />
-                </div> 
-                 {dropdownOpen && (
+                </div>
+                {dropdownOpen && (
                   <div
                     ref={dropdownRef}
                     className="z-50 fixed right-2 top-14 md:top-12 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"
@@ -152,13 +153,16 @@ const Navbar = () => {
                     </ul>
                   </div>
                 )}
-               
               </div>
             </div>
           </div>
         </div>
       </nav>
-      <Sidebar openSideBar={openSideBar} toggleSideBar={toggleSideBar} dropdownRef={dropdownRef}/>
+      <Sidebar
+        openSideBar={openSideBar}
+        toggleSideBar={toggleSideBar}
+        dropdownRef={dropdownRef}
+      />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { GET_USER_URL } from "../../constants/apiURL";
+import { GET_USER_URL, UPDATE_USER_URL } from "../../constants/apiURL";
 import axiosInstance from "../axiosInstance";
 
 export const getUser = async () => {
@@ -8,8 +8,7 @@ export const getUser = async () => {
   } catch (error) {
     if (error.response) {
       throw new Error(
-        `Registration failed: ${
-          error.response.data?.message || "Unexpected error"
+        `Registration failed: ${error.response.data?.message || "Unexpected error"
         }`
       );
     } else if (error.request) {
@@ -19,3 +18,13 @@ export const getUser = async () => {
     }
   }
 };
+
+export const updateUser = async (updatedUserData) => {
+  try {
+    // console.log(UPDATE_USER_URL())
+    const response = await axiosInstance.patch(UPDATE_USER_URL(), updatedUserData);
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}

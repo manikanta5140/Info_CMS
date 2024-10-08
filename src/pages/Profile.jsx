@@ -9,6 +9,9 @@ import {
   validateDOB,
 } from "../utils/Validation";
 import { getUser } from "../Api/services/userService";
+import { showNotification } from "../Components/notification/Notification";
+import { updateUser } from "../Api/services/userService";
+import { useAuth } from "../Context/AuthContext";
 
 const Profile = () => {
   const [formData, setFormData] = useState(null);
@@ -18,6 +21,7 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState(null); // Image preview
   const [updatedFormData, setUpdatedFormData] = useState(null);
   const [gender, setGender] = useState(null);
+  const { setUserDetails } = useAuth();
 
   useEffect(() => {
     getUser()
@@ -37,6 +41,13 @@ const Profile = () => {
       ...formData,
       [name]: value,
     });
+
+    return function () {
+      setFormData(null);
+      setIntitialFormData(null);
+      setGender(null);
+      setSelectedImage(null);
+    };
   };
 
   // const handleSubmit = async (e) => {
@@ -56,34 +67,41 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formDataToSend = new FormData();
+    if (await validate()) {
+      const formDataToSend = new FormData();
 
-    // Add form data fields
-    formDataToSend.append("firstName", formData.firstName);
-    formDataToSend.append("lastName", formData.lastName);
-    formDataToSend.append("mobileNumber", formData.mobileNumber);
-    formDataToSend.append("gender", gender);
-    formDataToSend.append("dateOfBirth", formData.dateOfBirth);
+      // Add form data fields
+      formDataToSend.append("firstName", formData.firstName);
+      formDataToSend.append("lastName", formData.lastName);
+      formDataToSend.append("mobileNumber", formData.mobileNumber);
+      formDataToSend.append("gender", gender);
+      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
 
-    // Add the selected image file (if any)
-    if (selectedImage) {
-      formDataToSend.append("profileImage", selectedImage);
+      // Add the selected image file (if any)
+      if (selectedImage) {
+        formDataToSend.append("profileImage", selectedImage);
+      }
+
+      // Print form data in console
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      updateUser(formDataToSend)
+        .then((res) => setUserDetails(res))
+        .catch((err) => {
+          console.log(err);
+        });
+      setIsEditing(false);
     }
-
-    // Print form data in console
-    for (let [key, value] of formDataToSend.entries()) {
-      console.log(`${key}:`, value);
-    }
-
-    console.log(formDataToSend);
-
-    setIsEditing(false); // Disable editing after saving
   };
 
   const handleCancel = () => {
+    setFormData(initialFormData);
     setIsEditing(false);
     setSelectedImage(null);
-    setFormData(initialFormData);
+    setError({});
+    setGender(initialFormData?.gender);
   };
 
   const handleImageChange = (e) => {
@@ -98,11 +116,11 @@ const Profile = () => {
     const isError = {};
 
     // Validate
-    isError.firstName = validateFirstName(formData.firstName);
-    isError.lastName = validateLastName(formData.lastName);
-    isError.email = validateEmail(formData.email);
-    // isError.mobileNumber = validatePhoneNumber(formData.mobileNumber);
-    // isError.dob = validateDOB(formData.dateOfBirth);
+    // isError.firstName = validateFirstName(formData.firstName);
+    // isError.lastName = validateLastName(formData.lastName);
+    // isError.email = validateEmail(formData.email);
+    isError.mobileNumber = validatePhoneNumber(formData.mobileNumber);
+    isError.dateOfBirth = validateDOB(formData.dateOfBirth);
 
     // Remove fields without errors
     for (const key in isError) {
@@ -156,7 +174,6 @@ const Profile = () => {
                 label="Username"
                 type="text"
                 name="userName"
-                error={error.userName}
                 value={formData?.userName}
                 onChange={handleChange}
                 disabled // Disable if not editing
@@ -170,7 +187,6 @@ const Profile = () => {
                 label="First Name"
                 type="text"
                 name="firstName"
-                error={error.firstName}
                 value={formData?.firstName}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
@@ -182,7 +198,6 @@ const Profile = () => {
                 label="Last Name"
                 type="text"
                 name="lastName"
-                error={error.lastName}
                 value={formData?.lastName}
                 onChange={handleChange}
                 disabled={!isEditing} // Disable if not editing
@@ -197,7 +212,6 @@ const Profile = () => {
                 type="email"
                 name="email"
                 value={formData?.email || ""}
-                error={error.email}
                 onChange={handleChange}
                 disabled // Disable if not editing
                 required
@@ -208,7 +222,7 @@ const Profile = () => {
                 type="text"
                 name="mobileNumber"
                 error={error.mobileNumber}
-                value={formData?.mobileNumber}
+                value={formData?.mobileNumber || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -247,11 +261,18 @@ const Profile = () => {
 
               {/* Date of Birth */}
               <div className="w-full sm:w-1/2">
-                <input
+                <Input
                   className="bg-fill text-primary"
                   type="date"
                   name="dateOfBirth"
-                  value={formData?.dateOfBirth}
+                  error={error.dateOfBirth}
+                  value={
+                    formData?.dateOfBirth
+                      ? new Date(formData.dateOfBirth)
+                          .toISOString()
+                          .split("T")[0]
+                      : ""
+                  }
                   onChange={handleChange}
                   disabled={!isEditing}
                 />
