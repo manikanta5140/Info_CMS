@@ -20,8 +20,8 @@ import {
   updateContentHistory,
 } from "../Api/services/contentService";
 import { useAuth } from "../Context/AuthContext";
-import { UPDATE_CONTENT_HISTORY } from "../constants/apiURL";
 import { showNotification } from "../Components/notification/Notification";
+import ModalButton from "../Components/common/ModalButton";
 
 const GenerateContent = ({ mode }) => {
   const [formData, setFormData] = useState({});
@@ -31,7 +31,6 @@ const GenerateContent = ({ mode }) => {
   const [content, setContent] = useState();
   const [selectedTemplte, setSelectedTemplate] = useState();
   const [editData, setEditData] = useState();
-  const { authUser } = useAuth();
   const editorRef = useRef();
 
   const params = useParams();
@@ -97,6 +96,8 @@ const GenerateContent = ({ mode }) => {
   const onCopyHandler = (text, result) => {
     if (result) {
       setIsCopied(true);
+      showNotification("Content copied to clipboard!", "success");
+
       setTimeout(() => setIsCopied(false), 1500);
     } else {
       showNotification("Failed to copy text. Please try again.", "error");
@@ -139,6 +140,15 @@ const GenerateContent = ({ mode }) => {
 
   return (
     <>
+      {/* {isCopied && (
+        <div
+          className="fixed top-0 left-0 right-0 bg-green-600 text-white text-center py-2 z-50"
+          style={{ transition: "opacity 0.5s ease-in-out" }}
+        >
+          Content copied to clipboard!
+        </div>
+      )} */}
+
       <div className="sm:p-6 md:py-12  md:px-2 my-auto">
         <section className="max-w-screen-lg md:rounded-md ">
           <Button
@@ -245,10 +255,6 @@ const GenerateContent = ({ mode }) => {
                     Your Result
                   </h2>
                   <div className="flex gap-2">
-                    <Button className="bg-button text-primary font-medium flex items-center gap-2 text-sm md:text-base">
-                      <FontAwesomeIcon icon={faCloudArrowUp} />
-                      Post
-                    </Button>
                     <CopyToClipboard text={aiResult} onCopy={onCopyHandler}>
                       <Button
                         className={` text-primary font-medium flex items-center gap-2 text-sm md:text-base ${

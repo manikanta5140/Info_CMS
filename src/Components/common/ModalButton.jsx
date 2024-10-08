@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   authorizeTwitter,
+  getAllPlatforms,
+  getAllPost,
   twitterPost,
   verifyPlatform,
 } from "../../Api/services/socialMediaService";
 import { showNotification } from "../notification/Notification";
 
-export default function ModalButton({ message, contentHistoryId }) {
+export default function ModalButton({ message, contentHistoryId ,socialMediaList}) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [authorizedPlatforms, setAuthorizedPlatforms] = useState({
     Twitter: false,
@@ -16,25 +18,9 @@ export default function ModalButton({ message, contentHistoryId }) {
     Instagram: false,
   });
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
-  const [postedPlatforms, setPostedPlatforms] = useState([]); // New state for successful posts
+  const [postedPlatforms, setPostedPlatforms] = useState([]);
+ 
 
-  const socialMediaList = [
-    {
-      platform: "Twitter",
-      icon: "https://cdn-icons-png.flaticon.com/512/733/733579.png",
-      url: "https://twitter.com/john_lorin",
-    },
-    {
-      platform: "LinkedIn",
-      icon: "https://cdn-icons-png.flaticon.com/512/174/174857.png",
-      url: "https://linkedin.com/in/chris_bondi",
-    },
-    {
-      platform: "Facebook",
-      icon: "https://cdn-icons-png.flaticon.com/512/733/733547.png",
-      url: "https://facebook.com/yasmine.profile",
-    },
-  ];
 
   function openModal() {
     setIsOpen(true);
@@ -47,19 +33,19 @@ export default function ModalButton({ message, contentHistoryId }) {
   useEffect(() => {
     verifyPlatform()
       .then((response) => {
-        console.log(response, "mod");
-        let result = response?.filter(
-          (res) => res?.platforms.platformName === "Twitter"
+        // Filter the response to find platforms
+        const result = response?.filter((res) => 
+          res?.platforms?.platformName === "Twitter"
         );
-        if (
-          result[0]?.platforms.platformName === "Twitter" &&
-          result[0]?.isVerified
-        ) {
+  
+        // Check if the result has any items and if it's verified
+        if (result.length > 0 && result[0]?.isVerified) {
           setAuthorizedPlatforms((prev) => ({ ...prev, Twitter: true }));
         }
       })
       .catch((error) => console.log(error));
   }, []);
+  
 
   function handlePlatformSelection(platform) {
     setSelectedPlatforms((prevSelection) =>
@@ -91,7 +77,7 @@ export default function ModalButton({ message, contentHistoryId }) {
           showNotification("Error sending post", "error");
         }
       }
-      // Add similar logic for other platforms if needed
+     
     }
   }
 
@@ -131,39 +117,39 @@ export default function ModalButton({ message, contentHistoryId }) {
             Please authorize platforms before posting.
           </p>
           <ul className="divide-y">
-            {socialMediaList.map((item, idx) => (
-              <li key={idx} className="py-5 flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={item.icon}
-                    alt={item.platform}
-                    className="w-8 h-8"
-                  />
-                  <span className="text-sm text-gray-700 font-semibold">
-                    {item.platform}
-                  </span>
-                </div>
+  {Array.isArray(socialMediaList) && socialMediaList.map((item, idx) => (
+    <li key={idx} className="py-5 flex items-start justify-between">
+      <div className="flex items-center gap-3">
+        <img
+          src={item.platformImage}
+          alt={item.platformName}
+          className="w-8 h-8"
+        />
+        <span className="text-sm text-gray-700 font-semibold">
+          {item.platformName}
+        </span>
+      </div>
 
-                {postedPlatforms.includes(item.platform) ? (
-                  <span className="text-green-500 text-lg font-bold">✔</span>
-                ) : authorizedPlatforms[item.platform] ? (
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-5 w-5 text-purple-600"
-                    checked={selectedPlatforms.includes(item.platform)}
-                    onChange={() => handlePlatformSelection(item.platform)}
-                  />
-                ) : (
-                  <button
-                    className="text-blue-600 text-sm underline"
-                    onClick={() => handleAuthorize(item.platform)}
-                  >
-                    Authorize
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
+      {postedPlatforms.includes(item.platformName) ? (
+        <span className="text-green-500 text-lg font-bold">✔</span>
+      ) : authorizedPlatforms[item.platformName] ? (
+        <input
+          type="checkbox"
+          className="form-checkbox h-5 w-5 text-purple-600"
+          checked={selectedPlatforms.includes(item.platformName)}
+          onChange={() => handlePlatformSelection(item.platformName)}
+        />
+      ) : (
+        <button
+          className="text-blue-600 text-sm underline"
+          onClick={() => handleAuthorize(item.platformName)}
+        >
+          Authorize
+        </button>
+      )}
+    </li>
+  ))}
+</ul>
         </div>
 
         <div className="flex justify-end gap-4 p-4">

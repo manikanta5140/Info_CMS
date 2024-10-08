@@ -9,8 +9,7 @@ const TemplateCard = ({ searchTemplate }) => {
   useEffect(() => {
     getAllContent()
       .then((res) => {
-        setContent(res);
-        console.log(res);
+        setContent(res)
       })
       .catch((error) => console.log(error));
   }, []);

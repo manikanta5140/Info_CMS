@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCopy,
@@ -7,8 +7,17 @@ import {
   faReceipt,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
+import { getAllPost } from "../Api/services/socialMediaService";
+import GenerateContent from "./GenerateContent";
+import { getContent } from "../utils/Validation";
 
 const PostedContent = () => {
+
+  const[post,setPost]=useState(null);
+  useEffect(()=>{
+    getAllPost().then(res=>setPost(res)).catch(err=>console.log(err));
+  },[])
+
   return (
     <>
       <div className="w-screen bg-fill">
@@ -36,6 +45,7 @@ const PostedContent = () => {
           <div className="mt-6 overflow-hidden rounded-xl bg-primary px-6 shadow lg:px-4">
             <table className="min-w-full border-collapse border-spacing-y-2 border-spacing-x-2">
               <thead className="hidden border-b lg:table-header-group">
+                
                 <tr className="">
                   <td className="whitespace-normal py-4 text-sm font-semibold text-primary sm:px-3">
                     Id
@@ -67,54 +77,67 @@ const PostedContent = () => {
               </thead>
 
               <tbody className="lg::border-gray-300">
-                <tr className="">
+              {post && post.map((item,idx)=>(
+                <tr key={idx}>
                   <td className="whitespace-no-wrap py-4 text-left text-sm text-secondary sm:px-3 lg::text-left">
-                    <span className="hidden lg:block"> 1</span>
+                    <span className="hidden lg:block"> {idx+1}</span>
                     <div className="mt-1 flex flex-col text-xs font-medium lg:hidden">
                       <div className="flex items-center  gap-2 text-lg font-bold">
                         <FontAwesomeIcon icon={faReceipt} />
-                        Platform
+                        {item?.posts?.contentHistory?.slug}
                       </div>
                       <div className="flex items-center">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Minima similique aliquid optio neque, quisquam eum?
+                      {getContent(item?.posts?.contentHistory?.content)}
                       </div>
                       <div className="flex gap-1 justify-start items-center">
                         <FontAwesomeIcon
                           className="h-4 w-4   align-middle"
                           icon={faCloudArrowUp}
                         />
-                        instagram facebook
+                        <div className="">
+                        {item?.platforms?.map((plat,idx)=>(
+                          <img src={plat?.platformImage} className="h-5 w-5"/>
+                        ))}
+                        </div>
                       </div>
                       <div className="flex items-center gap-1">
                         <FontAwesomeIcon
                           className="h-3 w-3 align-middle"
                           icon={faCalendarDays}
                         />
-                        12/5/2024
+                        {item?.platforms?.map((plat,idx)=>(
+                          <span key={idx}> {new Date(plat?.createdOn).toLocaleDateString("en-US")}</span>
+                        ))}
+                        
                       </div>
                     </div>
                   </td>
 
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
-                    Youtube
+                  {item?.posts?.contentHistory?.slug}
                   </td>
 
                   <td className="whitespace-no-wrap py-4 text-right text-sm text-secondary sm:px-3 lg:text-left hidden lg:block">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Magni ullam earum excepturi qui! Necessitatibus, porro.
-                  </td>
+                  {getContent(item?.posts?.contentHistory?.content)}
+                  </td> 
 
                 
 
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
-                    15/4/2024
+                  {item?.platforms?.map((plat,idx)=>(
+                          <span key={idx}>{new Date(plat?.createdOn).toLocaleDateString("en-US")}</span>
+                        ))}
                   </td>
                   <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
-                    facebook , linkedin
+                  
+                        {item?.platforms?.map((plat,idx)=>(
+                          <img src={plat?.platformImage} className="h-5 w-5"/>
+                        ))}
+                       
                   </td>
                 
                 </tr>
+              ))}
               </tbody>
             </table>
           </div>

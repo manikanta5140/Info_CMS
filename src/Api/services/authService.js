@@ -87,7 +87,6 @@ export const checkUsernameAvailability = async (username) => {
 export const checkValidToken = async (token) => {
   try {
     const response = await axiosInstance.get(CHECK_VALID_TOKEN(token));
-    console.log(response.data, "authserrrr");
     return response.data;
   } catch (error) {
     console.log(error);

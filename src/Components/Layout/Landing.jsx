@@ -82,6 +82,18 @@ function Landing() {
       setShowLogin(true);
     }
   };
+  const handleClickOutside = (event) => {
+    // Check if the clicked element is outside the dropdown and sidebar
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -108,14 +120,11 @@ function Landing() {
               <div className="lg:flex items-center space-x-6">
                 <div className="flex  items-center justify-center bg  text-3xl font-extrabold rounded">
                   <button onClick={handleThemeChange}>
-                    {theme === "theme-dark" ? (
-                      <FontAwesomeIcon
-                        icon={faSun}
-                        className="text-white hover:text-yellow-400"
-                      />
-                    ) : (
-                      <FontAwesomeIcon icon={faMoon} />
-                    )}
+                  {
+                      theme === "theme-dark" ? 
+                      <FontAwesomeIcon icon={faSun} className="text-white rounded-full hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"/>
+                      : <FontAwesomeIcon icon={faMoon} />
+                    }
                   </button>
                 </div>
                 {isLoggedIn ? (
@@ -130,11 +139,11 @@ function Landing() {
                       >
                         <img
                           className="w-8 h-8 rounded-full"
-                          src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                          src={userDetails?.profilePhoto}
                           alt="user photo"
                         />
                       </button>
-                      <FontAwesomeIcon icon={faChevronDown} />
+                      {theme === "theme-dark" ? <FontAwesomeIcon className="text-white" icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronDown} />}
                     </div>
                     {dropdownOpen && (
                       <div

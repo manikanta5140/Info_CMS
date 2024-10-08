@@ -61,7 +61,7 @@ export const updateContentHistory = async (id, updatedcontentData) => {
       UPDATE_CONTENT_HISTORY(id),
       updatedcontentData
     );
-    console.log(response.data, "UPDATE");
+  
     return response.data;
   } catch (error) {
     console.log(error);

@@ -5,7 +5,7 @@ import {
 } from "../Api/services/authService";
 import { getUser } from "../Api/services/userService";
 import { useNavigate } from "react-router-dom";
-import { showNotification } from "../Components/notification/Notification";
+
 
 /**
  * AuthContext is a React context that holds authentication state.
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     logout,
   };
 
-  useEffect(() => console.log(checkToken), [setCheckToken]);
+  // useEffect(() => console.log(checkToken), [setCheckToken]);
   // Return the provider component, wrapping all children components with AuthContext
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

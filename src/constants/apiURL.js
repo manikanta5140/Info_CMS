@@ -12,6 +12,10 @@ export const GET_CONTENT_HISTORY = "/content-history";
 export const GET_CONTENT_BY_ID = (id) => `/content-history/${id}`;
 export const CHECK_VALID_TOKEN = (token) => `/auth/isVerified-user/${token}`;
 export const UPDATE_USER_URL = () => `/user`;
+export const GET_ALL_PLATFORMS='/posts/all-platforms'
+export const GET_ALL_POST='/posts'
+
+
 
 export const AUTHORIZE_TWITTER = "/sm/twitter/authorize";
 export const USER_VERIFIED_PLATFORM = "/verifiedPlatforms";

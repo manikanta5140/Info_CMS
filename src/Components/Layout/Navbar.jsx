@@ -80,17 +80,6 @@ const Navbar = () => {
                       <FontAwesomeIcon icon={faMoon} />
                     )}
                   </button>
-                  {/* <select
-                    onChange={handleThemeChange}
-                    value={theme} // Set the current theme as selected
-                    className="border border-gray-300 rounded p-2"
-                  >
-                    {themes.map((themeOption, index) => (
-                      <option key={index} value={themeOption}>
-                        {themeOption}
-                      </option>
-                    ))}
-                  </select> */}
                 </div>
                 <div
                   className="flex gap-3 items-center justify-center focus:ring-4 focus:ring-gray-300 cursor-pointer"
@@ -106,9 +95,9 @@ const Navbar = () => {
                       alt="user photo"
                     />
                   </button>
-                  <FontAwesomeIcon icon={faChevronDown} />
-                </div>
-                {dropdownOpen && (
+                  {theme === "theme-dark" ? <FontAwesomeIcon className="text-white" icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronDown} />}
+                </div> 
+                 {dropdownOpen && (
                   <div
                     ref={dropdownRef}
                     className="z-50 fixed right-2 top-14 md:top-12 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"

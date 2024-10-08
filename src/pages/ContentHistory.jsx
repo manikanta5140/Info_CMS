@@ -9,24 +9,24 @@ import {
 import { getContentHistory } from "../Api/services/contentService";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ModalButton from "../Components/common/ModalButton";
+import { getAllPlatforms } from "../Api/services/socialMediaService";
+import { getContent } from "../utils/Validation";
 
 const ContentHistory = () => {
   const [historyContent, setHistoryContent] = useState([]);
   const [searchContent, setSearchContent] = useState("");
   const [contentValue, setContentValue] = useState(searchContent);
+  const [socialMediaList, setSocialMediaList] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
     getContentHistory()
       .then((res) => {
-        console.log(res, "sdfghj");
         setHistoryContent(res);
       })
       .catch((err) => console.log(err));
   }, []);
-  const getContent = (content) => {
-    return content.length > 100 ? content.slice(0, 100) + "..." : content;
-  };
+ 
 
   useEffect(() => {
     if (historyContent) {
@@ -35,12 +35,20 @@ const ContentHistory = () => {
           item.content.toLowerCase().includes(searchContent.toLowerCase())
         );
         setContentValue(filterContent);
-        console.log(contentValue);
       } else {
         setContentValue(historyContent);
       }
     }
   }, [searchContent, historyContent]);
+
+  useEffect(() => {
+    getAllPlatforms()
+      .then((res) => {
+        console.log(res);
+        setSocialMediaList(res);
+      })
+      .catch((err) => console.log(err));
+  },[]);
 
   return (
     <div className="w-screen bg-fill">
@@ -128,7 +136,7 @@ const ContentHistory = () => {
                     <td className="whitespace-no-wrap py-4 text-right text-sm text-secondary sm:px-3 lg:text-left block lg:hidden">
                       <div className="flex gap-1 justify-center items-center">
                         <span className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-primary py-0.5 text-center text-xs text-primary  lg:hidden">
-                          <ModalButton message={getContent(item.content)} contentHistoryId={item.id}/>
+                          {socialMediaList && <ModalButton message={getContent(item.content)} contentHistoryId={item.id} socialMediaList={socialMediaList}/>}
                         </span>
 
                         <span
@@ -144,7 +152,7 @@ const ContentHistory = () => {
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                       <span className="  cursor-pointer mr-3 whitespace-nowrap rounded-full bg-button  py-0.5 text-primary font-semibold">
-                      <ModalButton message={getContent(item.content)} contentHistoryId={item.id}/>
+                      {socialMediaList && <ModalButton message={getContent(item.content)} contentHistoryId={item.id} socialMediaList={socialMediaList}/>}
                       </span>
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-500 sm:px-3 lg:table-cell">
