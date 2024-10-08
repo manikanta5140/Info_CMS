@@ -107,12 +107,12 @@ const Register = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className="relative py-3 sm:max-w-xl sm:mx-auto ">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-important)] to-sky-700 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div className="relative px-4 py-10 bg-secondary shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
             <div className="bg-transparent w-11/12 md:w-1/2 lg:w-1/3 max-w-lg mx-auto">
               <Button
-                className="absolute top-6 right-8 bg-gray-200 text-black"
+                className="absolute bg-secondary text-xl top-6 right-8 text-primary"
                 type="button"
                 onClick={() => setShowRegister(false)}
               >
@@ -182,7 +182,7 @@ const Register = ({
                 <div className="relative">
                   <Button
                     type="submit"
-                    className="w-full bg-cyan-500 text-white rounded-md font-bold lore mt-2"
+                    className="w-full bg-important text-primary rounded-md font-bold mt-2 transition-all hover:scale-105 "
                   >
                     Register
                   </Button>
@@ -192,10 +192,10 @@ const Register = ({
           </div>
 
           <div className="w-full flex justify-center">
-            <p className="flex  gap-2 items-center bg-white  px-6 py-2 text-sm font-medium text-gray-800">
+            <p className="flex  gap-2 items-center px-6 py-2 text-sm font-medium text-secondary">
               Already have an account?
               <span
-                className="font-bold text-primary transition-all duration-200 underline cursor-pointer"
+                className="font-bold tracking-wider text-base text-primary transition-all duration-200 underline cursor-pointer"
                 onClick={() => {
                   setShowLogin(true);
                   setShowRegister(false);

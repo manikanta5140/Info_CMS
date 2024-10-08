@@ -27,7 +27,7 @@ const Input = React.forwardRef(function Input(
         ref={ref}
         required={required}
         disabled={disabled}
-        className={`peer text-primary bg-primary  placeholder-gray-100 h-10 w-full  
+        className={`peer text-primary bg-primary rounded-md placeholder-gray-100 h-10 w-full  
           ${
             error
               ? "border-red-500 focus:border-red-500"

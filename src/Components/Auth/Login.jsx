@@ -118,7 +118,7 @@ const Login = ({
               <div className="">
                 <div className="py-8 text-base leading-6 space-y-6 sm:text-lg sm:leading-7">
                   <Input
-                    className="rounded ps-2"
+                    
               
                     label="Email"
                     type="Email"
@@ -128,7 +128,7 @@ const Login = ({
                     error={error.email}
                   />
                   <Input
-                    className="text-primary bg-primary rounded ps-2"
+                
                    
                     label="Password"
                     type="password"
