@@ -79,7 +79,7 @@ const Profile = () => {
 
       // Add the selected image file (if any)
       if (selectedImage) {
-        formDataToSend.append("profileImage", selectedImage);
+        formDataToSend.append("profilePhoto", selectedImage);
       }
 
       // Print form data in console

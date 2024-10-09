@@ -5,15 +5,20 @@ import "./index.css";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./Context/ThemeContext.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+const clientId = "922963109105-36jvvoeme9s53rnih20ph3sn9ds2e31j.apps.googleusercontent.com";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <ThemeProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={clientId}>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

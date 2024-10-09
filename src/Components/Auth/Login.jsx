@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import Input from "../common/Input";
 import Button from "../common/Button";
@@ -8,8 +8,14 @@ import {
   validatePassword,
 } from "../../utils/Validation.js";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../Api/services/authService.js";
+import {
+  login,
+  register,
+  storeGoogleUser,
+} from "../../Api/services/authService.js";
 import { showNotification } from "../notification/Notification.jsx";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Login = ({
   setShowLogin,
@@ -17,23 +23,15 @@ const Login = ({
   openModal,
   setLoggedInUser,
 }) => {
-  // Destructure the loginUser function from the AuthContext to handle user login
   const { setIsLoggedIn, setUserDetails } = useAuth();
 
   const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
-
   const [error, setError] = useState({});
   const navigate = useNavigate();
 
-  /**
-   * validate - Validates the input fields for the login form.
-   * Ensures that email and password meet the necessary criteria.
-   *
-   * @returns {boolean} - True if the form is valid, false otherwise.
-   */
   const validate = () => {
     const isError = {};
     isError.email = validateEmail(loginFormData.email);
@@ -48,24 +46,11 @@ const Login = ({
     return Object.keys(isError).length === 0;
   };
 
-  /**
-   * handleChange - Handles the change in input field values.
-   * Updates the state with the current value for the respective field.
-   *
-   * @param {Event} e - The input change event.
-   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * handleSubmit - Handles the form submission.
-   * Checks if the form is valid using the validate function, and if valid,
-   * calls the loginUser function from the AuthContext to log in the user.
-   *
-   * @param {Event} e - The form submit event.
-   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
@@ -86,14 +71,20 @@ const Login = ({
         }
       }
     } else {
-     showNotification("Please verify your details and try again.","error",);
+      showNotification("Please verify your details and try again.", "error");
     }
   };
 
-  /**
-   * Render the login form with input fields for email and password,
-   * along with a submit button.
-   */
+  const googleLogin = useGoogleLogin({
+    onSuccess: (credentialResponse) => {
+      const decoded = jwtDecode(credentialResponse.credential);
+      console.log(decoded);
+    },
+    onError: () => {
+      console.log("Login Failed");
+    },
+  });
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -115,43 +106,67 @@ const Login = ({
                   Login
                 </h1>
               </div>
-              <div className="">
-                <div className="py-8 text-base leading-6 space-y-6 sm:text-lg sm:leading-7">
-                  <Input
-                    
-              
-                    label="Email"
-                    type="Email"
-                    name="email"
-                    value={loginFormData.email || ""}
-                    onChange={handleChange}
-                    error={error.email}
-                  />
-                  <Input
-                
-                   
-                    label="Password"
-                    type="password"
-                    name="password"
-                    value={loginFormData.password || ""}
-                    onChange={handleChange}
-                    error={error.password}
-                  />
-                  <div className="relative">
-                    <Button
-                      type="submit"
-                      className="w-full bg-important text-primary rounded-md font-bold lore mt-2 transition-all hover:scale-105"
-                    >
-                      Login
-                    </Button>
-                  </div>
+              <div className="py-8 text-base leading-6 space-y-6 sm:text-lg sm:leading-7">
+                <Input
+                  className="rounded ps-2"
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={loginFormData.email || ""}
+                  onChange={handleChange}
+                  error={error.email}
+                />
+                <Input
+                  className="text-primary bg-primary rounded ps-2"
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={loginFormData.password || ""}
+                  onChange={handleChange}
+                  error={error.password}
+                />
+                <div className="relative">
+                  <Button
+                    type="submit"
+                    className="w-full bg-important text-primary rounded-md font-bold lore mt-2 transition-all hover:scale-105"
+                  >
+                    Login
+                  </Button>
                 </div>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    const decoded = jwtDecode(credentialResponse.credential);
+                    const userData = {
+                      firstName: decoded?.given_name,
+                      lastName: decoded?.family_name,
+                      email: decoded?.email,
+                      userName: decoded?.email.split("@")[0],
+                      email_verified: decoded?.email_verified,
+                      profilePhoto: decoded?.picture,
+                      password: decoded?.sub,
+                    };
+                    console.log(userData);
+
+                    storeGoogleUser(userData).then((res) => {
+                      console.log(res);
+                      localStorage.clear();
+                      localStorage.setItem("token", res.accessToken);
+                      setLoggedInUser(res.userDetails);
+                      setUserDetails(res.userDetails);
+                      setIsLoggedIn(true);
+                      navigate("/home");
+                    });
+                  }}
+                  onError={() => {
+                    showNotification("Login Failed");
+                  }}
+                />
               </div>
             </div>
 
             <div className="w-full flex justify-center">
-              <p className="flex  gap-2 items-center px-6 py-2 text-sm font-medium text-primary">
-                Donot have an account?
+              <p className="flex gap-2 items-center px-6 py-2 text-sm font-medium text-primary">
+                Don't have an account?
                 <span
                   className="font-bold tracking-wider text-base text-primary transition-all duration-200 underline cursor-pointer"
                   onClick={() => {

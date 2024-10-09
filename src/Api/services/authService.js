@@ -2,6 +2,7 @@ import {
   CHECK_USERNAME_URL,
   CHECK_VALID_TOKEN,
   REGISTER_URL,
+  STORE_GOOGLE_USER,
 } from "../../constants/apiURL.js";
 import { LOGIN_URL } from "../../constants/apiURL.js";
 import axiosInstance from "../axiosInstance";
@@ -93,6 +94,14 @@ export const checkValidToken = async (token) => {
   }
 };
 
+export const storeGoogleUser = async (userPayload) => {
+  try {
+    const response = await axiosInstance.post(STORE_GOOGLE_USER, userPayload);
+    return response.data;
+  } catch (error) {
+    console.error("Error storing Google user:", error);
+  }
+};
 // export const resendMail=()=>{
 //   try{
 //     const response=await axiosInstance.get()
