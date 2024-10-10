@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   withCredentials: API_CONFIG.withCredentials,
   timeout: API_CONFIG.timeout,
 });
-console.log(axiosInstance);
+
 
 /************************************************ 
   Interceptors for adding auth tokens and handling 

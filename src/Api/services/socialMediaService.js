@@ -9,11 +9,10 @@ import axiosInstance from "../axiosInstance";
 
 export const authorizeTwitter = async () => {
   const response = await axiosInstance.get(AUTHORIZE_TWITTER);
-  console.log(response);
   if (response?.data?.redirectUrl) {
     window.location.href = response.data.redirectUrl;
   } else {
-    console.error("No redirect URL returned from the backend");
+    showNotification(error.message,"error");
   }
 };
 
@@ -27,7 +26,6 @@ export const twitterPost = async (message, contentHistoryId) => {
     message: message,
     contentHistoryId: contentHistoryId,
   };
-  console.log(data);
   const response = await axiosInstance.post(TWITTER_POST_URL, data);
   return response.data;
 };
@@ -39,6 +37,8 @@ return response.data.data;
 }
 export const getAllPost=async()=>{
   const response=await axiosInstance.get(GET_ALL_POST);
-  console.log(response.data.data)
   return response.data.data;
+  }
+  export const schedulePost=async()=>{
+    
   }

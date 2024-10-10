@@ -17,6 +17,7 @@ import {
   faSun,
   faMoon,
 } from "@fortawesome/free-solid-svg-icons";
+import { resendMail } from "../../Api/services/authService/authService";
 
 function Landing() {
   const [showLogin, setShowLogin] = useState(false);
@@ -68,7 +69,7 @@ function Landing() {
   }, []);
 
   const handleResend = () => {
-    alert("Verification code resent!");
+    resendMail();
   };
 
   const handleThemeChange = () => {

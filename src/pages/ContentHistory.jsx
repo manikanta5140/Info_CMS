@@ -6,7 +6,7 @@ import {
   faReceipt,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { getContentHistory } from "../Api/services/contentService";
+import { getContentHistory } from "../Api/services/contentService/contentService";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ModalButton from "../Components/common/ModalButton";
 import { getAllPlatforms } from "../Api/services/socialMediaService";
@@ -106,7 +106,7 @@ const ContentHistory = () => {
 
             <tbody className=" lg:border-gray-300">
               {contentValue.length > 0 ? (
-                contentValue.map((item, index) => (
+                [...contentValue].reverse().map((item, index) => (
                   <tr key={item.id} className="border-b border-gray-300">
                     <td className="whitespace-no-wrap py-4 text-left text-sm text-gray-600 sm:px-3 lg:text-left">
                       <span className="hidden lg:block">{index + 1}</span>
@@ -151,6 +151,7 @@ const ContentHistory = () => {
                       {new Date(item.modifiedOn).toLocaleDateString("en-US")}
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
+                      
                       <span className="  cursor-pointer mr-3 whitespace-nowrap rounded-full bg-button  py-0.5 text-primary font-semibold">
                       {socialMediaList && <ModalButton message={getContent(item.content)} contentHistoryId={item.id} socialMediaList={socialMediaList}/>}
                       </span>

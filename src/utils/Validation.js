@@ -1,4 +1,4 @@
-import { checkUsernameAvailability } from "../Api/services/authService";
+import { checkUsernameAvailability } from "../Api/services/authService/authService";
 
 // Validate First Name
 export const validateFirstName = (firstName) => {
@@ -108,6 +108,7 @@ export const checkUserVerified = (verified) => {
   }
   return false;
 };
+
 export const getContent = (content) => {
   return content.length > 60 ? content.slice(0, 60) + "..." : content;
 };

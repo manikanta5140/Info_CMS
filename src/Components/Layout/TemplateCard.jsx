@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { getAllContent } from "../../Api/services/contentService";
+import { getAllContent } from "../../Api/services/contentService/contentService";
 
 const TemplateCard = ({ searchTemplate }) => {
   const [templateList, setTemplateList] = useState(searchTemplate);

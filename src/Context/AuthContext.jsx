@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   checkValidToken,
 
-} from "../Api/services/authService";
+} from "../Api/services/authService/authService";
 import { getUser } from "../Api/services/userService";
 import { useNavigate } from "react-router-dom";
 

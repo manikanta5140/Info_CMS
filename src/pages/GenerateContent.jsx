@@ -18,7 +18,7 @@ import {
   getContentBySlug,
   storeContentHistory,
   updateContentHistory,
-} from "../Api/services/contentService";
+} from "../Api/services/contentService/contentService";
 import { useAuth } from "../Context/AuthContext";
 import { showNotification } from "../Components/notification/Notification";
 import ModalButton from "../Components/common/ModalButton";

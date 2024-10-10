@@ -12,13 +12,14 @@ import { getUser } from "../Api/services/userService";
 import { showNotification } from "../Components/notification/Notification";
 import { updateUser } from "../Api/services/userService";
 import { useAuth } from "../Context/AuthContext";
+import VerifyMobNoButton from "../Components/common/VerifyMobNoButton";
 
-const Profile = () => {
+const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
   const [formData, setFormData] = useState(null);
   const [initialFormData, setIntitialFormData] = useState(null);
 
-  const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
-  const [selectedImage, setSelectedImage] = useState(null); // Image preview
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [updatedFormData, setUpdatedFormData] = useState(null);
   const [gender, setGender] = useState(null);
   const { setUserDetails } = useAuth();
@@ -49,20 +50,6 @@ const Profile = () => {
       setSelectedImage(null);
     };
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (await validate()) {
-  //     console.log("Form Data:", formData);
-  //     if (selectedImage) {
-  //       console.log("Image Path:", URL.createObjectURL(selectedImage));
-  //     }
-  //     // Send form data including image to backend for storage
-  //     setIsEditing(false); // Disable editing after saving
-  //   } else {
-  //     console.log("Invalid form");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -189,7 +176,7 @@ const Profile = () => {
                 name="firstName"
                 value={formData?.firstName}
                 onChange={handleChange}
-                disabled={!isEditing} // Disable if not editing
+                disabled={!isEditing}
                 required
               />
 
@@ -205,7 +192,7 @@ const Profile = () => {
               />
             </div>
 
-            <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <Input
                 className="bg-primary text-primary"
                 label="Email"
@@ -216,16 +203,28 @@ const Profile = () => {
                 disabled // Disable if not editing
                 required
               />
-              <Input
-                className="bg-primary text-primary"
-                label="Phone Number"
-                type="text"
-                name="mobileNumber"
-                error={error.mobileNumber}
-                value={formData?.mobileNumber || ""}
-                onChange={handleChange}
-                disabled={!isEditing}
-              />
+              <div>
+                <div className="flex gap-1">
+                  <Input
+                    className="bg-primary text-primary"
+                    label="Phone Number"
+                    type="text"
+                    name="mobileNumber"
+                    error={error.mobileNumber}
+                    value={formData?.mobileNumber || ""}
+                    onChange={handleChange}
+                    disabled={!isEditing}
+                  />
+                  <VerifyMobNoButton
+                    onClick={() => {
+                      onMobileModalOpen();
+                      handleClosePopup();
+                    }}
+                    className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+                    children="Verify"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">

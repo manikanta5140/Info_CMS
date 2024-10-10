@@ -3,10 +3,11 @@ import {
   CHECK_VALID_TOKEN,
   REGISTER_URL,
   STORE_GOOGLE_USER,
-} from "../../constants/apiURL.js";
-import { LOGIN_URL } from "../../constants/apiURL.js";
-import axiosInstance from "../axiosInstance";
-import { showNotification } from "../../Components/notification/Notification.jsx";
+  RESEND_EMAIL,
+} from "../../../constants/apiURL.js";
+import { LOGIN_URL } from "../../../constants/apiURL.js";
+import axiosInstance from "../../axiosInstance.js";
+import { showNotification } from "../../../Components/notification/Notification.jsx";
 
 /**
  * Login Service
@@ -18,20 +19,13 @@ import { showNotification } from "../../Components/notification/Notification.jsx
 
 export const login = async (userData) => {
   try {
-    console.log(userData);
     const response = await axiosInstance.post(LOGIN_URL, userData);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     if (error.response) {
-      showNotification("logged in failed", "error");
-      throw new Error(
-        `Login failed: ${error.response.data?.message || "Unexpected error"}`
-      );
-    } else if (error.request) {
-      throw new Error("Login failed: No response from server");
+      showNotification( `Login failed: ${error.response.data?.message || "Unexpected error"}`, "error");
     } else {
-      throw new Error("Login failed: Unexpected error occurred");
+      showNotification(error.message,"error");
     }
   }
 };
@@ -46,22 +40,9 @@ export const login = async (userData) => {
 export const register = async (userData) => {
   try {
     const response = await axiosInstance.post(REGISTER_URL, userData);
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log(error);
-    if (error.response) {
-      console.log(error.response.data?.message);
-      throw new Error(
-        `Registration failed: ${
-          error.response.data?.message || "Unexpected error"
-        }`
-      );
-    } else if (error.request) {
-      throw new Error("Registration failed: No response from server");
-    } else {
-      throw new Error("Registration failed: Unexpected error occurred");
-    }
+    showNotification(error.message,"error");
   }
 };
 
@@ -81,7 +62,7 @@ export const checkUsernameAvailability = async (username) => {
     });
     return response.data.isUnique;
   } catch (error) {
-    throw new Error("Error checking username availability");
+    // throw new Error("Error checking username availability");
   }
 };
 
@@ -90,20 +71,26 @@ export const checkValidToken = async (token) => {
     const response = await axiosInstance.get(CHECK_VALID_TOKEN(token));
     return response.data;
   } catch (error) {
-    console.log(error);
+    showNotification(error.message,"error");
   }
 };
 
 export const storeGoogleUser = async (userPayload) => {
+  console.log(userPayload)
   try {
     const response = await axiosInstance.post(STORE_GOOGLE_USER, userPayload);
+    console.log(response.data,"dervice")
     return response.data;
   } catch (error) {
     console.error("Error storing Google user:", error);
   }
 };
-// export const resendMail=()=>{
-//   try{
-//     const response=await axiosInstance.get()
-//   }
-// }
+
+export const resendMail=async ()=>{
+  try{
+    const response=await axiosInstance.post(RESEND_EMAIL);
+    return response.data;
+  }catch(error){
+    showNotification(error.message,"error");
+  }
+}

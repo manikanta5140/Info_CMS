@@ -12,7 +12,7 @@ import {
   login,
   register,
   storeGoogleUser,
-} from "../../Api/services/authService.js";
+} from "../../Api/services/authService/authService.js";
 import { showNotification } from "../notification/Notification.jsx";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";

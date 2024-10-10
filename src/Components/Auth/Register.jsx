@@ -11,7 +11,7 @@ import {
   validateConfirmPassword,
   checkUserVerified,
 } from "../../utils/Validation.js";
-import { register } from "../../Api/services/authService.js";
+import { register } from "../../Api/services/authService/authService.js";
 import { setAuthHeader } from "../../Api/ApiConfig.js";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "../notification/Notification.jsx";
