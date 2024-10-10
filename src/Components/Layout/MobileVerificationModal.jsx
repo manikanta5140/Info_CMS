@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Button from "../common/Button";
+import {
+  sendWhatsappVerificationToken,
+  verifyWhatsappVerificationToken,
+} from "../../Api/services/socialMediaService";
 
-const MobileVerificationModal = ({ onMobileModalClose }) => {
+const MobileVerificationModal = ({ onMobileModalClose, isOpen, onClose }) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -57,6 +61,9 @@ const MobileVerificationModal = ({ onMobileModalClose }) => {
       setOtpSent(true);
       setTimer(60);
       console.log("OTP sent to", mobileNumber);
+      sendWhatsappVerificationToken({ mobileNumber })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
   };
 
@@ -64,6 +71,9 @@ const MobileVerificationModal = ({ onMobileModalClose }) => {
   const handleVerifyOtp = () => {
     if (validateOtp()) {
       console.log("Verifying OTP:", otp);
+      verifyWhatsappVerificationToken({ verificationCode: otp })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
   };
 
@@ -76,94 +86,100 @@ const MobileVerificationModal = ({ onMobileModalClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="relative bg-fill text-white rounded-lg shadow-lg w-96 p-6">
-        {/* Close icon */}
-        <AiOutlineClose
-          className="absolute top-2 right-2 cursor-pointer text-xl"
-          onClick={onMobileModalClose}
-        />
+    isOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="relative bg-fill text-white rounded-lg shadow-lg w-96 p-6">
+          {/* Close icon */}
+          <AiOutlineClose
+            className="absolute top-2 right-2 cursor-pointer text-xl"
+            onClick={onClose} // Properly call onClose
+          />
 
-        {/* Modal content */}
-        {!otpSent ? (
-          <>
-            <h4 className="text-lg font-semibold mb-4">Verify Mobile Number</h4>
-            <p className="mb-4">
-              Enter your mobile number to receive an OTP for verification.
-            </p>
-            <input
-              type="text"
-              placeholder="Enter mobile number"
-              className="w-full p-2 mb-2 text-black rounded-md"
-              value={mobileNumber}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value)) {
-                  setMobileNumber(value);
-                }
-              }}
-              onBlur={validateMobileNumber}
-              maxLength={10}
-            />
-            {mobileError && (
-              <p className="text-red-500 text-sm mb-2">{mobileError}</p>
-            )}
-            <Button
-              className={`bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md w-full ${
-                !mobileNumber ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={handleSendOtp}
-              disabled={!mobileNumber}
-            >
-              Send OTP
-            </Button>
-          </>
-        ) : (
-          <>
-            <h4 className="text-lg font-semibold mb-4">OTP Sent</h4>
-            <p className="mb-4">Enter the OTP sent to your mobile number.</p>
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              className="w-full p-2 mb-2 text-black rounded-md"
-              value={otp}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value)) {
-                  setOtp(value);
-                }
-              }}
-              onBlur={validateOtp}
-              maxLength={6}
-            />
-            {otpError && (
-              <p className="text-red-500 text-sm mb-2">{otpError}</p>
-            )}
-            <Button
-              className={`bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md w-full ${
-                !verifyEnabled ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={handleVerifyOtp}
-              disabled={!verifyEnabled}
-            >
-              Verify
-            </Button>
-            {timer > 0 ? (
-              <p className="mt-2 text-gray-400 text-sm">
-                Resend OTP in {timer}s
+          {/* Modal content */}
+          {!otpSent ? (
+            <>
+              <h4 className="text-lg font-semibold mb-4">
+                Verify Mobile Number
+              </h4>
+              <p className="mb-4">
+                Enter your mobile number to receive an OTP for verification.
               </p>
-            ) : (
-              <p
-                className="mt-2 text-green-600 cursor-pointer"
-                onClick={handleResendOtp}
+              <input
+                type="text"
+                placeholder="Enter mobile number"
+                className="w-full p-2 mb-2 text-black rounded-md"
+                value={mobileNumber}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setMobileNumber(value);
+                  }
+                }}
+                onBlur={validateMobileNumber}
+                maxLength={10}
+              />
+              {mobileError && (
+                <p className="text-red-500 text-sm mb-2">{mobileError}</p>
+              )}
+              <Button
+                className={`bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md w-full ${
+                  !mobileNumber || mobileError
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                onClick={handleSendOtp}
+                disabled={!mobileNumber || mobileError} // Disable if no number or has error
               >
-                Resend OTP
-              </p>
-            )}
-          </>
-        )}
+                Send OTP
+              </Button>
+            </>
+          ) : (
+            <>
+              <h4 className="text-lg font-semibold mb-4">OTP Sent</h4>
+              <p className="mb-4">Enter the OTP sent to your mobile number.</p>
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                className="w-full p-2 mb-2 text-black rounded-md"
+                value={otp}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setOtp(value);
+                  }
+                }}
+                onBlur={validateOtp}
+                maxLength={6}
+              />
+              {otpError && (
+                <p className="text-red-500 text-sm mb-2">{otpError}</p>
+              )}
+              <Button
+                className={`bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md w-full ${
+                  !verifyEnabled ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={handleVerifyOtp}
+                disabled={!verifyEnabled}
+              >
+                Verify
+              </Button>
+              {timer > 0 ? (
+                <p className="mt-2 text-gray-400 text-sm">
+                  Resend OTP in {timer}s
+                </p>
+              ) : (
+                <p
+                  className="mt-2 text-green-600 cursor-pointer"
+                  onClick={handleResendOtp}
+                >
+                  Resend OTP
+                </p>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

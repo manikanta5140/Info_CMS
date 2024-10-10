@@ -8,21 +8,21 @@ import {
   validatePhoneNumber,
   validateDOB,
 } from "../utils/Validation";
-import { getUser } from "../Api/services/userService";
+import { getUser, updateUser } from "../Api/services/userService";
 import { showNotification } from "../Components/notification/Notification";
-import { updateUser } from "../Api/services/userService";
 import { useAuth } from "../Context/AuthContext";
+import MobileVerificationModal from "../Components/Layout/MobileVerificationModal";
 import VerifyMobNoButton from "../Components/common/VerifyMobNoButton";
 
-const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
+const Profile = () => {
   const [formData, setFormData] = useState(null);
   const [initialFormData, setIntitialFormData] = useState(null);
-
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [updatedFormData, setUpdatedFormData] = useState(null);
   const [gender, setGender] = useState(null);
   const { setUserDetails } = useAuth();
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
+  const [error, setError] = useState({});
 
   useEffect(() => {
     getUser()
@@ -42,13 +42,6 @@ const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
       ...formData,
       [name]: value,
     });
-
-    return function () {
-      setFormData(null);
-      setIntitialFormData(null);
-      setGender(null);
-      setSelectedImage(null);
-    };
   };
 
   const handleSubmit = async (e) => {
@@ -67,11 +60,6 @@ const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
       // Add the selected image file (if any)
       if (selectedImage) {
         formDataToSend.append("profilePhoto", selectedImage);
-      }
-
-      // Print form data in console
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(`${key}:`, value);
       }
 
       updateUser(formDataToSend)
@@ -94,19 +82,12 @@ const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedImage(file); // Store selected image for preview
+      setSelectedImage(file);
     }
   };
 
-  const [error, setError] = useState({});
   const validate = async () => {
     const isError = {};
-
-    // Validate
-    // isError.firstName = validateFirstName(formData.firstName);
-    // isError.lastName = validateLastName(formData.lastName);
-    // isError.email = validateEmail(formData.email);
-    isError.mobileNumber = validatePhoneNumber(formData.mobileNumber);
     isError.dateOfBirth = validateDOB(formData.dateOfBirth);
 
     // Remove fields without errors
@@ -118,6 +99,16 @@ const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
 
     setError(isError);
     return Object.keys(isError).length === 0;
+  };
+
+  // Function to open the mobile verification modal
+  const onMobileModalOpen = () => {
+    setIsMobileModalOpen(true);
+  };
+
+  // Function to close the mobile verification modal
+  const handleClosePopup = () => {
+    setIsMobileModalOpen(false);
   };
 
   return (
@@ -218,7 +209,6 @@ const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
                   <VerifyMobNoButton
                     onClick={() => {
                       onMobileModalOpen();
-                      handleClosePopup();
                     }}
                     className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white"
                     children="Verify"
@@ -273,32 +263,39 @@ const Profile = ({ handleClosePopup, onMobileModalOpen }) => {
                       : ""
                   }
                   onChange={handleChange}
-                  disabled={!isEditing}
+                  disabled={!isEditing} // Disable if not editing
+                  required
                 />
               </div>
             </div>
 
-            <div className="flex justify-end">
-              {isEditing ? (
-                <>
-                  <Button type="submit">Save</Button>
-                  <Button type="button" onClick={handleCancel} className="ml-4">
-                    Cancel
-                  </Button>
-                </>
-              ) : (
-                <button
+            {/* Submit and Cancel Buttons */}
+            {isEditing && (
+              <div className="flex justify-center w-full mb-8 space-x-4">
+                <Button
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+                  type="submit"
+                  children="Save"
+                />
+                <Button
+                  className="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white"
                   type="button"
-                  className="px-4 py-2 rounded-lg bg-blue-600"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit
-                </button>
-              )}
-            </div>
+                  onClick={handleCancel}
+                  children="Cancel"
+                />
+              </div>
+            )}
           </div>
         </form>
       </div>
+
+      {/* Mobile Verification Modal */}
+      {isMobileModalOpen && (
+        <MobileVerificationModal
+          isOpen={isMobileModalOpen}
+          onClose={handleClosePopup}
+        />
+      )}
     </>
   );
 };
