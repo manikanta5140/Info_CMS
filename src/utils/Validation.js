@@ -41,6 +41,12 @@ export const validateUserName = async (userName) => {
   return null;
 };
 
+
+
+
+
+
+
 // Validate Email
 export const validateEmail = (email) => {
   if (!email) {

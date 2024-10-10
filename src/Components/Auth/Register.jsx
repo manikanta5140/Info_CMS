@@ -129,6 +129,7 @@ const Register = ({
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Input
                     label="First Name"
+                    className="rounded ps-2"
                     type="text"
                     error={error.firstName}
                     name="firstName"
@@ -137,6 +138,7 @@ const Register = ({
                   />
                   <Input
                     label="Last Name"
+                    className="rounded ps-2"
                     type="text"
                     error={error.lastName}
                     name="lastName"
@@ -146,6 +148,7 @@ const Register = ({
                 </div>
                 <Input
                   label="Username"
+                  className="rounded ps-2"
                   type="text"
                   error={error.userName}
                   name="userName"
@@ -156,6 +159,7 @@ const Register = ({
                 <Input
                   label="Email"
                   type="Email"
+                  className="rounded ps-2"
                   error={error.email}
                   name="email"
                   value={registerFormData.email || ""}
@@ -164,6 +168,7 @@ const Register = ({
                 <div className="flex flex-col sm:flex-row  gap-4">
                   <Input
                     label="Password"
+                    className="rounded ps-2"
                     type="password"
                     error={error.password}
                     name="password"
@@ -173,6 +178,7 @@ const Register = ({
                   <Input
                     label="Confirm Password"
                     type="password"
+                    className="rounded ps-2"
                     error={error.confirmPassword}
                     name="confirmPassword"
                     value={registerFormData.confirmPassword || ""}

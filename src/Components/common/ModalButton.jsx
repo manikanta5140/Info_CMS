@@ -154,16 +154,17 @@ export default function ModalButton({ message, contentHistoryId ,socialMediaList
 
         <div className="flex justify-end gap-4 p-4">
           <button
-            className="px-8 py-2 my-2 text-white bg-red-600 rounded"
+            className="px-8 py-2 my-2 bg-red-100 text-red-800 text-sm font-medium dark:bg-red-900 dark:text-red-300 rounded"
             onClick={closeModal}
           >
             Close
           </button>
           <button
-            className={`px-8 py-2 my-2 text-white bg-green-600 rounded ${
+            className={`px-8 py-2 my-2bg-green-100 text-green-800 text-sm font-medium dark:bg-green-900 dark:text-green-300 rounded ${
               selectedPlatforms.length === 0
                 ? "opacity-50 cursor-not-allowed"
                 : ""
+                
             }`}
             onClick={handlePost}
             disabled={selectedPlatforms.length === 0}
