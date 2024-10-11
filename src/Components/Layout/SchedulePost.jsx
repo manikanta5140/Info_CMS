@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker"; // Ensure react-datepicker is installed
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function SchedulePost({ contentHistoryId, selectedPlatforms, closeModal }) {
+export default function SchedulePost({
+  contentHistoryId,
+  selectedPlatforms,
+  closeModal,
+}) {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleSchedule = () => {
@@ -19,7 +23,8 @@ export default function SchedulePost({ contentHistoryId, selectedPlatforms, clos
     <div className="p-6">
       <h2 className="text-xl font-semibold mb-4">Schedule Post</h2>
       <p className="mb-4">
-        Select a date and time for scheduling your post on the selected platforms.
+        Select a date and time for scheduling your post on the selected
+        platforms.
       </p>
       <div className="relative">
         <DatePicker
@@ -27,8 +32,8 @@ export default function SchedulePost({ contentHistoryId, selectedPlatforms, clos
           onChange={(date) => setSelectedDate(date)}
           showTimeSelect
           dateFormat="Pp"
-          className="p-2 border rounded w-full"
-          popperClassName="custom-datepicker" // Add a class for custom styles
+          className="p-2 border rounded w-full "
+          popperClassName="custom-datepicker"
         />
       </div>
       <div className="flex justify-end gap-4 mt-6">
@@ -46,8 +51,6 @@ export default function SchedulePost({ contentHistoryId, selectedPlatforms, clos
           Schedule
         </button>
       </div>
-
-      
     </div>
   );
 }

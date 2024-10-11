@@ -121,11 +121,14 @@ function Landing() {
               <div className="lg:flex items-center space-x-6">
                 <div className="flex  items-center justify-center bg  text-3xl font-extrabold rounded">
                   <button onClick={handleThemeChange}>
-                  {
-                      theme === "theme-dark" ? 
-                      <FontAwesomeIcon icon={faSun} className="text-white rounded-full hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"/>
-                      : <FontAwesomeIcon icon={faMoon} />
-                    }
+                    {theme === "theme-dark" ? (
+                      <FontAwesomeIcon
+                        icon={faSun}
+                        className="text-white rounded-full hover:shadow-[0px_0px_10px_10px_rgba(8,_112,_184,_0.7)]"
+                      />
+                    ) : (
+                      <FontAwesomeIcon icon={faMoon} />
+                    )}
                   </button>
                 </div>
                 {isLoggedIn ? (
@@ -144,7 +147,14 @@ function Landing() {
                           alt="user photo"
                         />
                       </button>
-                      {theme === "theme-dark" ? <FontAwesomeIcon className="text-white" icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronDown} />}
+                      {theme === "theme-dark" ? (
+                        <FontAwesomeIcon
+                          className="text-white"
+                          icon={faChevronDown}
+                        />
+                      ) : (
+                        <FontAwesomeIcon icon={faChevronDown} />
+                      )}
                     </div>
                     {dropdownOpen && (
                       <div

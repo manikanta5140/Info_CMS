@@ -4,8 +4,6 @@ import Input from "../common/Input";
 import { showNotification } from "../notification/Notification";
 import { authorizeFacebook } from "../../Api/services/socialMediaService";
 
-
-
 const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
   const [appId, setAppId] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -26,13 +24,14 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
     if (!errorMessages.appId && !errorMessages.accessToken) {
       setErrors({ appId: "", accessToken: "" });
       authorizeFacebook({ appId, accessToken })
-      .then(res => { showNotification("Credentials saved successfully !!", "success"); onRequestClose() })
-      .catch(err => showNotification(err.message, "error"))
+        .then((res) => {
+          showNotification("Credentials saved successfully !!", "success");
+          onRequestClose();
+        })
+        .catch((err) => showNotification(err.message, "error"));
     } else {
       setErrors(errorMessages);
     }
-
-
   };
 
   return (
@@ -42,13 +41,15 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
       className="relative bg-white p-6 rounded-lg max-w-md w-full shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center"
     >
-      <h2 className="text-xl font-bold mb-4 text-center">Facebook Authorization</h2>
+      <h2 className="text-xl font-bold mb-4 text-center">
+        Facebook Authorization
+      </h2>
       <p className="mb-6 text-primary text-center text-sm">
         Please provide both App ID and Access Token for Facebook authorization:
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        <div className=""> 
+        <div className="">
           <Input
             label="App ID"
             name="appId"
@@ -98,45 +99,3 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
 };
 
 export default FacebookAuthModal;
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from "react";
-// import FacebookAuthModal from "./FacebookAuthModal";
-
-// const YourComponent = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   const handleOpenModal = () => setIsModalOpen(true);
-//   const handleCloseModal = () => setIsModalOpen(false);
-
-//   const handleSubmit = (data) => {
-//     console.log("App ID:", data.appId);
-//     console.log("Access Token:", data.accessToken);
-//     // Perform Facebook authorization logic here
-//     handleCloseModal();
-//   };
-
-//   return (
-//     <div>
-//       <button onClick={handleOpenModal} className="bg-blue-600 text-white px-4 py-2 rounded">
-//         Authorize with Facebook
-//       </button>
-
-//       <FacebookAuthModal
-//         isOpen={isModalOpen}
-//         onRequestClose={handleCloseModal}
-//         onSubmit={handleSubmit}
-//       />
-//     </div>
-//   );
-// };
-
-// export default YourComponent;

@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { getContentHistory } from "../Api/services/contentService/contentService";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import ModalButton from "../Components/common/ModalButton";
+import ModalButton from "../Components/Modals/ModalButton";
 import { getAllPlatforms } from "../Api/services/socialMediaService";
 import { getContent } from "../utils/Validation";
 
@@ -141,7 +141,9 @@ const ContentHistory = () => {
 
                         <span
                           onClick={() => navigate(`/content/${item.id}/edit`)}
-                          className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded-full bg-button-secondary px-2  text-center text-xs text-primary  lg:hidden"
+                          className=" cursor-pointer mt-2 ml-auto block w-fit whitespace-nowrap rounded bg-button-secondary px-4  text-center text-sm font-semibold text-primary py-1
+                            lg:hidden"
+                            
                         >
                           Edit
                         </span>

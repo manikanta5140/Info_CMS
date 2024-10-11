@@ -146,7 +146,7 @@ const Login = ({
                       profilePhoto: decoded?.picture,
                       password: decoded?.sub,
                     };
-                    console.log(userData);
+                    console.log(userData ,"bgtthbj");
 
                     storeGoogleUser(userData).then((res) => {
                       console.log(res);

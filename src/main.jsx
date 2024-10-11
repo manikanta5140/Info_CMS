@@ -6,6 +6,7 @@ import { AuthProvider } from "./Context/AuthContext.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./Context/ThemeContext.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ModalProvider } from "./Context/ModalContext.jsx";
 
 const clientId = "922963109105-36jvvoeme9s53rnih20ph3sn9ds2e31j.apps.googleusercontent.com";
 
@@ -15,7 +16,9 @@ createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <ThemeProvider>
           <AuthProvider>
+          <ModalProvider>
             <App />
+            </ModalProvider>
           </AuthProvider>
         </ThemeProvider>
       </BrowserRouter>

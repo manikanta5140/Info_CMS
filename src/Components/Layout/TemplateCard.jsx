@@ -9,7 +9,7 @@ const TemplateCard = ({ searchTemplate }) => {
   useEffect(() => {
     getAllContent()
       .then((res) => {
-        setContent(res)
+        setContent(res);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -36,7 +36,11 @@ const TemplateCard = ({ searchTemplate }) => {
           >
             <div className="relative flex flex-col break-words rounded-lg border border-[var(--color-secondary)] bg-primary shadow-lg transition-transform transform hover:scale-[1.02]">
               <div className="absolute -mt-4 left-1/2 transform -translate-x-1/2 h-16 w-16 rounded-xl flex items-center justify-center">
-                <img src={item?.iconUrl} alt="icon" className="w-12 h-12 bg-white rounded" />
+                <img
+                  src={item?.iconUrl}
+                  alt="icon"
+                  className="w-12 h-12 bg-white rounded"
+                />
               </div>
               <div className="p-4 pt-12 text-center">
                 <h4 className="text-lg font-semibold tracking-tight text-primary">

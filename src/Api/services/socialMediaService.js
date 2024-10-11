@@ -1,6 +1,7 @@
 import {
   AUTHORIZE_FACEBOOK,
   AUTHORIZE_TWITTER,
+  FACEBOOK_POST_URL,
   GET_ALL_PLATFORMS,
   GET_ALL_POST,
   SEND_WHATSAPP_VERIFICATION_CODE,
@@ -21,6 +22,7 @@ export const authorizeTwitter = async () => {
 
 export const verifyPlatform = async () => {
   const response = await axiosInstance.get(USER_VERIFIED_PLATFORM);
+  console.log(response.data, "dgfdg");
   return response.data;
 };
 
@@ -41,14 +43,18 @@ export const getAllPost = async () => {
   const response = await axiosInstance.get(GET_ALL_POST);
   return response.data.data;
 };
-export const schedulePost = async () => { };
+export const schedulePost = async () => {};
 
 export const sendWhatsappVerificationToken = async (mobileNumber) => {
-  const response = await axiosInstance.post(
-    SEND_WHATSAPP_VERIFICATION_CODE,
-    mobileNumber
-  );
-  return response.data;
+  try {
+    const response = await axiosInstance.post(
+      SEND_WHATSAPP_VERIFICATION_CODE,
+      mobileNumber
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
 };
 
 export const verifyWhatsappVerificationToken = async (token) => {
@@ -60,9 +66,14 @@ export const verifyWhatsappVerificationToken = async (token) => {
 };
 
 export const authorizeFacebook = async (credentials) => {
-  const response = await axiosInstance.post(
-    AUTHORIZE_FACEBOOK,
-    credentials
-  );
+  const response = await axiosInstance.post(AUTHORIZE_FACEBOOK, credentials);
   return response.data;
-}
+};
+export const facebookPost = async (message, contentHistoryId) => {
+  const data = {
+    message: message,
+    contentHistoryId: contentHistoryId,
+  };
+  const response = await axiosInstance.post(FACEBOOK_POST_URL, data);
+  return response.data;
+};

@@ -1,16 +1,18 @@
 // src/components/MobileVerificationPopup.js
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { useModal } from "../../Context/ModalContext";
 import VerifyMobNoButton from "../common/VerifyMobNoButton";
 
-const MobileVerificationPopup = ({ handleClosePopup, onMobileModalOpen }) => {
+const MobileVerificationPopup = () => {
+  const { onMobileModalOpen, handleCloseMobilePopup } = useModal();
   return (
     <div className="fixed bottom-5 right-5 w-80 bg-fill text-white rounded-lg shadow-lg z-50">
       <div className="flex justify-between items-center p-4 border-b border-gray-700">
         <h4 className="text-lg font-semibold">Verify Mobile Number</h4>
         <AiOutlineClose
           className="cursor-pointer text-xl"
-          onClick={handleClosePopup}
+          onClick={handleCloseMobilePopup}
         />
       </div>
       <div className="p-4">
@@ -22,7 +24,7 @@ const MobileVerificationPopup = ({ handleClosePopup, onMobileModalOpen }) => {
           className="bg-green-600 hover:bg-green-700 text-white"
           onClick={() => {
             onMobileModalOpen();
-            handleClosePopup();
+            handleCloseMobilePopup();
           }}
         >
           Verify

@@ -7,7 +7,7 @@ const Modal = ({ isOpen, onResend }) => {
   // Function to start or restart the timer
   const startTimer = () => {
     setIsDisabled(true);
-    setTimer(120); 
+    setTimer(120);
 
     const interval = setInterval(() => {
       setTimer((prevTimer) => {
@@ -23,13 +23,13 @@ const Modal = ({ isOpen, onResend }) => {
 
   useEffect(() => {
     if (isOpen) {
-      startTimer(); 
+      startTimer();
     }
   }, [isOpen]);
 
   const handleResend = () => {
-    onResend(); 
-    startTimer(); 
+    onResend();
+    startTimer();
   };
 
   // If the modal is not open, return null

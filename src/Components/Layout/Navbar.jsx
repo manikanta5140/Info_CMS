@@ -95,9 +95,16 @@ const Navbar = () => {
                       alt="user photo"
                     />
                   </button>
-                  {theme === "theme-dark" ? <FontAwesomeIcon className="text-white" icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronDown} />}
-                </div> 
-                 {dropdownOpen && (
+                  {theme === "theme-dark" ? (
+                    <FontAwesomeIcon
+                      className="text-white"
+                      icon={faChevronDown}
+                    />
+                  ) : (
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  )}
+                </div>
+                {dropdownOpen && (
                   <div
                     ref={dropdownRef}
                     className="z-50 fixed right-2 top-14 md:top-12 my-4 text-base list-none bg-secondary divide-y divide-gray-950 rounded shadow"

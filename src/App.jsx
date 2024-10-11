@@ -14,21 +14,6 @@ import { useAuth } from "./Context/AuthContext";
 const App = () => {
   // Theme Setting variables
   const { theme } = useTheme() || {};
-  const [showPopup, setShowPopup] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-
-  const onMobileModalClose = () => {
-    setShowModal(false);
-  };
-  const onMobileModalOpen = () => {
-    setShowPopup(false);
-    setShowModal(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
   const { validateToken } = useAuth();
   useEffect(() => {
     validateToken();
@@ -40,18 +25,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Landing />} />
 
-        <Route
-          path="/"
-          element={
-            <Dashboard
-              onMobileModalClose={onMobileModalClose}
-              handleClosePopup={handleClosePopup}
-              onMobileModalOpen={onMobileModalOpen}
-              showPopup={showPopup}
-              showModal={showModal}
-            />
-          }
-        >
+        <Route path="/" element={<Dashboard />}>
           <Route path="/home" element={<Home />} />
           <Route
             path="/content/:slug"
@@ -61,15 +35,7 @@ const App = () => {
             path="/content/:id/edit"
             element={<GenerateContent mode="edit" />}
           />
-          <Route
-            path="/profile"
-            element={
-              <Profile
-                handleClosePopup={handleClosePopup}
-                onMobileModalOpen={onMobileModalOpen}
-              />
-            }
-          />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/history" element={<ContentHistory />} />
           <Route path="/posted-content" element={<PostedContent />} />
         </Route>

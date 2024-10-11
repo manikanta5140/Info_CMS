@@ -21,7 +21,7 @@ import {
 } from "../Api/services/contentService/contentService";
 import { useAuth } from "../Context/AuthContext";
 import { showNotification } from "../Components/notification/Notification";
-import ModalButton from "../Components/common/ModalButton";
+import ModalButton from "../Components/Modals/ModalButton";
 
 const GenerateContent = ({ mode }) => {
   const [formData, setFormData] = useState({});

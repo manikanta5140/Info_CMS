@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import {
   authorizeTwitter,
+  facebookPost,
   twitterPost,
   verifyPlatform,
 } from "../../Api/services/socialMediaService";
 import { showNotification } from "../notification/Notification";
 import SchedulePost from "../Layout/SchedulePost";
-import "react-datepicker/dist/react-datepicker.css"; 
-import FacebookAuthModal from "../Modals/FacebookAuthModel";
+import "react-datepicker/dist/react-datepicker.css";
+import FacebookAuthModal from "./FacebookAuthModel";
 
 export default function ModalButton({
   message,
@@ -23,7 +24,7 @@ export default function ModalButton({
     Instagram: false,
   });
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
-  const [postedPlatforms, setPostedPlatforms] = useState([]);
+  const [postedPlatforms, setPostedPlatforms] = useState({}); // Update: Track posted platforms by contentHistoryId
   const [scheduleModalIsOpen, setScheduleModalIsOpen] = useState(false);
   const [isFacebookModalOpen, setIsFacebookModalOpen] = useState(false);
 
@@ -38,14 +39,19 @@ export default function ModalButton({
   useEffect(() => {
     verifyPlatform()
       .then((response) => {
-        const result = response?.filter(
-          (res) => res?.platforms?.platformName === "Twitter"
-        );
-        if (result.length > 0 && result[0]?.isVerified) {
-          setAuthorizedPlatforms((prev) => ({ ...prev, Twitter: true }));
-        }
+        const authorized = {};
+        response.forEach(({ platforms, isVerified }) => {
+          if (platforms?.platformName === "Twitter" && isVerified) {
+            authorized.Twitter = true;
+          }
+          if (platforms?.platformName === "Facebook" && isVerified) {
+            authorized.Facebook = true;
+          }
+        });
+
+        setAuthorizedPlatforms((prev) => ({ ...prev, ...authorized }));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("Error verifying platforms: ", error));
   }, []);
 
   function handlePlatformSelection(platform) {
@@ -73,17 +79,51 @@ export default function ModalButton({
   async function handlePost() {
     if (selectedPlatforms.length === 0) {
       showNotification("Please select at least one platform", "error");
-    } else {
-      const isTwitterSelected = selectedPlatforms.includes("Twitter");
-      if (isTwitterSelected) {
-        const res = await twitterPost(message, contentHistoryId);
+      return;
+    }
+
+    const platformsToPost = selectedPlatforms.filter(
+      (platform) => platform === "Twitter" || platform === "Facebook"
+    );
+
+    let allSuccess = true; // Track whether all posts are successful
+
+    for (const platform of platformsToPost) {
+      let res = null;
+      if (platform === "Twitter") {
+        res = await twitterPost(message, contentHistoryId);
         if (res) {
-          showNotification("Post sent successfully", "success");
-          setPostedPlatforms((prev) => [...prev, "Twitter"]);
-        } else {
-          showNotification("Error sending post", "error");
+          // Update postedPlatforms for current contentHistoryId
+          setPostedPlatforms((prev) => ({
+            ...prev,
+            [contentHistoryId]: [...(prev[contentHistoryId] || []), "Twitter"],
+          }));
+        }
+      } else if (platform === "Facebook") {
+        res = await facebookPost(message, contentHistoryId);
+        if (res) {
+          // Update postedPlatforms for current contentHistoryId
+          setPostedPlatforms((prev) => ({
+            ...prev,
+            [contentHistoryId]: [...(prev[contentHistoryId] || []), "Facebook"],
+          }));
         }
       }
+
+      // If any post fails, mark allSuccess as false
+      if (!res) {
+        allSuccess = false;
+      }
+    }
+
+    // Show a single notification based on the overall result
+    if (allSuccess) {
+      showNotification("Post(s) sent successfully", "success");
+    } else {
+      showNotification(
+        "Error sending post(s) to one or more platforms",
+        "error"
+      );
     }
   }
 
@@ -132,9 +172,9 @@ export default function ModalButton({
           <p className="text-sm text-violet-600 mb-4">
             Please authorize platforms before posting.
           </p>
-          <ul className="divide-y">
-            {Array.isArray(socialMediaList) &&
-              socialMediaList.map((item, idx) => (
+          {Array.isArray(socialMediaList) && (
+            <ul>
+              {socialMediaList.map((item, idx) => (
                 <li key={idx} className="py-5 flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <img
@@ -147,16 +187,23 @@ export default function ModalButton({
                     </span>
                   </div>
 
-                  {postedPlatforms.includes(item.platformName) ? (
+                  {/* Check if platform is already posted for the specific contentHistoryId */}
+                  {postedPlatforms[contentHistoryId]?.includes(
+                    item.platformName
+                  ) ? (
                     <span className="text-green-500 text-lg font-bold">✔</span>
                   ) : authorizedPlatforms[item.platformName] ? (
+                    /* Show checkbox for authorized but not yet posted platforms */
                     <input
                       type="checkbox"
                       className="form-checkbox h-5 w-5 text-purple-600"
                       checked={selectedPlatforms.includes(item.platformName)}
-                      onChange={() => handlePlatformSelection(item.platformName)}
+                      onChange={() =>
+                        handlePlatformSelection(item.platformName)
+                      }
                     />
                   ) : (
+                    /* Show authorize button for platforms that are not authorized */
                     <button
                       className="text-blue-600 text-sm underline"
                       onClick={() => handleAuthorize(item.platformName)}
@@ -166,7 +213,8 @@ export default function ModalButton({
                   )}
                 </li>
               ))}
-          </ul>
+            </ul>
+          )}
         </div>
 
         <div className="flex justify-end gap-4 p-4">
@@ -177,11 +225,11 @@ export default function ModalButton({
             Close
           </button>
           <button
-            className={`bg-green-200 text-green-900 text-base font-semibold me-2 px-5 py-1 rounded hover:bg-green-300 transition ${selectedPlatforms.length === 0
+            className={`bg-green-200 text-green-900 text-base font-semibold me-2 px-5 py-1 rounded hover:bg-green-300 transition ${
+              selectedPlatforms.length === 0
                 ? "opacity-70 cursor-not-allowed"
                 : ""
-
-              }`}
+            }`}
             onClick={handlePost}
             disabled={selectedPlatforms.length === 0}
           >
@@ -228,7 +276,7 @@ export default function ModalButton({
         />
       </Modal>
 
-
+      {/* FacebookAuth Modal */}
       <FacebookAuthModal
         isOpen={isFacebookModalOpen}
         onRequestClose={handleFacebookCloseModal}

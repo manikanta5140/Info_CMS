@@ -19,6 +19,7 @@ export const RESEND_EMAIL = "/auth/resend-email";
 export const AUTHORIZE_TWITTER = "/sm/twitter/authorize";
 export const USER_VERIFIED_PLATFORM = "/verifiedPlatforms";
 export const TWITTER_POST_URL = "/sm/twitter/tweet";
+export const FACEBOOK_POST_URL = "/sm/facebook/post";
 export const STORE_GOOGLE_USER = "/auth/store-google-user";
 
 export const SEND_WHATSAPP_VERIFICATION_CODE =

@@ -2,27 +2,25 @@ import React, { useState, useEffect } from "react";
 import Button from "../Components/common/Button";
 import Input from "../Components/common/Input";
 import {
-  validateFirstName,
-  validateLastName,
-  validateEmail,
-  validatePhoneNumber,
   validateDOB,
 } from "../utils/Validation";
 import { getUser, updateUser } from "../Api/services/userService";
-import { showNotification } from "../Components/notification/Notification";
+
 import { useAuth } from "../Context/AuthContext";
-import MobileVerificationModal from "../Components/Layout/MobileVerificationModal";
+
 import VerifyMobNoButton from "../Components/common/VerifyMobNoButton";
+import { useModal } from "../Context/ModalContext";
+import MobileVerificationModal from "../Components/Modals/MobileVerificationModal";
 
 const Profile = () => {
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState();
   const [initialFormData, setIntitialFormData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [gender, setGender] = useState(null);
-  const { setUserDetails } = useAuth();
-  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
+  const { setUserDetails, userDetails } = useAuth();
   const [error, setError] = useState({});
+  const { onMobileModalClose, onMobileModalOpen, showMobileModal } = useModal();
 
   useEffect(() => {
     getUser()
@@ -34,7 +32,7 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [onMobileModalClose]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,16 +99,6 @@ const Profile = () => {
     return Object.keys(isError).length === 0;
   };
 
-  // Function to open the mobile verification modal
-  const onMobileModalOpen = () => {
-    setIsMobileModalOpen(true);
-  };
-
-  // Function to close the mobile verification modal
-  const handleClosePopup = () => {
-    setIsMobileModalOpen(false);
-  };
-
   return (
     <>
       <div className="w-full bg-primary px-4 lg:px-12 mt-16 sm:max-w-xl rounded-lg py-6 border border-[var(--color-secondary)]">
@@ -154,7 +142,7 @@ const Profile = () => {
                 name="userName"
                 value={formData?.userName}
                 onChange={handleChange}
-                disabled // Disable if not editing
+                disabled
                 required
               />
             </div>
@@ -178,7 +166,7 @@ const Profile = () => {
                 name="lastName"
                 value={formData?.lastName}
                 onChange={handleChange}
-                disabled={!isEditing} // Disable if not editing
+                disabled={!isEditing} 
                 required
               />
             </div>
@@ -191,7 +179,7 @@ const Profile = () => {
                 name="email"
                 value={formData?.email || ""}
                 onChange={handleChange}
-                disabled // Disable if not editing
+                disabled
                 required
               />
               <div>
@@ -204,18 +192,16 @@ const Profile = () => {
                     error={error.mobileNumber}
                     value={formData?.mobileNumber || ""}
                     onChange={handleChange}
-                    disabled={!isEditing}
+                    disabled
                   />
                   <div>
-                  <VerifyMobNoButton
-                    onClick={() => {
-                      onMobileModalOpen();
-                    }}
-
-                    children="Verify"
-                  />
+                    {!userDetails?.isMobileVerified && (
+                      <VerifyMobNoButton
+                        onClick={onMobileModalOpen}
+                        children="Verify"
+                      />
+                    )}
                   </div>
-                  
                 </div>
               </div>
             </div>
@@ -266,30 +252,30 @@ const Profile = () => {
                       : ""
                   }
                   onChange={handleChange}
-                  disabled={!isEditing} // Disable if not editing
+                  disabled={!isEditing} 
                   required
                 />
               </div>
             </div>
 
             {/* Submit and Cancel Buttons */}
-             
-              <div className="flex justify-end w-full mb-8 space-x-4">
-              {isEditing ?
-              <div>
-                <Button
-                  className="cursor-pointer bg-blue-200 text-blue-800 text-sm font-bold me-2 px-4 py-1 hover:bg-blue-400 rounded"
-                  type="submit"
-                  children="Save"
-                />
-                <Button
-                  className="px-4 py-1  text-sm font-bold bg-gray-600 hover:bg-gray-700 text-white"
-                  type="button"
-                  onClick={handleCancel}
-                  children="Cancel"
-                />
+
+            <div className="flex justify-end w-full mb-8 space-x-4">
+              {isEditing ? (
+                <div>
+                  <button
+                    className="cursor-pointer bg-blue-200 text-blue-800 text-sm font-bold me-2 px-4 py-1 hover:bg-blue-400 rounded"
+                    type="submit"
+                    children="Save"
+                  />
+                  <Button
+                    className="px-4 py-1  text-sm font-bold bg-gray-600 hover:bg-gray-700 text-white"
+                    type="button"
+                    onClick={handleCancel}
+                    children="Cancel"
+                  />
                 </div>
-                :
+              ) : (
                 <button
                   type="button"
                   className="cursor-pointer bg-blue-200 text-blue-800 text-sm font-bold me-2 px-4 py-1 hover:bg-blue-400 rounded"
@@ -297,21 +283,14 @@ const Profile = () => {
                 >
                   Edit
                 </button>
-}
-              </div>
-            
-
+              )}
+            </div>
           </div>
         </form>
       </div>
 
       {/* Mobile Verification Modal */}
-      {isMobileModalOpen && (
-        <MobileVerificationModal
-          isOpen={isMobileModalOpen}
-          onClose={handleClosePopup}
-        />
-      )}
+      {/* {showMobileModal && <MobileVerificationModal />} */}
     </>
   );
 };
