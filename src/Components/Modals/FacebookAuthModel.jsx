@@ -42,13 +42,13 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
       className="relative bg-white p-6 rounded-lg max-w-md w-full shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center"
     >
-      <h2 className="text-2xl font-bold mb-4 text-center">Facebook Authorization</h2>
-      <p className="mb-6 text-primary text-center">
+      <h2 className="text-xl font-bold mb-4 text-center">Facebook Authorization</h2>
+      <p className="mb-6 text-primary text-center text-sm">
         Please provide both App ID and Access Token for Facebook authorization:
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className=""> 
           <Input
             label="App ID"
             name="appId"
@@ -57,7 +57,7 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
             onChange={(e) => setAppId(e.target.value)}
             placeholder="Enter Facebook App ID"
             error={errors.appId}
-            className="border border-gray-300 focus:border-blue-500"
+            className="border border-gray-300 focus:border-blue-500 ps-2"
             required
           />
         </div>
@@ -71,15 +71,15 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
             onChange={(e) => setAccessToken(e.target.value)}
             placeholder="Enter Facebook Access Token"
             error={errors.accessToken}
-            className="border border-gray-300 focus:border-blue-500"
+            className="border border-gray-300 focus:border-blue-500 ps-2"
             required
           />
         </div>
 
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-end mt-6 space-x-2">
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            className="bg-blue-100 text-green-800 font-semibold py-1 px-4 rounded hover:bg-blue-300"
           >
             Submit
           </button>
@@ -87,7 +87,7 @@ const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
           <button
             type="button"
             onClick={onRequestClose}
-            className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+            className="bg-red-100 text-red-800 font-semibold py-1 px-4 rounded hover:bg-red-300"
           >
             Cancel
           </button>
