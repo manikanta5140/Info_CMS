@@ -26,3 +26,5 @@ export const SEND_WHATSAPP_VERIFICATION_CODE =
 
 export const VERIFY_WHATSAPP_VERIFICATION_TOKEN =
   "/user/verify-whatsapp-verification-token";
+
+export const AUTHORIZE_FACEBOOK = "/sm/facebook/credentials";

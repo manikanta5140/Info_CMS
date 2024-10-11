@@ -7,7 +7,8 @@ import {
 } from "../../Api/services/socialMediaService";
 import { showNotification } from "../notification/Notification";
 import SchedulePost from "../Layout/SchedulePost";
-import "react-datepicker/dist/react-datepicker.css"; // Import date picker styles
+import "react-datepicker/dist/react-datepicker.css"; 
+import FacebookAuthModal from "../Modals/FacebookAuthModel";
 
 export default function ModalButton({
   message,
@@ -24,6 +25,7 @@ export default function ModalButton({
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [postedPlatforms, setPostedPlatforms] = useState([]);
   const [scheduleModalIsOpen, setScheduleModalIsOpen] = useState(false);
+  const [isFacebookModalOpen, setIsFacebookModalOpen] = useState(false);
 
   function openModal() {
     setIsOpen(true);
@@ -58,7 +60,15 @@ export default function ModalButton({
     if (platform === "Twitter") {
       await authorizeTwitter();
     }
+
+    if (platform === "Facebook") {
+      setIsFacebookModalOpen(true);
+    }
   }
+
+  const handleFacebookCloseModal = () => {
+    setIsFacebookModalOpen(false);
+  };
 
   async function handlePost() {
     if (selectedPlatforms.length === 0) {
@@ -217,6 +227,12 @@ export default function ModalButton({
           closeModal={closeScheduleModal}
         />
       </Modal>
+
+
+      <FacebookAuthModal
+        isOpen={isFacebookModalOpen}
+        onRequestClose={handleFacebookCloseModal}
+      />
     </>
   );
 }

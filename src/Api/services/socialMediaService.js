@@ -1,4 +1,5 @@
 import {
+  AUTHORIZE_FACEBOOK,
   AUTHORIZE_TWITTER,
   GET_ALL_PLATFORMS,
   GET_ALL_POST,
@@ -40,7 +41,7 @@ export const getAllPost = async () => {
   const response = await axiosInstance.get(GET_ALL_POST);
   return response.data.data;
 };
-export const schedulePost = async () => {};
+export const schedulePost = async () => { };
 
 export const sendWhatsappVerificationToken = async (mobileNumber) => {
   const response = await axiosInstance.post(
@@ -57,3 +58,11 @@ export const verifyWhatsappVerificationToken = async (token) => {
   );
   return response.data;
 };
+
+export const authorizeFacebook = async (credentials) => {
+  const response = await axiosInstance.post(
+    AUTHORIZE_FACEBOOK,
+    credentials
+  );
+  return response.data;
+}

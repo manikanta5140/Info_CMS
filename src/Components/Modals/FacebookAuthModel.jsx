@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import Modal from "react-modal"; // If needed, install: npm install react-modal
-import Input from "./Input"; // Your reusable Input component
+import Modal from "react-modal";
+import Input from "../common/Input";
+import { showNotification } from "../notification/Notification";
+import { authorizeFacebook } from "../../Api/services/socialMediaService";
 
 
 
-const FacebookAuthModal = ({ isOpen, onRequestClose, onSubmit }) => {
+const FacebookAuthModal = ({ isOpen, onRequestClose }) => {
   const [appId, setAppId] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [errors, setErrors] = useState({ appId: "", accessToken: "" });
@@ -22,11 +24,15 @@ const FacebookAuthModal = ({ isOpen, onRequestClose, onSubmit }) => {
     }
 
     if (!errorMessages.appId && !errorMessages.accessToken) {
-      onSubmit({ appId, accessToken });
       setErrors({ appId: "", accessToken: "" });
+      authorizeFacebook({ appId, accessToken })
+      .then(res => { showNotification("Credentials saved successfully !!", "success"); onRequestClose() })
+      .catch(err => showNotification(err.message, "error"))
     } else {
       setErrors(errorMessages);
     }
+
+
   };
 
   return (
@@ -102,8 +108,8 @@ export default FacebookAuthModal;
 
 
 
-import React, { useState } from "react";
-import FacebookAuthModal from "./FacebookAuthModal";
+// import React, { useState } from "react";
+// import FacebookAuthModal from "./FacebookAuthModal";
 
 // const YourComponent = () => {
 //   const [isModalOpen, setIsModalOpen] = useState(false);
