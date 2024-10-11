@@ -88,7 +88,7 @@ export default function ModalButton({
   return (
     <>
       <span
-        className="cursor-pointer ml-2 mr-3 whitespace-nowrap rounded-full bg-button px-2 text-primary"
+        className="cursor-pointer bg-green-200 text-green-800 text-sm mt-2.5 font-bold me-2 px-4 py-1 hover:bg-green-400 rounded"
         onClick={openModal}
       >
         Post
@@ -119,7 +119,7 @@ export default function ModalButton({
       >
         <div className="p-6">
           <h2 className="text-xl font-semibold mb-4">Select Platforms</h2>
-          <p className="text-sm text-red-600 mb-4">
+          <p className="text-sm text-violet-600 mb-4">
             Please authorize platforms before posting.
           </p>
           <ul className="divide-y">
@@ -161,18 +161,17 @@ export default function ModalButton({
 
         <div className="flex justify-end gap-4 p-4">
           <button
-            className="px-2 py-1 text-white bg-red-600 rounded-lg hover:bg-red-700 transition"
+            className="bg-red-200 text-red-900 text-base font-semibold me-2 px-5 py-1 rounded hover:bg-red-300 transition"
             onClick={closeModal}
           >
             Close
           </button>
           <button
-            className={`px-2 py-1 text-white bg-green-600 rounded-lg hover:bg-green-700 transition ${
-              selectedPlatforms.length === 0
-                ? "opacity-50 cursor-not-allowed"
+            className={`bg-green-200 text-green-900 text-base font-semibold me-2 px-5 py-1 rounded hover:bg-green-300 transition ${selectedPlatforms.length === 0
+                ? "opacity-70 cursor-not-allowed"
                 : ""
-                
-            }`}
+
+              }`}
             onClick={handlePost}
             disabled={selectedPlatforms.length === 0}
           >

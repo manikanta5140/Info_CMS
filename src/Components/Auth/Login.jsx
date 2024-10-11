@@ -88,7 +88,7 @@ const Login = ({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="relative py-3 sm:max-w-xl sm:mx-auto bg-transparent">
+        <div className="relative py-3 sm:max-w-xl sm:mx-auto bg-transparent scale-[0.85]">
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-important)] to-sky-700 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
           <div className="relative px-4 py-10 bg-secondary shadow-lg sm:rounded-3xl sm:p-20">
             <div className="max-w-md mx-auto">
@@ -133,6 +133,7 @@ const Login = ({
                     Login
                   </Button>
                 </div>
+                <div className="w-full flex justify-center">
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
                     const decoded = jwtDecode(credentialResponse.credential);
@@ -161,6 +162,8 @@ const Login = ({
                     showNotification("Login Failed");
                   }}
                 />
+                </div>
+                
               </div>
             </div>
 

@@ -206,13 +206,16 @@ const Profile = () => {
                     onChange={handleChange}
                     disabled={!isEditing}
                   />
+                  <div>
                   <VerifyMobNoButton
                     onClick={() => {
                       onMobileModalOpen();
                     }}
-                    className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+
                     children="Verify"
                   />
+                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -270,21 +273,34 @@ const Profile = () => {
             </div>
 
             {/* Submit and Cancel Buttons */}
-            {isEditing && (
-              <div className="flex justify-center w-full mb-8 space-x-4">
+             
+              <div className="flex justify-end w-full mb-8 space-x-4">
+              {isEditing ?
+              <div>
                 <Button
-                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+                  className="cursor-pointer bg-blue-200 text-blue-800 text-sm font-bold me-2 px-4 py-1 hover:bg-blue-400 rounded"
                   type="submit"
                   children="Save"
                 />
                 <Button
-                  className="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white"
+                  className="px-4 py-1  text-sm font-bold bg-gray-600 hover:bg-gray-700 text-white"
                   type="button"
                   onClick={handleCancel}
                   children="Cancel"
                 />
+                </div>
+                :
+                <button
+                  type="button"
+                  className="cursor-pointer bg-blue-200 text-blue-800 text-sm font-bold me-2 px-4 py-1 hover:bg-blue-400 rounded"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit
+                </button>
+}
               </div>
-            )}
+            
+
           </div>
         </form>
       </div>

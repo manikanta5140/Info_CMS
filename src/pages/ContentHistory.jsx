@@ -152,13 +152,13 @@ const ContentHistory = () => {
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-600 sm:px-3 lg:table-cell">
                       
-                      <span className="  cursor-pointer mr-3 whitespace-nowrap rounded-full bg-button  py-0.5 text-primary font-semibold">
+                      <span className="">
                       {socialMediaList && <ModalButton message={getContent(item.content)} contentHistoryId={item.id} socialMediaList={socialMediaList}/>}
                       </span>
                     </td>
                     <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-gray-500 sm:px-3 lg:table-cell">
                       <span
-                        className="  cursor-pointer mr-3 whitespace-nowrap rounded-full bg-button-secondary px-4 py-0.5 text-primary font-semibold"
+                        className="  cursor-pointer mr-3 whitespace-nowrap bg-yellow-100 text-yellow-800 text-sm mt-2.5 font-bold me-2 px-4 py-1 hover:bg-yellow-200 rounded"
                         onClick={() => navigate(`/content/${item.id}/edit`)}
                       >
                         Edit

@@ -257,7 +257,7 @@ const GenerateContent = ({ mode }) => {
                   <div className="flex gap-2">
                     <CopyToClipboard text={aiResult} onCopy={onCopyHandler}>
                       <Button
-                        className={` text-primary font-medium flex items-center gap-2 text-sm md:text-base ${
+                        className={` text-blue-900 bg-blue-200 flex items-center gap-2 font-semibold text-xs md:text-sm hover:bg-blue-300 ${
                           isCopied ? "bg-green-600 text-white" : ""
                         }`}
                       >
