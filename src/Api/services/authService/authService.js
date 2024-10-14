@@ -22,11 +22,10 @@ export const login = async (userData) => {
     const response = await axiosInstance.post(LOGIN_URL, userData);
     return response.data;
   } catch (error) {
-    if (error.response) {
-      showNotification( `Login failed: ${error.response.data?.message || "Unexpected error"}`, "error");
-    } else {
-      showNotification(error.message,"error");
-    }
+    showNotification(
+      `Login failed: ${error.message || "Unexpected error"}`,
+      "error"
+    );
   }
 };
 
@@ -42,7 +41,7 @@ export const register = async (userData) => {
     const response = await axiosInstance.post(REGISTER_URL, userData);
     return response.data;
   } catch (error) {
-    showNotification(error.message,"error");
+    showNotification(error.message, "error");
   }
 };
 
@@ -71,26 +70,26 @@ export const checkValidToken = async (token) => {
     const response = await axiosInstance.get(CHECK_VALID_TOKEN(token));
     return response.data;
   } catch (error) {
-    showNotification(error.message,"error");
+    console.log(error);
   }
 };
 
 export const storeGoogleUser = async (userPayload) => {
-  console.log(userPayload)
+  console.log(userPayload);
   try {
     const response = await axiosInstance.post(STORE_GOOGLE_USER, userPayload);
-    console.log(response.data,"dervice")
+    console.log(response.data, "dervice");
     return response.data;
   } catch (error) {
     console.error("Error storing Google user:", error);
   }
 };
 
-export const resendMail=async ()=>{
-  try{
-    const response=await axiosInstance.post(RESEND_EMAIL);
+export const resendMail = async () => {
+  try {
+    const response = await axiosInstance.post(RESEND_EMAIL);
     return response.data;
-  }catch(error){
-    showNotification(error.message,"error");
+  } catch (error) {
+    showNotification(error.message, "error");
   }
-}
+};

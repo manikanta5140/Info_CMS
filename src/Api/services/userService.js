@@ -7,14 +7,14 @@ export const getUser = async () => {
     const response = await axiosInstance.get(GET_USER_URL);
     return response.data;
   } catch (error) {
-    showNotification(error.message, "error");
+    console.error(error.message, "error");
   }
 };
 
 /**
- * 
- * @param {*} updatedUserData 
- * @returns 
+ *
+ * @param {*} updatedUserData
+ * @returns
  */
 export const updateUser = async (updatedUserData) => {
   console.log(updatedUserData, "user");

@@ -17,13 +17,12 @@ export const authorizeTwitter = async () => {
   if (response?.data?.redirectUrl) {
     window.location.href = response.data.redirectUrl;
   } else {
-    showNotification(error.message, "error");
+    console.log(response);
   }
 };
 
 export const verifyPlatform = async () => {
   const response = await axiosInstance.get(USER_VERIFIED_PLATFORM);
-  console.log(response.data, "dgfdg");
   return response.data;
 };
 
@@ -79,7 +78,6 @@ export const facebookPost = async (message, contentHistoryId) => {
 };
 
 export const schedulePosts = async (data) => {
-  console.log(data);
   const response = await axiosInstance.post(SCHEDULE_POST, data);
   return response.data;
 };

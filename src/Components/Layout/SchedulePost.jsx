@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker"; // Ensure react-datepicker is installed
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { showNotification } from "../notification/Notification";
 import { schedulePosts } from "../../Api/services/socialMediaService";
+import Modal from "react-modal";
 
 export default function SchedulePost({
   contentHistoryId,
   selectedPlatformsId,
-  closeModal,
+  isOpen,
+  onRequestClose,
 }) {
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -28,7 +30,7 @@ export default function SchedulePost({
       .catch((err) => showNotification("Sorry please reschedule ! ", "error"));
 
     // Send to backend, then close the modal
-    closeModal();
+    onRequestClose();
   };
 
   function formatScheduledDateTime(dateInput) {
@@ -44,7 +46,12 @@ export default function SchedulePost({
   }
 
   return (
-    <div className="p-6">
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      className="relative bg-white p-6 rounded-lg max-w-md w-full shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center"
+    >
       <h2 className="text-xl font-semibold mb-4">Schedule Post</h2>
       <p className="mb-4">
         Select a date and time for scheduling your post on the selected
@@ -63,7 +70,7 @@ export default function SchedulePost({
       <div className="flex justify-end gap-4 mt-6">
         <button
           className="px-8 py-2 bg-gray-600 text-white rounded"
-          onClick={closeModal}
+          onClick={() => onRequestClose()}
         >
           Cancel
         </button>
@@ -75,6 +82,6 @@ export default function SchedulePost({
           Schedule
         </button>
       </div>
-    </div>
+    </Modal>
   );
 }

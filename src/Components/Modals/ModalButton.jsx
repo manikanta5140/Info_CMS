@@ -180,6 +180,7 @@ export default function ModalButton({
   }
 
   function closeScheduleModal() {
+    console.log("false");
     setScheduleModalIsOpen(false);
   }
 
@@ -303,36 +304,13 @@ export default function ModalButton({
           )}
         </div>
       </Modal>
-
-      {/* SchedulePost Modal */}
-      <Modal
+      {/* Schedule Modal */}
+      <SchedulePost
+        contentHistoryId={contentHistoryId}
+        selectedPlatformsId={selectedPlatformsId}
         isOpen={scheduleModalIsOpen}
         onRequestClose={closeScheduleModal}
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-        style={{
-          content: {
-            maxHeight: "100vh",
-            overflowY: "auto",
-            padding: "0",
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            transform: "translate(-50%, -50%)",
-            borderRadius: "8px",
-            border: "none",
-            backgroundColor: "white",
-            width: "90%",
-            maxWidth: "450px",
-          },
-        }}
-      >
-        <SchedulePost
-          contentHistoryId={contentHistoryId}
-          selectedPlatformsId={selectedPlatformsId}
-          closeModal={closeScheduleModal}
-        />
-      </Modal>
+      />
 
       {/* FacebookAuth Modal */}
       <FacebookAuthModal
