@@ -4,6 +4,7 @@ import {
   FACEBOOK_POST_URL,
   GET_ALL_PLATFORMS,
   GET_ALL_POST,
+  SCHEDULE_POST,
   SEND_WHATSAPP_VERIFICATION_CODE,
   TWITTER_POST_URL,
   USER_VERIFIED_PLATFORM,
@@ -43,7 +44,6 @@ export const getAllPost = async () => {
   const response = await axiosInstance.get(GET_ALL_POST);
   return response.data.data;
 };
-export const schedulePost = async () => {};
 
 export const sendWhatsappVerificationToken = async (mobileNumber) => {
   try {
@@ -75,5 +75,11 @@ export const facebookPost = async (message, contentHistoryId) => {
     contentHistoryId: contentHistoryId,
   };
   const response = await axiosInstance.post(FACEBOOK_POST_URL, data);
+  return response.data;
+};
+
+export const schedulePosts = async (data) => {
+  console.log(data);
+  const response = await axiosInstance.post(SCHEDULE_POST, data);
   return response.data;
 };

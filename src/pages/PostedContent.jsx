@@ -19,7 +19,9 @@ const PostedContent = () => {
     if (postedContent) {
       if (searchContent) {
         const filterContent = postedContent.filter((item) =>
-          item?.posts?.contentHistory?.content.toLowerCase().includes(searchContent?.toLowerCase())
+          item?.posts?.contentHistory?.content
+            .toLowerCase()
+            .includes(searchContent?.toLowerCase())
         );
         setPost(filterContent);
       } else {
@@ -30,7 +32,9 @@ const PostedContent = () => {
 
   useEffect(() => {
     getAllPost()
-      .then((res) => setPostedContent(res))
+      .then((res) => {
+        setPostedContent(res);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -91,7 +95,7 @@ const PostedContent = () => {
               </thead>
 
               <tbody className="lg::border-gray-300">
-                {post?.length >0 ? (
+                {post?.length > 0 ? (
                   [...post].reverse().map((item, idx) => (
                     <tr key={idx}>
                       <td className="whitespace-no-wrap py-4 text-left text-sm text-secondary sm:px-3 lg::text-left">
@@ -111,7 +115,8 @@ const PostedContent = () => {
                             />
                             <div className="">
                               {item?.platforms?.map((plat, idx) => (
-                                <img key={idx}
+                                <img
+                                  key={idx}
                                   src={plat?.platformImage}
                                   className="h-5 w-5"
                                 />
@@ -154,20 +159,25 @@ const PostedContent = () => {
                       </td>
                       <td className="whitespace-no-wrap hidden py-4 text-sm font-normal text-secondary sm:px-3 lg:table-cell">
                         {item?.platforms?.map((plat, idx) => (
-                          <img key={idx} src={plat?.platformImage} className="h-5 w-5" />
+                          <img
+                            key={idx}
+                            src={plat?.platformImage}
+                            className="h-5 w-5"
+                          />
                         ))}
                       </td>
                     </tr>
-                  ))):(
-                    <tr>
-                      <td
-                        colSpan="7"
-                        className="py-4 text-center text-sm text-gray-600"
-                      >
-                        No content history available.
-                      </td>
-                    </tr>
-                  )}
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="py-4 text-center text-sm text-gray-600"
+                    >
+                      No content history available.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

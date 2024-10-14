@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import {
   authorizeTwitter,
   facebookPost,
+  getAllPost,
   twitterPost,
   verifyPlatform,
 } from "../../Api/services/socialMediaService";
@@ -10,6 +11,8 @@ import { showNotification } from "../notification/Notification";
 import SchedulePost from "../Layout/SchedulePost";
 import "react-datepicker/dist/react-datepicker.css";
 import FacebookAuthModal from "./FacebookAuthModel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function ModalButton({
   message,
@@ -24,9 +27,11 @@ export default function ModalButton({
     Instagram: false,
   });
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
-  const [postedPlatforms, setPostedPlatforms] = useState({}); // Update: Track posted platforms by contentHistoryId
+  const [postedPlatforms, setPostedPlatforms] = useState({});
   const [scheduleModalIsOpen, setScheduleModalIsOpen] = useState(false);
   const [isFacebookModalOpen, setIsFacebookModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedPlatformsId, setSelectedPlatformsId] = useState([]);
 
   function openModal() {
     setIsOpen(true);
@@ -35,6 +40,29 @@ export default function ModalButton({
   function closeModal() {
     setIsOpen(false);
   }
+
+  useEffect(() => {
+    getAllPost()
+      .then((res) => {
+        if (Array.isArray(res)) {
+          console.log(res);
+          res.forEach((item) => {
+            if (item.posts?.contentHistoryId === contentHistoryId) {
+              item.platforms?.forEach((platform) => {
+                setPostedPlatforms((prev) => ({
+                  ...prev,
+                  [contentHistoryId]: [
+                    ...(prev[contentHistoryId] || []),
+                    platform.platformName,
+                  ],
+                }));
+              });
+            }
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [contentHistoryId]);
 
   useEffect(() => {
     verifyPlatform()
@@ -52,7 +80,7 @@ export default function ModalButton({
         setAuthorizedPlatforms((prev) => ({ ...prev, ...authorized }));
       })
       .catch((error) => console.log("Error verifying platforms: ", error));
-  }, []);
+  }, [isFacebookModalOpen]);
 
   function handlePlatformSelection(platform) {
     setSelectedPlatforms((prevSelection) =>
@@ -60,6 +88,11 @@ export default function ModalButton({
         ? prevSelection.filter((item) => item !== platform)
         : [...prevSelection, platform]
     );
+    // setSelectedPlatformsId((prevSelection) =>
+    //   prevSelection.includes(platform)
+    //     ? prevSelection.filter((item) => item !== platform)
+    //     : [...prevSelection, platform]
+    // );
   }
 
   async function handleAuthorize(platform) {
@@ -86,44 +119,59 @@ export default function ModalButton({
       (platform) => platform === "Twitter" || platform === "Facebook"
     );
 
+    setLoading(true); // Start loading before the post operation
     let allSuccess = true; // Track whether all posts are successful
 
-    for (const platform of platformsToPost) {
-      let res = null;
-      if (platform === "Twitter") {
-        res = await twitterPost(message, contentHistoryId);
-        if (res) {
-          // Update postedPlatforms for current contentHistoryId
-          setPostedPlatforms((prev) => ({
-            ...prev,
-            [contentHistoryId]: [...(prev[contentHistoryId] || []), "Twitter"],
-          }));
+    try {
+      for (const platform of platformsToPost) {
+        let res = null;
+
+        if (platform === "Twitter") {
+          res = await twitterPost(message, contentHistoryId);
+          if (res) {
+            // Update postedPlatforms for current contentHistoryId
+            setPostedPlatforms((prev) => ({
+              ...prev,
+              [contentHistoryId]: [
+                ...(prev[contentHistoryId] || []),
+                "Twitter",
+              ],
+            }));
+          }
+        } else if (platform === "Facebook") {
+          res = await facebookPost(message, contentHistoryId);
+          if (res) {
+            // Update postedPlatforms for current contentHistoryId
+            setPostedPlatforms((prev) => ({
+              ...prev,
+              [contentHistoryId]: [
+                ...(prev[contentHistoryId] || []),
+                "Facebook",
+              ],
+            }));
+          }
         }
-      } else if (platform === "Facebook") {
-        res = await facebookPost(message, contentHistoryId);
-        if (res) {
-          // Update postedPlatforms for current contentHistoryId
-          setPostedPlatforms((prev) => ({
-            ...prev,
-            [contentHistoryId]: [...(prev[contentHistoryId] || []), "Facebook"],
-          }));
+
+        // If any post fails, mark allSuccess as false
+        if (!res) {
+          allSuccess = false;
         }
       }
 
-      // If any post fails, mark allSuccess as false
-      if (!res) {
-        allSuccess = false;
+      // Show a single notification based on the overall result
+      if (allSuccess) {
+        showNotification("Post(s) sent successfully", "success");
+      } else {
+        showNotification(
+          "Error sending post(s) to one or more platforms",
+          "error"
+        );
       }
-    }
-
-    // Show a single notification based on the overall result
-    if (allSuccess) {
-      showNotification("Post(s) sent successfully", "success");
-    } else {
-      showNotification(
-        "Error sending post(s) to one or more platforms",
-        "error"
-      );
+    } catch (error) {
+      showNotification("An error occurred during the posting process", "error");
+      allSuccess = false;
+    } finally {
+      setLoading(false); // Ensure loading is stopped after everything is done
     }
   }
 
@@ -187,23 +235,30 @@ export default function ModalButton({
                     </span>
                   </div>
 
-                  {/* Check if platform is already posted for the specific contentHistoryId */}
-                  {postedPlatforms[contentHistoryId]?.includes(
-                    item.platformName
-                  ) ? (
+                  {loading && selectedPlatforms.includes(item.platformName) ? (
+                    // Show loading spinner when platform is being posted
+                    <FontAwesomeIcon
+                      className="animate-spin"
+                      icon={faSpinner}
+                    />
+                  ) : postedPlatforms[contentHistoryId]?.includes(
+                      item.platformName
+                    ) ? (
+                    // Show checkmark for already posted platforms
                     <span className="text-green-500 text-lg font-bold">✔</span>
                   ) : authorizedPlatforms[item.platformName] ? (
-                    /* Show checkbox for authorized but not yet posted platforms */
+                    // Show checkbox for authorized platforms that haven't been posted yet
                     <input
                       type="checkbox"
                       className="form-checkbox h-5 w-5 text-purple-600"
                       checked={selectedPlatforms.includes(item.platformName)}
-                      onChange={() =>
-                        handlePlatformSelection(item.platformName)
-                      }
+                      onChange={() => {
+                        handlePlatformSelection(item.platformName);
+                        setSelectedPlatformsId((prev) => [...prev, item.id]);
+                      }}
                     />
                   ) : (
-                    /* Show authorize button for platforms that are not authorized */
+                    // Show authorize button for unauthorized platforms
                     <button
                       className="text-blue-600 text-sm underline"
                       onClick={() => handleAuthorize(item.platformName)}
@@ -231,8 +286,11 @@ export default function ModalButton({
                 : ""
             }`}
             onClick={handlePost}
-            disabled={selectedPlatforms.length === 0}
+            disabled={selectedPlatforms.length === 0 || loading}
           >
+            {loading && (
+              <FontAwesomeIcon className="animate-spin" icon={faSpinner} />
+            )}
             Post
           </button>
           {selectedPlatforms.length > 0 && (
@@ -271,7 +329,7 @@ export default function ModalButton({
       >
         <SchedulePost
           contentHistoryId={contentHistoryId}
-          selectedPlatforms={selectedPlatforms}
+          selectedPlatformsId={selectedPlatformsId}
           closeModal={closeScheduleModal}
         />
       </Modal>

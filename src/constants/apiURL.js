@@ -29,3 +29,5 @@ export const VERIFY_WHATSAPP_VERIFICATION_TOKEN =
   "/user/verify-whatsapp-verification-token";
 
 export const AUTHORIZE_FACEBOOK = "/sm/facebook/credentials";
+
+export const SCHEDULE_POST = "/schedule-posts";

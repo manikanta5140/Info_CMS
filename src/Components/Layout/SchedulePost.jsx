@@ -1,23 +1,47 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker"; // Ensure react-datepicker is installed
 import "react-datepicker/dist/react-datepicker.css";
+import { showNotification } from "../notification/Notification";
+import { schedulePosts } from "../../Api/services/socialMediaService";
 
 export default function SchedulePost({
   contentHistoryId,
-  selectedPlatforms,
+  selectedPlatformsId,
   closeModal,
 }) {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleSchedule = () => {
-    // Here you would send the schedule information to the backend
-    console.log("Scheduled for:", selectedDate);
-    console.log("ContentHistoryId:", contentHistoryId);
-    console.log("Selected Platforms:", selectedPlatforms);
+    const scheduledData = {
+      platformIds: selectedPlatformsId,
+      contentHistoryId: contentHistoryId,
+      scheduledDate: formatScheduledDateTime(selectedDate).scheduledDate,
+      scheduledTime: formatScheduledDateTime(selectedDate).scheduledTime,
+    };
+    console.log(scheduledData);
+
+    schedulePosts(scheduledData)
+      .then((res) => {
+        console.log(res);
+        showNotification("Your post is scheduled successfully ", "success");
+      })
+      .catch((err) => showNotification("Sorry please reschedule ! ", "error"));
 
     // Send to backend, then close the modal
     closeModal();
   };
+
+  function formatScheduledDateTime(dateInput) {
+    const scheduledFor = new Date(dateInput);
+    const scheduledDate = scheduledFor.toISOString().split("T")[0];
+    const hours = String(scheduledFor.getHours()).padStart(2, "0");
+    const minutes = String(scheduledFor.getMinutes()).padStart(2, "0");
+    const scheduledTime = `${hours}:${minutes}`;
+    return {
+      scheduledDate: scheduledDate,
+      scheduledTime: scheduledTime,
+    };
+  }
 
   return (
     <div className="p-6">

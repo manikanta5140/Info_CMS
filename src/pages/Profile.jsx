@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "../Components/common/Button";
 import Input from "../Components/common/Input";
-import {
-  validateDOB,
-} from "../utils/Validation";
+import { validateDOB } from "../utils/Validation";
 import { getUser, updateUser } from "../Api/services/userService";
 
 import { useAuth } from "../Context/AuthContext";
@@ -140,7 +138,7 @@ const Profile = () => {
                 label="Username"
                 type="text"
                 name="userName"
-                value={formData?.userName}
+                value={formData?.userName || ""}
                 onChange={handleChange}
                 disabled
                 required
@@ -153,7 +151,7 @@ const Profile = () => {
                 label="First Name"
                 type="text"
                 name="firstName"
-                value={formData?.firstName}
+                value={formData?.firstName || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
                 required
@@ -164,9 +162,9 @@ const Profile = () => {
                 label="Last Name"
                 type="text"
                 name="lastName"
-                value={formData?.lastName}
+                value={formData?.lastName || ""}
                 onChange={handleChange}
-                disabled={!isEditing} 
+                disabled={!isEditing}
                 required
               />
             </div>
@@ -208,6 +206,7 @@ const Profile = () => {
 
             <div className="flex flex-col items-center w-full mb-2 space-x-0 space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 sm:mb-6">
               {/* Gender Toggle */}
+
               <div className="flex items-center space-x-4 w-full sm:w-1/2">
                 <div
                   className={`flex bg-blue-100 border border-blue-300 rounded p-1 ${
@@ -236,7 +235,6 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-
               {/* Date of Birth */}
               <div className="w-full sm:w-1/2">
                 <Input
@@ -252,7 +250,7 @@ const Profile = () => {
                       : ""
                   }
                   onChange={handleChange}
-                  disabled={!isEditing} 
+                  disabled={!isEditing}
                   required
                 />
               </div>
@@ -288,9 +286,6 @@ const Profile = () => {
           </div>
         </form>
       </div>
-
-      {/* Mobile Verification Modal */}
-      {/* {showMobileModal && <MobileVerificationModal />} */}
     </>
   );
 };
